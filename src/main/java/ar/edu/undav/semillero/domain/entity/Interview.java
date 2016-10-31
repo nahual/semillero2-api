@@ -47,5 +47,13 @@ public class Interview {
 		return comments;
 	}
 
+	public Graduated getGraduated() {
+		return graduated;
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
 
 }

@@ -19,6 +19,8 @@ public class Graduated {
     private Long id;
 
     private String name;
+    
+    private boolean deleted=true;
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "graduated")
     private List<Interview> interviews = new ArrayList<>();
@@ -32,6 +34,14 @@ public class Graduated {
 
     public Graduated(String name) {
         this.name = name;
+    }
+    
+    public void setDeleted(boolean d){
+    	this.deleted= d;
+    }
+    
+    public boolean getDeleted(){
+    	return this.deleted;
     }
 
     public Long getId() {

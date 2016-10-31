@@ -3,11 +3,7 @@ package ar.edu.undav.semillero.domain.entity;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * Juan Lagostena on 24/10/16
- * jlagostena@bitsense.com.ar
- * .
- */
+
 public class GraduatedTest {
 
     @Test
@@ -15,6 +11,7 @@ public class GraduatedTest {
         String nombre = "nombre";
         Graduated graduated = new Graduated(nombre);
         Assert.assertEquals(nombre, graduated.getName());
+        Assert.assertEquals(true, graduated.getDeleted());
     }
 
 

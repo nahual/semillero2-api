@@ -26,7 +26,7 @@ public class GraduatedController {
     public String saveGraduated(@RequestParam(value="name") String name) {
 	    	Graduated graduated = new Graduated(name);
 	        graduatedService.save(graduated);
-			return "Se agrego el graduado " + name + "con el ID:" + graduated.getId();
+			return "Se agrego el graduado " + name + " con el ID:" + graduated.getId();
 	}
 
 	//Obtener graduados. Si no se pasan parametros, se obtienen todos. Si se especifica parametro, se busca segun ese criterio (id, fecha, nodo)

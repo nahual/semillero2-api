@@ -43,4 +43,8 @@ public class Node {
         this.graduateds.add(graduated);
     }
 
+	public List<Graduated> getGraduateds() {
+		return graduateds;
+	}
+
 }

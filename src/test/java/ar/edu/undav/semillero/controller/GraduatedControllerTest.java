@@ -19,11 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.Assert.*;
 
-/**
- * Juan Lagostena on 24/10/16
- * jlagostena@bitsense.com.ar
- * .
- */
+
 @RunWith(SpringRunner.class)
 @TestPropertySource("classpath:application.test.properties")
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
