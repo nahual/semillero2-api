@@ -1,0 +1,320 @@
+<!DOCTYPE HTML><html><head><title>Nahual Project API documentation</title><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="generator" content="https://github.com/raml2html/raml2html 3.0.1"><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css"><script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script><script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script><script type="text/javascript">
+      $(document).ready(function() {
+        $('.page-header pre code, .top-resource-description pre code, .modal-body pre code').each(function(i, block) {
+          hljs.highlightBlock(block);
+        });
+
+        $('[data-toggle]').click(function() {
+          var selector = $(this).data('target') + ' pre code';
+          $(selector).each(function(i, block) {
+            hljs.highlightBlock(block);
+          });
+        });
+
+        // open modal on hashes like #_action_get
+        $(window).bind('hashchange', function(e) {
+          var anchor_id = document.location.hash.substr(1); //strip #
+          var element = $('#' + anchor_id);
+
+          // do we have such element + is it a modal?  --> show it
+          if (element.length && element.hasClass('modal')) {
+            element.modal('show');
+          }
+        });
+
+        // execute hashchange on first page load
+        $(window).trigger('hashchange');
+
+        // remove url fragment on modal hide
+        $('.modal').on('hidden.bs.modal', function() {
+          try {
+            if (history && history.replaceState) {
+                history.replaceState({}, '', '#');
+            }
+          } catch(e) {}
+        });
+      });
+    </script><style>
+      .hljs {
+        background: transparent;
+      }
+      .parent {
+        color: #999;
+      }
+      .list-group-item > .badge {
+        float: none;
+        margin-right: 6px;
+      }
+      .panel-title > .methods {
+        float: right;
+      }
+      .badge {
+        border-radius: 0;
+        text-transform: uppercase;
+        width: 70px;
+        font-weight: normal;
+        color: #f3f3f6;
+        line-height: normal;
+      }
+      .badge_get {
+        background-color: #63a8e2;
+      }
+      .badge_post {
+        background-color: #6cbd7d;
+      }
+      .badge_put {
+        background-color: #22bac4;
+      }
+      .badge_delete {
+        background-color: #d26460;
+      }
+      .badge_patch {
+        background-color: #ccc444;
+      }
+      .list-group, .panel-group {
+        margin-bottom: 0;
+      }
+      .panel-group .panel+.panel-white {
+        margin-top: 0;
+      }
+      .panel-group .panel-white {
+        border-bottom: 1px solid #F5F5F5;
+        border-radius: 0;
+      }
+      .panel-white:last-child {
+        border-bottom-color: white;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+      }
+      .panel-white .panel-heading {
+        background: white;
+      }
+      .tab-pane ul {
+        padding-left: 2em;
+      }
+      .tab-pane h1 {
+        font-size: 1.3em;
+      }
+      .tab-pane h2 {
+        font-size: 1.2em;
+        padding-bottom: 4px;
+        border-bottom: 1px solid #ddd;
+      }
+      .tab-pane h3 {
+        font-size: 1.1em;
+      }
+      .tab-content {
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+      }
+      #sidebar {
+        margin-top: 30px;
+        padding-right: 5px;
+        overflow: auto;
+        height: 90%;
+      }
+      .top-resource-description {
+        border-bottom: 1px solid #ddd;
+        background: #fcfcfc;
+        padding: 15px 15px 0 15px;
+        margin: -15px -15px 10px -15px;
+      }
+      .resource-description {
+        border-bottom: 1px solid #fcfcfc;
+        background: #fcfcfc;
+        padding: 15px 15px 0 15px;
+        margin: -15px -15px 10px -15px;
+      }
+      .resource-description p:last-child {
+        margin: 0;
+      }
+      .list-group .badge {
+        float: left;
+      }
+      .method_description {
+        margin-left: 85px;
+      }
+      .method_description p:last-child {
+        margin: 0;
+      }
+      .list-group-item {
+        cursor: pointer;
+      }
+      .list-group-item:hover {
+        background-color: #f5f5f5;
+      }
+
+      pre code {
+        overflow: auto;
+        word-wrap: normal;
+        white-space: pre;
+      }
+    </style></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>Nahual Project API documentation <small>version v1</small></h1><p>/http/localhost:8080/</p></div><div class="panel panel-default"><div class="panel-heading"><h3 id="graduated" class="panel-title">graduated</h3></div><div class="panel-body"><div class="top-resource-description"><p>graduados del Proyecto Nahual</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_graduated"><span class="parent"></span>/graduated</a> <span class="methods"><a href="#graduated_get"><span class="badge badge_get">get</span></a> <a href="#graduated_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_graduated" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#graduated_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Devuelve una coleccion de Graduados</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#graduated_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Creacion de un nuevo graduado del Proyecto Nahual</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="graduated_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent"></span>/graduated</h4></div><div class="modal-body"><div class="alert alert-info"><p>Devuelve una coleccion de Graduados</p></div><ul class="nav nav-tabs"><li class="active"><a href="#graduated_get_request" data-toggle="tab">Request</a></li><li><a href="#graduated_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="graduated_get_request"><h3>Query Parameters</h3><ul><li><strong>año</strong>: <em>(number - default: -1)</em></li><li><strong>mes</strong>: <em>(number - default: -1)</em></li><li><strong>dia</strong>: <em>(number - default: -1)</em></li><li><strong>nodeId</strong>: <em>(number - default: -1)</em></li></ul></div><div class="tab-pane" id="graduated_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Obtencion exitosa de todos los graduados(Incluso los que estan marcados con borrado logico)</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>[
+  {
+    "id": 1,
+    "name": "santi",
+    "date": 1481227669000,
+    "deleted": true,
+    "node": null
+  },
+  {
+    "id": 2,
+    "name": "Daniel",
+    "date": 1481305396000,
+    "deleted": false,
+    "node": {
+      "id": 1,
+      "name": "Banfield",
+      "address": "CalleFalsa123"
+    }
+  }
+]
+</code></pre></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="graduated_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent"></span>/graduated</h4></div><div class="modal-body"><div class="alert alert-info"><p>Creacion de un nuevo graduado del Proyecto Nahual</p></div><ul class="nav nav-tabs"><li class="active"><a href="#graduated_post_request" data-toggle="tab">Request</a></li><li><a href="#graduated_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="graduated_post_request"><h3>Query Parameters</h3><ul><li><strong>name</strong>: <em>required (string)</em><p>Nombre del graduado</p><p><strong>Example</strong>:</p><pre>Daniel</pre></li><li><strong>nodeId</strong>: <em>required (number)</em><p>Id de un nodo</p></li></ul></div><div class="tab-pane" id="graduated_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Creacion exitosa de un graduado</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "id": 2,
+  "name": "Daniel",
+  "date": 1481305395815,
+  "deleted": false,
+  "interviews": [],
+  "node": {
+    "id": 1,
+    "name": "Banfield",
+    "address": "CalleFalsa123",
+    "graduateds": [
+      2
+    ]
+  }
+}
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/400" target="_blank">400</a></h2><p>Error en la creacion de un graduado por falta de parametros</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "timestamp": 1481306059861,
+  "status": 400,
+  "error": "Bad Request",
+  "exception": "org.springframework.web.bind.MissingServletRequestParameterException",
+  "message": "Required String parameter &#39;name&#39; is not present",
+  "path": "/graduated"
+}
+</code></pre></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_graduated__id_"><span class="parent">/graduated</span>/{id}</a> <span class="methods"><a href="#graduated__id__delete"><span class="badge badge_delete">delete</span></a> <a href="#graduated__id__get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_graduated__id_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#graduated__id__delete'" class="list-group-item"><span class="badge badge_delete">delete</span><div class="method_description"><p>Elimina un graduado por su Id</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#graduated__id__get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Detalle de un graduado por su Id</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="graduated__id__delete"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_delete">delete</span> <span class="parent">/graduated</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Elimina un graduado por su Id</p></div><ul class="nav nav-tabs"><li class="active"><a href="#graduated__id__delete_request" data-toggle="tab">Request</a></li></ul><div class="tab-content"><div class="tab-pane active" id="graduated__id__delete_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="graduated__id__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/graduated</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Detalle de un graduado por su Id</p></div><ul class="nav nav-tabs"><li class="active"><a href="#graduated__id__get_request" data-toggle="tab">Request</a></li></ul><div class="tab-content"><div class="tab-pane active" id="graduated__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="company" class="panel-title">company</h3></div><div class="panel-body"><div class="top-resource-description"><p>Compañias que tendran contacto con los graduados</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_company"><span class="parent"></span>/company</a> <span class="methods"><a href="#company_get"><span class="badge badge_get">get</span></a> <a href="#company_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_company" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#company_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Devuelve todas las compañias existentes</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#company_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Creacion de una nueva compañia</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="company_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent"></span>/company</h4></div><div class="modal-body"><div class="alert alert-info"><p>Devuelve todas las compañias existentes</p></div><ul class="nav nav-tabs"><li class="active"><a href="#company_get_request" data-toggle="tab">Request</a></li><li><a href="#company_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="company_get_request"><h3>Query Parameters</h3><ul><li><strong>name</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="company_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Obtencion exitosa de las compañias existentes</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>[
+  {
+    "id": 1,
+    "name": "TARNET",
+    "contact": "Nicolas"
+  },
+  {
+    "id": 2,
+    "name": "TARNET S.A.",
+    "contact": "Juan"
+  },
+  {
+    "id": 3,
+    "name": "PLS CO.",
+    "contact": "Ricardo"
+  }
+]
+</code></pre></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="company_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent"></span>/company</h4></div><div class="modal-body"><div class="alert alert-info"><p>Creacion de una nueva compañia</p></div><ul class="nav nav-tabs"><li class="active"><a href="#company_post_request" data-toggle="tab">Request</a></li><li><a href="#company_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="company_post_request"><h3>Query Parameters</h3><ul><li><strong>name</strong>: <em>required (string)</em><p><strong>Example</strong>:</p><pre>TARNET S.A.</pre></li><li><strong>contactName</strong>: <em>required (string)</em><p><strong>Example</strong>:</p><pre>Juan</pre></li></ul></div><div class="tab-pane" id="company_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Creacion exitosa de una nueva compañia</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "id": 2,
+  "name": "TARNET S.A.",
+  "contact": "Juan",
+  "interviews": []
+}
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/400" target="_blank">400</a></h2><p>Error por falta de parametro en la creacion de una nueva compañia</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "timestamp": 1481306391582,
+  "status": 400,
+  "error": "Bad Request",
+  "exception": "org.springframework.web.bind.MissingServletRequestParameterException",
+  "message": "Required String parameter &#39;contact&#39; is not present",
+  "path": "/company"
+}
+</code></pre></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_company__id_"><span class="parent">/company</span>/{id}</a> <span class="methods"><a href="#company__id__get"><span class="badge badge_get">get</span></a> <a href="#company__id__delete"><span class="badge badge_delete">delete</span></a></span></h4></div><div id="panel_company__id_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#company__id__get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Detalle de una compañia por su Id</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#company__id__delete'" class="list-group-item"><span class="badge badge_delete">delete</span><div class="method_description"><p>Eliminar una compañia por su Id</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="company__id__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/company</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Detalle de una compañia por su Id</p></div><ul class="nav nav-tabs"><li class="active"><a href="#company__id__get_request" data-toggle="tab">Request</a></li></ul><div class="tab-content"><div class="tab-pane active" id="company__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="company__id__delete"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_delete">delete</span> <span class="parent">/company</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Eliminar una compañia por su Id</p></div><ul class="nav nav-tabs"><li class="active"><a href="#company__id__delete_request" data-toggle="tab">Request</a></li></ul><div class="tab-content"><div class="tab-pane active" id="company__id__delete_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="node" class="panel-title">node</h3></div><div class="panel-body"><div class="top-resource-description"><p>Un nodo es el lugar de graduacion de los graduados</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_node"><span class="parent"></span>/node</a> <span class="methods"><a href="#node_get"><span class="badge badge_get">get</span></a> <a href="#node_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_node" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#node_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Se obtienen todos los nodos existentes</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#node_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Creacion de un nodo nuevo</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="node_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent"></span>/node</h4></div><div class="modal-body"><div class="alert alert-info"><p>Se obtienen todos los nodos existentes</p></div><ul class="nav nav-tabs"><li class="active"><a href="#node_get_request" data-toggle="tab">Request</a></li><li><a href="#node_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="node_get_request"><h3>Query Parameters</h3><ul><li><strong>date</strong>: <em>(string)</em></li><li><strong>node</strong>: <em>(string)</em></li></ul></div><div class="tab-pane" id="node_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Obtencion exitosa de los nodos</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>[
+  {
+    "id": 1,
+    "name": "Banfield",
+    "address": "CalleFalsa123"
+  },
+  {
+    "id": 2,
+    "name": "Claypole",
+    "address": "Crisantemo6457"
+  },
+  {
+    "id": 3,
+    "name": "FlorencioVarela",
+    "address": "AnicetoDiaz432"
+  }
+]
+</code></pre></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="node_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent"></span>/node</h4></div><div class="modal-body"><div class="alert alert-info"><p>Creacion de un nodo nuevo</p></div><ul class="nav nav-tabs"><li class="active"><a href="#node_post_request" data-toggle="tab">Request</a></li><li><a href="#node_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="node_post_request"><h3>Query Parameters</h3><ul><li><strong>name</strong>: <em>required (string)</em><p>Nombre del nodo a crear</p><p><strong>Example</strong>:</p><pre>Banfield</pre></li><li><strong>address</strong>: <em>required (string)</em><p>Direccion del nodo</p><p><strong>Example</strong>:</p><pre>Calle Falsa 123</pre></li></ul></div><div class="tab-pane" id="node_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Creacion exitosa de un nodo</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "id": 2,
+  "name": "Claypole",
+  "address": "Crisantemo6457",
+  "graduateds": []
+}
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/400" target="_blank">400</a></h2><p>Error en la creacion de un nodo nuevo por falta de parametros</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "timestamp": 1481306462897,
+  "status": 400,
+  "error": "Bad Request",
+  "exception": "org.springframework.web.bind.MissingServletRequestParameterException",
+  "message": "Required String parameter &#39;name&#39; is not present",
+  "path": "/node"
+}
+</code></pre></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_node__id_"><span class="parent">/node</span>/{id}</a> <span class="methods"><a href="#node__id__get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_node__id_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#node__id__get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Obtiene los nodos segun el Id</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="node__id__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/node</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Obtiene los nodos segun el Id</p></div><ul class="nav nav-tabs"><li class="active"><a href="#node__id__get_request" data-toggle="tab">Request</a></li></ul><div class="tab-content"><div class="tab-pane active" id="node__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="interview" class="panel-title">interview</h3></div><div class="panel-body"><div class="top-resource-description"><p>Entrevistas que tienen los graduados con las compañias.</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_interview"><span class="parent"></span>/interview</a> <span class="methods"><a href="#interview_get"><span class="badge badge_get">get</span></a> <a href="#interview_post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_interview" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#interview_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Obtiene todas las entrevistas</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#interview_post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>Creacion de una entrevista</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="interview_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent"></span>/interview</h4></div><div class="modal-body"><div class="alert alert-info"><p>Obtiene todas las entrevistas</p></div><ul class="nav nav-tabs"><li class="active"><a href="#interview_get_request" data-toggle="tab">Request</a></li><li><a href="#interview_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="interview_get_request"><h3>Query Parameters</h3><ul><li><strong>order</strong>: <em>(string)</em><p>Parametro que indica si la lista estara ordenada</p></li><li><strong>año</strong>: <em>(number - default: -1)</em></li><li><strong>mes</strong>: <em>(number - default: -1)</em></li><li><strong>dia</strong>: <em>(number - default: -1)</em></li><li><strong>gId</strong>: <em>(number - default: -1)</em><p>Id de un graduado especifico</p></li></ul></div><div class="tab-pane" id="interview_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Obtencion exitosa de todas las entrevistas</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>[
+  {
+    "id": 1,
+    "graduated": {
+      "id": 2,
+      "name": "Daniel",
+      "date": 1481305396000,
+      "deleted": false,
+      "node": {
+        "id": 1,
+        "name": "Banfield",
+        "address": "CalleFalsa123"
+      }
+    },
+    "company": {
+      "id": 1,
+      "name": "TARNET",
+      "contact": "Nicolas"
+    },
+    "date": "2016-12-09",
+    "comments": "Sin comentarios"
+  }
+]
+</code></pre></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="interview_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent"></span>/interview</h4></div><div class="modal-body"><div class="alert alert-info"><p>Creacion de una entrevista</p></div><ul class="nav nav-tabs"><li class="active"><a href="#interview_post_request" data-toggle="tab">Request</a></li><li><a href="#interview_post_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="interview_post_request"><h3>Query Parameters</h3><ul><li><strong>gId</strong>: <em>required (number)</em><p>Id de un graduado</p><p><strong>Example</strong>:</p><pre><code>2</code></pre></li><li><strong>cId</strong>: <em>required (number)</em><p>Id de una compañia</p><p><strong>Example</strong>:</p><pre><code>1</code></pre></li></ul></div><div class="tab-pane" id="interview_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Creacion exitosa de una entrevista</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "id": 1,
+  "graduated": {
+    "id": 2,
+    "name": "Daniel",
+    "date": 1481305396000,
+    "deleted": false,
+    "interviews": [
+      1
+    ],
+    "node": {
+      "id": 1,
+      "name": "Banfield",
+      "address": "CalleFalsa123",
+      "graduateds": [
+        2
+      ]
+    }
+  },
+  "company": {
+    "id": 1,
+    "name": "TARNET",
+    "contact": "Nicolas",
+    "interviews": [
+      1
+    ]
+  },
+  "date": 1481305541172,
+  "comments": "Sin comentarios"
+}
+</code></pre><h2>HTTP status code <a href="http://httpstatus.es/400" target="_blank">400</a></h2><p>Error en la creacion de una entrevista por falta de parametros</p><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
+  "timestamp": 1481306714946,
+  "status": 400,
+  "error": "Bad Request",
+  "exception": "org.springframework.web.bind.MissingServletRequestParameterException",
+  "message": "Required long parameter &#39;graduatedId&#39; is not present",
+  "path": "/interview"
+}
+</code></pre></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_interview__id_"><span class="parent">/interview</span>/{id}</a> <span class="methods"><a href="#interview__id__get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_interview__id_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#interview__id__get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Obtiene una entrevista por Id</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="interview__id__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/interview</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Obtiene una entrevista por Id</p></div><ul class="nav nav-tabs"><li class="active"><a href="#interview__id__get_request" data-toggle="tab">Request</a></li></ul><div class="tab-content"><div class="tab-pane active" id="interview__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul></div></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#graduated">graduated</a></li><li><a href="#company">company</a></li><li><a href="#node">node</a></li><li><a href="#interview">interview</a></li></ul></div></div></div></div></body></html>

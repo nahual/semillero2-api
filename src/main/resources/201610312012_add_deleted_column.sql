@@ -1,0 +1,1 @@
+ALTER TABLE graduated ADD deleted BOOLEAN DEFAULT FALSE;
