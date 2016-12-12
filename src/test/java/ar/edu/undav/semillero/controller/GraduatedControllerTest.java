@@ -77,7 +77,7 @@ public class GraduatedControllerTest {
 	public void getGraduatedById() throws Exception {
 		String id = "1";
 		mockMvc.perform(MockMvcRequestBuilders.get("/graduated/" + id))
-				.andExpect(MockMvcResultMatchers.status().isNotFound());
+				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
 	}
 
 }

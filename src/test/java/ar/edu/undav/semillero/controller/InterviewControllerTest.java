@@ -61,7 +61,7 @@ public class InterviewControllerTest {
 	public void getInterviewById() throws Exception {
 		String id = "1";
 		mockMvc.perform(MockMvcRequestBuilders.get("/interview/" + id))
-				.andExpect(MockMvcResultMatchers.status().isNotFound());
+				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
 	}
 
 }
