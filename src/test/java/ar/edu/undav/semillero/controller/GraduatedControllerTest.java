@@ -73,11 +73,6 @@ public class GraduatedControllerTest {
 				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
 	}
 
-	@Test
-	public void getGraduatedById() throws Exception {
-		String id = "1";
-		mockMvc.perform(MockMvcRequestBuilders.get("/graduated/" + id))
-				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
-	}
+
 
 }

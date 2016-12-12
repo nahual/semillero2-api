@@ -57,11 +57,6 @@ public class InterviewControllerTest {
 				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
 	}
 
-	@Test
-	public void getInterviewById() throws Exception {
-		String id = "1";
-		mockMvc.perform(MockMvcRequestBuilders.get("/interview/" + id))
-				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
-	}
+
 
 }

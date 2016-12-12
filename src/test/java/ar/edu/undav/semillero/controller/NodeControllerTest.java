@@ -61,10 +61,6 @@ public class NodeControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
 
-	@Test
-	public void getNodeById() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get("/node").param("id", "1"))
-				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
-	}
+
 
 }
