@@ -48,16 +48,24 @@ public class CompanyController {
 
 
 	// Obtener todas las companias, si se pasa parametro, se devuelve por nombre
+	@ResponseBody
 	@JsonView(View.Summary.class)
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public Collection<Company> getCompany(@RequestParam(value = "name", defaultValue = "null") String name) {
+	public ResponseEntity<Collection<Company>> getCompany(@RequestParam(value = "name", defaultValue = "null") String name) {
 		if (name.equals("null")) {
 			Collection<Company> companies = companyService.findAll();
-			return companies;
-		} else {
-			Collection<Company> companies = companyService.findByName(name);
-			return companies;
+			if(companies == null){return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);}
+				else{
+					return ResponseEntity.ok(companies);
+				}
 		}
+		else{
+			Collection<Company> companies = companyService.findByName(name);
+			if(companies.isEmpty()){return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);}
+				else{
+					return ResponseEntity.ok(companies);
+				}
+			}
 	}
 
 }

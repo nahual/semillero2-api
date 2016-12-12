@@ -55,7 +55,7 @@ public class NodeControllerTest {
 		mockMvc.perform(MockMvcRequestBuilders.get("/node"))
 				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
 	}
-	
+
 	public void getNotExistingNode() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/node/-1"))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest());

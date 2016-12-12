@@ -71,6 +71,18 @@ public class CompanyControllerTest {
 	public void getCompany() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/company").param("name", "ECORP"))
 				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+		
+
+	}
+	
+	@Test
+	public void getCompanyWrongParam() throws Exception {
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/company").param("name", "dfghertyafdgaert"))
+				.andExpect(MockMvcResultMatchers.status().isNotFound()).andReturn();
+		
+		String responseBodyContent = result.getResponse().getContentAsString();
+
+		Assert.assertEquals(String.valueOf("null"),responseBodyContent);
 	}
 
 	@Test
@@ -78,6 +90,13 @@ public class CompanyControllerTest {
 		String id = "1";
 		mockMvc.perform(MockMvcRequestBuilders.get("/company/" + id))
 				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+	}
+	
+	@Test
+	public void getCompanyByWrongId() throws Exception {
+		String id = "50";
+		mockMvc.perform(MockMvcRequestBuilders.get("/company/" + id))
+				.andExpect(MockMvcResultMatchers.status().isNotFound());
 	}
 
 }
