@@ -66,7 +66,7 @@ public class InterviewController {
 	// Obtener todas las entrevistas
 	@JsonView(View.Summary.class)
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public Collection<Interview> getInterview(@RequestParam(value = "order", defaultValue = "null") String order,
+	public Collection<Interview> getInterview(@RequestParam(value = "order", defaultValue = "-1") int order,
 			@RequestParam(value = "año", defaultValue = "-1") int año,
 			@RequestParam(value = "mes", defaultValue = "-1") int mes,
 			@RequestParam(value = "dia", defaultValue = "-1") int dia,
@@ -80,6 +80,9 @@ public class InterviewController {
 		} else if (gId != -1) {
 			Graduated graduated = graduatedService.findById(gId);
 			Collection<Interview> interviews = interviewService.findByGraduated(graduated);
+			return interviews;
+		} else if (order != -1){
+			Collection<Interview> interviews = interviewService.findAllByOrderByIdDesc();
 			return interviews;
 		} else {
 			Collection<Interview> interviews = interviewService.findAll();

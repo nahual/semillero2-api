@@ -35,5 +35,9 @@ public class InterviewService {
 	public Collection<Interview> findByGraduated(Graduated gId) {
 		return interviewRepository.findByGraduated(gId);
 	}
+	
+	public Collection<Interview> findAllByOrderByIdDesc(){
+		return interviewRepository.findAllByOrderByIdDesc();
+	}
 
 }

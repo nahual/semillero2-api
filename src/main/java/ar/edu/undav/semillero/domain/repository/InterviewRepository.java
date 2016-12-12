@@ -14,4 +14,6 @@ public interface InterviewRepository extends JpaRepository<Interview, Long> {
 	Collection<Interview> findByDate(Date date);
 
 	Collection<Interview> findByGraduated(Graduated gId);
+
+	Collection<Interview> findAllByOrderByIdDesc();
 }
