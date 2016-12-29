@@ -1,9 +1,17 @@
+
+CREATE TABLE `node` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `address` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
 CREATE TABLE `company` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `contact` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 
 
@@ -14,7 +22,7 @@ CREATE TABLE `graduated` (
   PRIMARY KEY (`id`),
   KEY `FKgjiwu77jcgsyw3b21xu69d72x` (`node_id`),
   CONSTRAINT `FKgjiwu77jcgsyw3b21xu69d72x` FOREIGN KEY (`node_id`) REFERENCES `node` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 
 CREATE TABLE `interview` (
@@ -28,12 +36,5 @@ CREATE TABLE `interview` (
   KEY `FK4isknufpp0gkgy33qppcmgk32` (`graduated_id`),
   CONSTRAINT `FK4isknufpp0gkgy33qppcmgk32` FOREIGN KEY (`graduated_id`) REFERENCES `graduated` (`id`),
   CONSTRAINT `FKn2fk6g8eem4m48trru0r8rcji` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
-
-CREATE TABLE `node` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `address` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
