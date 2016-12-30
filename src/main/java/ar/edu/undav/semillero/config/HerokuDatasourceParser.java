@@ -2,7 +2,6 @@ package ar.edu.undav.semillero.config;
 
 /**
  * Juan Lagostena on 30/12/16
- * jlagostena@bitsense.com.ar
  * .
  */
 public class HerokuDatasourceParser {
