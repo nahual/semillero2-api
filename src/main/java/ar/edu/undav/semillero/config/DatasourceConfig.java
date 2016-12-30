@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  * Juan Lagostena on 30/12/16
@@ -27,19 +25,12 @@ public class DatasourceConfig {
 
     @Bean
     DataSource dataSource(){
-        URI jdbUri = null;
         LOGGER.info("Heroku datasource -> " + this.herokuDatasourceURL);
-        try {
-            jdbUri = new URI(this.herokuDatasourceURL);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
 
-        String username = jdbUri.getUserInfo().split(":")[0];
-        String password = jdbUri.getUserInfo().split(":")[1];
-        String port = String.valueOf(jdbUri.getPort());
-        String jdbUrl = "jdbc:mysql://" + jdbUri.getHost() + ":" + port + jdbUri.getPath();
+        HerokuDatasourceParser herokuDatasourceParser = new HerokuDatasourceParser();
+        herokuDatasourceParser.parseCompleteURL(this.herokuDatasourceURL);
 
-        return new DriverManagerDataSource(jdbUrl, username, password);
+        return new DriverManagerDataSource(herokuDatasourceParser.getUrl(),
+                herokuDatasourceParser.getUsername(), herokuDatasourceParser.getPassword());
     }
 }
