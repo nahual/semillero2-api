@@ -1,0 +1,12 @@
+version: "3"
+services:
+  get-on-db:
+    image: mariadb:10.3
+    volumes:
+      - $HOME/nahual/docker-storage:/var/lib/mysql
+      - $HOME/nahual/mariadb-dev-conf:/etc/mysql/conf.d
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - TERM=xterm
+    ports:
+      - "3306:3306"
