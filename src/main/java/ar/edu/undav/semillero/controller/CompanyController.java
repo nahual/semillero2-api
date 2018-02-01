@@ -1,18 +1,15 @@
 package ar.edu.undav.semillero.controller;
 
-import java.util.Collection;
-
+import ar.edu.undav.semillero.domain.entity.Company;
+import ar.edu.undav.semillero.service.CompanyService;
+import ar.edu.undav.semillero.view.View;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
-import ar.edu.undav.semillero.domain.entity.Company;
-import ar.edu.undav.semillero.domain.entity.Interview;
-import ar.edu.undav.semillero.service.CompanyService;
-import ar.edu.undav.semillero.view.View;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/company")
