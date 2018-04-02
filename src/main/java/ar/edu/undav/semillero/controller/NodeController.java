@@ -1,60 +1,61 @@
 package ar.edu.undav.semillero.controller;
 
-import java.util.Collection;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import com.fasterxml.jackson.annotation.JsonView;
-
 import ar.edu.undav.semillero.domain.entity.Node;
 import ar.edu.undav.semillero.service.NodeService;
 import ar.edu.undav.semillero.view.View;
+import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/node")
 @CrossOrigin
 public class NodeController {
 
-	@Autowired
-	private NodeService nodeService;
+    private final NodeService nodeService;
 
-	// Guardar un nodo
-	@RequestMapping(value = "", method = RequestMethod.POST)
-	public Node saveNode(@RequestParam(value = "name") String name, @RequestParam(value = "address") String address) {
-		Node node = new Node(name, address);
-		nodeService.save(node);
-		return node;
-	}
+    public NodeController(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
 
-	// Obtener nodos por ID
-	@ResponseBody
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Node> getNode(@PathVariable Long id) {
-		Node node = nodeService.findById(id);
-		if(node == null){
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		}else{
-			return ResponseEntity.ok(node);
-		}
+    // Guardar un nodo
+    @PostMapping("")
+    public Node saveNode(@RequestParam(value = "name") String name, @RequestParam(value = "address") String address) {
+        Node node = new Node(name, address);
+        nodeService.save(node);
+        return node;
+    }
 
-	}
+    // Obtener nodos por ID
+    @ResponseBody
+    @GetMapping("/{id}")
+    public ResponseEntity<Node> getNode(@PathVariable Long id) {
+        return nodeService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.badRequest().build());
+    }
 
-	// Obtener todos los nodos
-	@JsonView(View.Summary.class)
-	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ResponseEntity<Collection<Node>> getNode(@RequestParam(value = "date", defaultValue = "null") String date,
-			@RequestParam(value = "node", defaultValue = "null") String node) {
-		Collection<Node> nodes = nodeService.findAll();
-		if(node == null){
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		}else{
-			return ResponseEntity.ok(nodes);
-		}
-	}
+    // Obtener todos los nodos
+    @JsonView(View.Summary.class)
+    @GetMapping("")
+    public ResponseEntity<Collection<Node>> getNode(@RequestParam(value = "date", defaultValue = "null") String date,
+            @RequestParam(value = "node", defaultValue = "null") String node) {
+        Collection<Node> nodes = nodeService.findAll();
+        if (node == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } else {
+            return ResponseEntity.ok(nodes);
+        }
+    }
 
 }

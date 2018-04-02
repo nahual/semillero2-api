@@ -1,39 +1,61 @@
 package ar.edu.undav.semillero.service;
 
-import java.util.Collection;
-import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import ar.edu.undav.semillero.domain.entity.Graduated;
 import ar.edu.undav.semillero.domain.entity.Node;
 import ar.edu.undav.semillero.domain.repository.GraduatedRepository;
+import ar.edu.undav.semillero.domain.repository.NodeRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class GraduatedService {
 
-	@Autowired
-	private GraduatedRepository graduatedRepository;
+    private final GraduatedRepository graduatedRepository;
+    private final NodeRepository nodeRepository;
 
-	public void save(Graduated graduated) {
-		graduatedRepository.save(graduated);
-	}
+    public GraduatedService(GraduatedRepository graduatedRepository, NodeRepository nodeRepository) {
+        this.graduatedRepository = graduatedRepository;
+        this.nodeRepository = nodeRepository;
+    }
 
-	public Collection<Graduated> findAll() {
-		return graduatedRepository.findAll();
-	}
+    @Transactional
+    public Graduated save(String name, long nodeId) {
+        Node node = nodeRepository.getOne(nodeId);
+        return graduatedRepository.save(new Graduated(name, node, new Date()));
+    }
 
-	public Graduated findById(Long id) {
-		return graduatedRepository.findById(id);
-	}
+    @Transactional
+    public Graduated deleteById(long id) {
+        Graduated graduated = graduatedRepository.getOne(id);
+        graduated.setDeleted(true);
+        return graduated;
+    }
 
-	public Collection<Graduated> findByNode(Node node) {
-		return graduatedRepository.findByNode(node);
-	}
+    @Transactional(readOnly = true)
+    public Collection<Graduated> findAll() {
+        return graduatedRepository.findAll();
+    }
 
-	public Collection<Graduated> findByDate(Date date) {
-		return graduatedRepository.findByDate(date);
-	}
+    @Transactional(readOnly = true)
+    public Optional<Graduated> findById(Long id) {
+        return graduatedRepository.findById(id);
+    }
 
+    @Transactional(readOnly = true)
+    public Collection<Graduated> findByNode(long nodeId) {
+        return nodeRepository.findById(nodeId)
+                .map(graduatedRepository::findByNode)
+                .orElseGet(Collections::emptyList);
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<Graduated> findByDate(LocalDate when) {
+        return graduatedRepository.findByDate(when);
+    }
 }

@@ -1,32 +1,34 @@
 package ar.edu.undav.semillero.service;
 
-import java.util.Collection;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import ar.edu.undav.semillero.domain.entity.Node;
 import ar.edu.undav.semillero.domain.repository.NodeRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.Optional;
 
 @Service
 public class NodeService {
 
-	@Autowired
-	private NodeRepository nodeRepository;
+    private final NodeRepository nodeRepository;
 
-	public void save(Node node) {
-		nodeRepository.save(node);
-	}
+    public NodeService(NodeRepository nodeRepository) {
+        this.nodeRepository = nodeRepository;
+    }
 
-	public Collection<Node> findAll() {
-		return nodeRepository.findAll();
-	}
+    @Transactional
+    public Node save(Node node) {
+        return nodeRepository.save(node);
+    }
 
-	public Node findById(Long id) {
-		return nodeRepository.findById(id);
-	}
+    @Transactional(readOnly = true)
+    public Collection<Node> findAll() {
+        return nodeRepository.findAll();
+    }
 
-	public Collection<Node> findByName(String name) {
-		return nodeRepository.findByName(name);
-	}
+    @Transactional(readOnly = true)
+    public Optional<Node> findById(Long id) {
+        return nodeRepository.findById(id);
+    }
 }

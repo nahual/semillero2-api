@@ -1,98 +1,109 @@
 package ar.edu.undav.semillero.controller;
 
-import org.junit.Assert;
-import org.junit.Before;
+import ar.edu.undav.semillero.domain.entity.Company;
+import ar.edu.undav.semillero.service.CompanyService;
+import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+
+import java.util.Collections;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
-@TestPropertySource("classpath:application.test.properties")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WebMvcTest(value = CompanyController.class)
 public class CompanyControllerTest {
 
-	@Autowired
-	protected WebApplicationContext wac;
+    @Autowired
+    private MockMvc mockMvc;
+    @MockBean
+    private CompanyService companyService;
 
-	protected MockMvc mockMvc;
+    @After
+    public void tearDown() {
+        Mockito.verifyNoMoreInteractions(companyService);
+    }
 
-	@Before
-	public void setup() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-	}
+    // POST Tests
+    @Test
+    public void saveCompanyNotPost() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/company"))
+                .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
+    }
 
-	// POST Tests
-	@Test
-	public void saveCompanyNotPost() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.put("/company"))
-				.andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
-	}
+    @Test
+    public void saveCompanyPost() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/company"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 
-	@Test
-	public void saveCompanyPost() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post("/company"))
-				.andExpect(MockMvcResultMatchers.status().isBadRequest());
-	}
+    @Test
+    public void saveCompanyPostParams() throws Exception {
+        String name = "ECORP";
+        String contact = "Carlos";
+        Company company = new Company(name, contact);
+        ReflectionTestUtils.setField(company, "id", 1L);
+        Mockito.when(companyService.save(Mockito.anyString(), Mockito.anyString())).thenReturn(company);
+        mockMvc.perform(MockMvcRequestBuilders.post("/company").param("name", name).param("contact", contact))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.notNullValue(Number.class)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(name)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.contact", Matchers.is(contact)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.interviews", Matchers.empty()));
+        Mockito.verify(companyService).save(Mockito.eq(name), Mockito.eq(contact));
+    }
 
-	@Test
-	public void saveCompanyPostParams() throws Exception {
-		String name = "ECORP";
-		String contact = "Carlos";
-		MvcResult result = mockMvc
-				.perform(MockMvcRequestBuilders.post("/company").param("name", name).param("contact", contact))
-				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful()).andReturn();
+    // GET Tests
 
-		String responseBodyContent = result.getResponse().getContentAsString();
+    @Test
+    public void getAllCompanies() throws Exception {
+        Mockito.when(companyService.findAll()).thenReturn(Collections.singletonList(new Company()));
+        mockMvc.perform(MockMvcRequestBuilders.get("/company"))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+        Mockito.verify(companyService).findAll();
+    }
 
-		System.out.println(responseBodyContent);
-		//TODO parsear el json de respuesta y assertar campo por campo.
-		//assertar el id auto generado es fruta
-		Assert.assertEquals("{\"id\":5,\"name\":\"ECORP\",\"contact\":\"Carlos\",\"interviews\":[]}",
-				responseBodyContent);
-	}
+    @Test
+    public void getCompany() throws Exception {
+        Mockito.when(companyService.findByName(Mockito.anyString())).thenReturn(Collections.singletonList(new Company()));
+        mockMvc.perform(MockMvcRequestBuilders.get("/company").param("name", "ECORP"))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+        Mockito.verify(companyService).findByName(Mockito.eq("ECORP"));
+    }
 
-	// GET Tests
+    @Test
+    public void getCompanyWrongParam() throws Exception {
+        Mockito.when(companyService.findByName(Mockito.anyString())).thenReturn(Collections.emptyList());
+        mockMvc.perform(MockMvcRequestBuilders.get("/company").param("name", "dfghertyafdgaert"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.content().string(""));
+        Mockito.verify(companyService).findByName(Mockito.eq("dfghertyafdgaert"));
+    }
 
-	@Test
-	public void getAllCompanies() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get("/company"))
-				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
-	}
+    @Test
+    public void getCompanyById() throws Exception {
+        Mockito.when(companyService.findById(Mockito.anyLong())).thenReturn(Optional.of(new Company()));
+        mockMvc.perform(MockMvcRequestBuilders.get("/company/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        Mockito.verify(companyService).findById(Mockito.eq(1L));
+    }
 
-	@Test
-	public void getCompany() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get("/company").param("name", "ECORP"))
-				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
-
-
-	}
-
-	@Test
-	public void getCompanyWrongParam() throws Exception {
-		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/company").param("name", "dfghertyafdgaert"))
-				.andExpect(MockMvcResultMatchers.status().isNotFound()).andReturn();
-
-		String responseBodyContent = result.getResponse().getContentAsString();
-
-		Assert.assertEquals(String.valueOf("null"),responseBodyContent);
-	}
-
-	@Test
-	public void getCompanyById() throws Exception {
-		String id = "1";
-		mockMvc.perform(MockMvcRequestBuilders.get("/company/" + id))
-				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
-	}
-
-
-
+    @Test
+    public void getCompanyByIdNotFound() throws Exception {
+        Mockito.when(companyService.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+        mockMvc.perform(MockMvcRequestBuilders.get("/company/1"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+        Mockito.verify(companyService).findById(Mockito.eq(1L));
+    }
 }

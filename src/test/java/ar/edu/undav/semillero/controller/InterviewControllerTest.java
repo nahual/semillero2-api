@@ -43,8 +43,8 @@ public class InterviewControllerTest {
 
 	@Test
 	public void saveInterviewPostParams() throws Exception {
-		String graduatedId = "1";
-		String companyId = "1";
+		String graduatedId = "1001";
+		String companyId = "1001";
 		mockMvc.perform(MockMvcRequestBuilders.post("/interview").param("graduatedId", graduatedId).param("companyId",
 				companyId)).andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
 	}

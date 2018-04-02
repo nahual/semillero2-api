@@ -45,7 +45,7 @@ public class GraduatedControllerTest {
 	@Test
 	public void saveGraduatedPostParams() throws Exception {
 		String name = "Juan";
-		String nodeid = "1";
+		String nodeid = "1001";
 		MvcResult result = mockMvc
 				.perform(MockMvcRequestBuilders.post("/graduated").param("name", name).param("node", nodeid))
 				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful()).andReturn();

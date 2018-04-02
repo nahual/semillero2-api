@@ -1,44 +1,38 @@
 package ar.edu.undav.semillero.domain.repository;
 
-import java.util.Date;
-
+import ar.edu.undav.semillero.domain.entity.Graduated;
+import ar.edu.undav.semillero.domain.entity.Interview;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.util.Pair;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import ar.edu.undav.semillero.domain.entity.Company;
-import ar.edu.undav.semillero.domain.entity.Graduated;
-import ar.edu.undav.semillero.domain.entity.Interview;
-import ar.edu.undav.semillero.domain.entity.Node;
-import ar.edu.undav.semillero.service.CompanyService;
-import ar.edu.undav.semillero.service.NodeService;
+import java.util.Date;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @TestPropertySource(value = "classpath:application.test.properties")
 public class GraduatedRepositoryTest {
 
-	@Autowired
-	private GraduatedRepository graduatedRepository;
+    @Autowired
+    private GraduatedRepository graduatedRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
+    @Autowired
+    private NodeRepository nodeRepository;
 
-	@Autowired
-	private CompanyService companyService;
-
-	@Autowired
-	private NodeService nodeService;
-
-	@Test
-	public void testSave() {
-		Node node = nodeService.findById((long) 1);
-		Company company = companyService.findById((long) 1);
-		Graduated graduated = new Graduated("Daniel", node, new Date());
-
-		graduated.addInterview(new Interview(graduated, company, new Date(), "no comments"));
-
-		graduatedRepository.save(graduated);
-	}
-
+    @Test
+    public void testSave() {
+        nodeRepository.findById(1001L)
+                .flatMap(node -> companyRepository.findById(1001L).map(company -> Pair.of(node, company)))
+                .map(pair -> {
+                    Graduated graduated = new Graduated("Daniel", pair.getFirst(), new Date());
+                    graduated.addInterview(new Interview(graduated, pair.getSecond(), new Date(), "no comments"));
+                    return graduatedRepository.save(graduated);
+                })
+                .orElseThrow(RuntimeException::new);
+    }
 }
