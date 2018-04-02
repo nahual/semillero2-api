@@ -4,6 +4,7 @@ import ar.edu.undav.semillero.domain.entity.Graduated;
 import ar.edu.undav.semillero.service.GraduatedService;
 import ar.edu.undav.semillero.view.View;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,7 +50,7 @@ public class GraduatedController {
     // Obtener todos los graduados
     @JsonView(View.Summary.class)
     @GetMapping("")
-    public Collection<Graduated> getGraduated(@RequestParam(value = "when", required = false) LocalDate when, @RequestParam(value = "node", required = false) Long nodeId) {
+    public Collection<Graduated> getGraduated(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam(value = "when", required = false) LocalDate when, @RequestParam(value = "node", required = false) Long nodeId) {
         if (nodeId != null) {
             return graduatedService.findByNode(nodeId);
         } else if (when != null) {
