@@ -1,0 +1,14 @@
+spring:
+  jpa.properties.hibernate.dialect: org.hibernate.dialect.MariaDB53Dialect
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://semillero-db/semillero
+    username: root
+    password:
+  jackson.serialization.FAIL_ON_EMPTY_BEANS: false
+
+server.compression:
+  enabled: true
+  mime-types: application/json
+
+logging.file: semillero.log

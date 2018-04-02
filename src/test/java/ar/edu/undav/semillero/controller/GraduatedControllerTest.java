@@ -1,78 +1,98 @@
 package ar.edu.undav.semillero.controller;
 
-import org.junit.Before;
+import ar.edu.undav.semillero.domain.entity.Graduated;
+import ar.edu.undav.semillero.domain.entity.Node;
+import ar.edu.undav.semillero.service.GraduatedService;
+import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
-@TestPropertySource("classpath:application.test.properties")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WebMvcTest(value = GraduatedController.class)
 public class GraduatedControllerTest {
 
-	@Autowired
-	protected WebApplicationContext wac;
+    @Autowired
+    private MockMvc mockMvc;
+    @MockBean
+    private GraduatedService graduatedService;
 
-	protected MockMvc mockMvc;
+    @After
+    public void tearDown() {
+        Mockito.verifyNoMoreInteractions(graduatedService);
+    }
 
-	@Before
-	public void setup() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
-	}
+    // POST Tests
+    @Test
+    public void saveGraduatedNotPost() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/graduated"))
+                .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
+    }
 
-	// POST Tests
-	@Test
-	public void saveGraduatedNotPost() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.put("/graduated"))
-				.andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
-	}
+    @Test
+    public void saveGraduatedPost() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/graduated"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 
-	@Test
-	public void saveGraduatedPost() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post("/graduated"))
-				.andExpect(MockMvcResultMatchers.status().isBadRequest());
-	}
+    @Test
+    public void saveGraduatedPostParams() throws Exception {
+        String name = "Juan";
+        long nodeId = 1001;
+        Graduated graduated = new Graduated(name, new Node(), new Date());
+        ReflectionTestUtils.setField(graduated, "id", 1L);
+        Mockito.when(graduatedService.save(Mockito.anyString(), Mockito.anyLong())).thenReturn(graduated);
+        mockMvc.perform(MockMvcRequestBuilders.post("/graduated").param("name", name).param("node", String.valueOf(nodeId)))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.notNullValue(Number.class)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(name)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.interviews", Matchers.empty()));
+        Mockito.verify(graduatedService).save(Mockito.eq(name), Mockito.eq(nodeId));
+    }
 
-	@Test
-	public void saveGraduatedPostParams() throws Exception {
-		String name = "Juan";
-		String nodeid = "1";
-		MvcResult result = mockMvc
-				.perform(MockMvcRequestBuilders.post("/graduated").param("name", name).param("node", nodeid))
-				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful()).andReturn();
+    // GET Tests
 
-		String responseBodyContent = result.getResponse().getContentAsString();
+    @Test
+    public void getAllGraduated() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/graduated"))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+        Mockito.verify(graduatedService).findAll();
+    }
 
-		System.out.println(responseBodyContent);
+    @Test
+    public void getAllGraduatedByNode() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/graduated").param("node", "1"))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+        Mockito.verify(graduatedService).findByNode(Mockito.eq(1L));
+    }
 
-		// Assert.assertEquals("{\"id\":1,\"name\":\"Juan\",\"deleted\":false,\"interviews\":[],\"node\":null}",
-		// responseBodyContent);
+    @Test
+    public void getAllGraduatedByDate() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/graduated").param("when", "2018-04-02"))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+        Mockito.verify(graduatedService).findByDate(Mockito.eq(LocalDate.of(2018, 4, 2)));
+    }
 
-	}
-
-	// GET Tests
-
-	@Test
-	public void getAllGraduated() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get("/graduated"))
-				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
-	}
-
-	@Test
-	public void getGraduated() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get("/graduated").param("id", "1"))
-				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
-	}
-
-
-
+    @Test
+    public void getGraduated() throws Exception {
+        Mockito.when(graduatedService.findById(Mockito.anyLong())).thenReturn(Optional.of(new Graduated()));
+        mockMvc.perform(MockMvcRequestBuilders.get("/graduated/1"))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+        Mockito.verify(graduatedService).findById(Mockito.eq(1L));
+    }
 }

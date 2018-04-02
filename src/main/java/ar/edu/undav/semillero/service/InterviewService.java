@@ -1,43 +1,60 @@
 package ar.edu.undav.semillero.service;
 
-import java.util.Collection;
-import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import ar.edu.undav.semillero.domain.entity.Company;
 import ar.edu.undav.semillero.domain.entity.Graduated;
 import ar.edu.undav.semillero.domain.entity.Interview;
+import ar.edu.undav.semillero.domain.repository.CompanyRepository;
+import ar.edu.undav.semillero.domain.repository.GraduatedRepository;
 import ar.edu.undav.semillero.domain.repository.InterviewRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class InterviewService {
 
-	@Autowired
-	private InterviewRepository interviewRepository;
+    private final InterviewRepository interviewRepository;
+    private final GraduatedRepository graduatedRepository;
+    private final CompanyRepository companyRepository;
 
-	public void save(Interview interview) {
-		interviewRepository.save(interview);
-	}
+    public InterviewService(InterviewRepository interviewRepository, GraduatedRepository graduatedRepository, CompanyRepository companyRepository) {
+        this.interviewRepository = interviewRepository;
+        this.graduatedRepository = graduatedRepository;
+        this.companyRepository = companyRepository;
+    }
 
-	public Collection<Interview> findAll() {
-		return interviewRepository.findAll();
-	}
+    @Transactional
+    public Interview save(long graduatedId, long companyId) {
+        Graduated graduated = graduatedRepository.getOne(graduatedId);
+        Company company = companyRepository.getOne(companyId);
+        return interviewRepository.save(new Interview(graduated, company, new Date(), "Sin comentarios"));
+    }
 
-	public Interview findById(Long id) {
-		return interviewRepository.findById(id);
-	}
+    @Transactional(readOnly = true)
+    public Collection<Interview> findAll() {
+        return interviewRepository.findAll();
+    }
 
-	public Collection<Interview> findByDate(Date date) {
-		return interviewRepository.findByDate(date);
-	}
+    @Transactional(readOnly = true)
+    public Optional<Interview> findById(Long id) {
+        return interviewRepository.findById(id);
+    }
 
-	public Collection<Interview> findByGraduated(Graduated gId) {
-		return interviewRepository.findByGraduated(gId);
-	}
-	
-	public Collection<Interview> findAllByOrderByIdDesc(){
-		return interviewRepository.findAllByOrderByIdDesc();
-	}
+    @Transactional(readOnly = true)
+    public Collection<Interview> findByDate(Date date) {
+        return interviewRepository.findByDate(date);
+    }
 
+    @Transactional(readOnly = true)
+    public Collection<Interview> findByGraduated(Graduated gId) {
+        return interviewRepository.findByGraduated(gId);
+    }
+
+    @Transactional(readOnly = true)
+    public Collection<Interview> findAllByOrderByIdDesc() {
+        return interviewRepository.findAllByOrderByIdDesc();
+    }
 }

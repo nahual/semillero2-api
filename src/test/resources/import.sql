@@ -1,4 +1,4 @@
-INSERT INTO node VALUES (1,'rivadavia102','avellaneda'),(2,'colon 1453','belgrano');
-INSERT INTO company VALUES (1,'ok','imanol'),(2,'Rodrigo','Imanol'),(3,'Juan','ECORP'),(4,'Lucas','SodaSA');
-INSERT INTO graduated VALUES (1,'imanol',1,0),(2,'Daniel',1,0),(3,'Julian',2,1),(4,'Leandro',2,0);
-INSERT INTO interview VALUES (1,'Sin comentarios','2016-11-02',1,2),(2,'Sin comentarios','2016-11-02',2,3);
+INSERT INTO node (id, name, address) VALUES (1001, 'rivadavia102', 'avellaneda'), (1002, 'colon 1453', 'belgrano');
+INSERT INTO company (id, name, contact) VALUES (1001, 'ok', 'imanol'), (1002, 'Rodrigo', 'Imanol'), (1003, 'Juan', 'ECORP'), (1004, 'Lucas', 'SodaSA');
+INSERT INTO graduated (id, name, node_id, deleted) VALUES (1001, 'imanol', 1001, 0), (1002, 'Daniel', 1001, 0), (1003, 'Julian', 1002, 1), (1004, 'Leandro', 1002, 0);
+INSERT INTO interview (id, comentarios, fecha, graduated_id, company_id) VALUES (1001, 'Sin comentarios', '2016-11-02', 1001, 1002), (1002, 'Sin comentarios', '2016-11-02', 1002, 1003);

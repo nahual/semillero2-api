@@ -1,33 +1,39 @@
 package ar.edu.undav.semillero.service;
 
-import java.util.Collection;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import ar.edu.undav.semillero.domain.entity.Company;
 import ar.edu.undav.semillero.domain.repository.CompanyRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.Optional;
 
 @Service
 public class CompanyService {
 
-	@Autowired
-	private CompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
 
-	public void save(Company company) {
-		companyRepository.save(company);
-	}
+    public CompanyService(CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
+    }
 
-	public Collection<Company> findAll() {
-		return companyRepository.findAll();
-	}
+    @Transactional
+    public Company save(String name, String contactName) {
+        return companyRepository.save(new Company(name, contactName));
+    }
 
-	public Company findById(Long id) {
-		return companyRepository.findOne(id);
-	}
+    @Transactional(readOnly = true)
+    public Collection<Company> findAll() {
+        return companyRepository.findAll();
+    }
 
-	public Collection<Company> findByName(String name) {
-		return companyRepository.findByName(name);
-	}
+    @Transactional(readOnly = true)
+    public Optional<Company> findById(Long id) {
+        return companyRepository.findById(id);
+    }
 
+    @Transactional(readOnly = true)
+    public Collection<Company> findByName(String name) {
+        return companyRepository.findByName(name);
+    }
 }

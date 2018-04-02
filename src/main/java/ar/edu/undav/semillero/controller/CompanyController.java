@@ -4,10 +4,15 @@ import ar.edu.undav.semillero.domain.entity.Company;
 import ar.edu.undav.semillero.service.CompanyService;
 import ar.edu.undav.semillero.view.View;
 import com.fasterxml.jackson.annotation.JsonView;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
@@ -16,49 +21,31 @@ import java.util.Collection;
 @CrossOrigin
 public class CompanyController {
 
-	@Autowired
-	private CompanyService companyService;
+    private final CompanyService companyService;
 
-	// Agregar una company
-	@RequestMapping(value = "", method = RequestMethod.POST)
-	Company addCompany(@RequestParam(value = "name") String name, @RequestParam(value = "contact") String contactName) {
-		Company company = new Company(name, contactName);
-		companyService.save(company);
-		return company;
-	}
+    public CompanyController(CompanyService companyService) {
+        this.companyService = companyService;
+    }
 
-	// Obtener company por ID
-	@ResponseBody
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Company> getCompany(@PathVariable Long id) {
-		Company company = companyService.findById(id);
-		if(company == null){
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		}else{
-			return ResponseEntity.ok(company);
-		}
-	}
+    // Agregar una company
+    @PostMapping("")
+    public Company addCompany(@RequestParam(value = "name") String name, @RequestParam(value = "contact") String contactName) {
+        return companyService.save(name, contactName);
+    }
 
+    // Obtener company por ID
+    @ResponseBody
+    @GetMapping("/{id}")
+    public ResponseEntity<Company> getCompany(@PathVariable Long id) {
+        return WebUtils.nullToNotFound(companyService.findById(id));
+    }
 
-	// Obtener todas las companias, si se pasa parametro, se devuelve por nombre
-	@ResponseBody
-	@JsonView(View.Summary.class)
-	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ResponseEntity<Collection<Company>> getCompany(@RequestParam(value = "name", defaultValue = "null") String name) {
-		if (name.equals("null")) {
-			Collection<Company> companies = companyService.findAll();
-			if(companies == null){return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);}
-				else{
-					return ResponseEntity.ok(companies);
-				}
-		}
-		else{
-			Collection<Company> companies = companyService.findByName(name);
-			if(companies.isEmpty()){return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);}
-				else{
-					return ResponseEntity.ok(companies);
-				}
-			}
-	}
-
+    // Obtener todas las companias, si se pasa parametro, se devuelve por nombre
+    @ResponseBody
+    @JsonView(View.Summary.class)
+    @GetMapping("")
+    public ResponseEntity<Collection<Company>> getCompany(@RequestParam(value = "name", required = false) String name) {
+        Collection<Company> companies = name == null ? companyService.findAll() : companyService.findByName(name);
+        return WebUtils.emptyToNotFound(companies);
+    }
 }

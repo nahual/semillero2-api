@@ -47,8 +47,8 @@ public class Interview {
 	public Interview() {
 	}
 
-	public Interview(Graduated nameGraduated, Company company, Date date, String comments) {
-		this.graduated = nameGraduated;
+	public Interview(Graduated graduated, Company company, Date date, String comments) {
+		this.graduated = graduated;
 		this.company = company;
 		this.date = date;
 		this.comments = comments;
