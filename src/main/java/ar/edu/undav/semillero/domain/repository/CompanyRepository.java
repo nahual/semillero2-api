@@ -1,9 +1,10 @@
 package ar.edu.undav.semillero.domain.repository;
 
-import ar.edu.undav.semillero.domain.entity.Company;
+import java.util.Collection;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collection;
+import ar.edu.undav.semillero.domain.entity.Company;
 
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 

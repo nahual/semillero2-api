@@ -1,11 +1,10 @@
 package ar.edu.undav.semillero.controller;
 
-import ar.edu.undav.semillero.domain.entity.Graduated;
 import ar.edu.undav.semillero.domain.entity.Interview;
-import ar.edu.undav.semillero.service.GraduatedService;
 import ar.edu.undav.semillero.service.InterviewService;
 import ar.edu.undav.semillero.view.View;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 
 @RestController
 @RequestMapping("/interview")
@@ -28,11 +24,9 @@ import java.util.Date;
 public class InterviewController {
 
     private final InterviewService interviewService;
-    private final GraduatedService graduatedService;
 
-    public InterviewController(InterviewService interviewService, GraduatedService graduatedService) {
+    public InterviewController(InterviewService interviewService) {
         this.interviewService = interviewService;
-        this.graduatedService = graduatedService;
     }
 
     // Agregar una entrevista
@@ -51,27 +45,17 @@ public class InterviewController {
     // Obtener todas las entrevistas
     @JsonView(View.Summary.class)
     @GetMapping("")
-    public Collection<Interview> getInterview(@RequestParam(value = "order", defaultValue = "-1") int order,
-            @RequestParam(value = "año", defaultValue = "-1") int año,
-            @RequestParam(value = "mes", defaultValue = "-1") int mes,
-            @RequestParam(value = "dia", defaultValue = "-1") int dia,
-            @RequestParam(value = "gId", defaultValue = "-1") long gId) throws ParseException {
-
-        if (dia != -1) {
-            DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-            Date fecha = df.parse(año + "/" + mes + "/" + dia + "/");
-            Collection<Interview> interviews = interviewService.findByDate(fecha);
-            return interviews;
-        } else if (gId != -1) {
-            Graduated graduated = graduatedService.findById(gId).get();
-            Collection<Interview> interviews = interviewService.findByGraduated(graduated);
-            return interviews;
-        } else if (order != -1) {
-            Collection<Interview> interviews = interviewService.findAllByOrderByIdDesc();
-            return interviews;
+    public Collection<Interview> getInterview(@RequestParam(value = "order", required = false) Integer order,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam(value = "when", required = false) LocalDate when,
+            @RequestParam(value = "gId", required = false) Long gId) {
+        if (when != null) {
+            return interviewService.findByDate(when);
+        } else if (gId != null) {
+            return interviewService.findByGraduated(gId);
+        } else if (order != null) {
+            return interviewService.findAllOrderByIdDesc();
         } else {
-            Collection<Interview> interviews = interviewService.findAll();
-            return interviews;
+            return interviewService.findAll();
+        }
         }
     }
-}

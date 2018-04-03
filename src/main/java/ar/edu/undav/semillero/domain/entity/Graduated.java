@@ -1,9 +1,9 @@
 package ar.edu.undav.semillero.domain.entity;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import ar.edu.undav.semillero.view.View;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -14,11 +14,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import ar.edu.undav.semillero.view.View;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table(name = "graduated")
@@ -34,7 +33,7 @@ public class Graduated {
 	private String name;
 
 	@JsonView(View.Summary.class)
-	private Date date;
+	private LocalDate date;
 
 	@JsonView(View.Summary.class)
 	private boolean deleted = false;
@@ -50,18 +49,18 @@ public class Graduated {
 	public Graduated() {
 	}
 
-	public Graduated(String name, Node node, Date date) {
+	public Graduated(String name, Node node) {
 		this.name = name;
 		this.node = node;
-		this.date = date;
+		date = LocalDate.now();
 	}
 
-	public void setDeleted(boolean d) {
-		this.deleted = d;
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	public boolean getDeleted() {
-		return this.deleted;
+		return deleted;
 	}
 
 	public Long getId() {
@@ -73,7 +72,7 @@ public class Graduated {
 	}
 
 	public void addInterview(Interview interview) {
-		this.interviews.add(interview);
+        interviews.add(interview);
 	}
 
 	public List<Interview> getInterviews() {
@@ -87,5 +86,4 @@ public class Graduated {
 	public Node getNode() {
 		return node;
 	}
-
 }

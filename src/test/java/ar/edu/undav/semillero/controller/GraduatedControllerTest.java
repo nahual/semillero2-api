@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Optional;
 
 @RunWith(SpringRunner.class)
@@ -53,11 +52,11 @@ public class GraduatedControllerTest {
     public void saveGraduatedPostParams() throws Exception {
         String name = "Juan";
         long nodeId = 1001;
-        Graduated graduated = new Graduated(name, new Node(), new Date());
+        Graduated graduated = new Graduated(name, new Node());
         ReflectionTestUtils.setField(graduated, "id", 1L);
         Mockito.when(graduatedService.save(Mockito.anyString(), Mockito.anyLong())).thenReturn(graduated);
         mockMvc.perform(MockMvcRequestBuilders.post("/graduated").param("name", name).param("node", String.valueOf(nodeId)))
-                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.notNullValue(Number.class)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(name)))
@@ -70,21 +69,21 @@ public class GraduatedControllerTest {
     @Test
     public void getAllGraduated() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/graduated"))
-                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+                .andExpect(MockMvcResultMatchers.status().isOk());
         Mockito.verify(graduatedService).findAll();
     }
 
     @Test
     public void getAllGraduatedByNode() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/graduated").param("node", "1"))
-                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+                .andExpect(MockMvcResultMatchers.status().isOk());
         Mockito.verify(graduatedService).findByNode(Mockito.eq(1L));
     }
 
     @Test
     public void getAllGraduatedByDate() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/graduated").param("when", "2018-04-02"))
-                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+                .andExpect(MockMvcResultMatchers.status().isOk());
         Mockito.verify(graduatedService).findByDate(Mockito.eq(LocalDate.of(2018, 4, 2)));
     }
 
@@ -92,7 +91,7 @@ public class GraduatedControllerTest {
     public void getGraduated() throws Exception {
         Mockito.when(graduatedService.findById(Mockito.anyLong())).thenReturn(Optional.of(new Graduated()));
         mockMvc.perform(MockMvcRequestBuilders.get("/graduated/1"))
-                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+                .andExpect(MockMvcResultMatchers.status().isOk());
         Mockito.verify(graduatedService).findById(Mockito.eq(1L));
     }
 }

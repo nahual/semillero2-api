@@ -11,5 +11,5 @@ public interface GraduatedRepository extends JpaRepository<Graduated, Long> {
 
     Collection<Graduated> findByNode(Node node);
 
-    Collection<Graduated> findByDate(LocalDate date);
+	Collection<Graduated> findByDate(LocalDate date);
 }

@@ -1,31 +1,35 @@
 package ar.edu.undav.semillero.controller;
 
-import org.junit.Before;
+import ar.edu.undav.semillero.domain.entity.Node;
+import ar.edu.undav.semillero.service.NodeService;
+import org.assertj.core.api.Assertions;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
-@TestPropertySource("classpath:application.test.properties")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WebMvcTest(value = NodeController.class)
 public class NodeControllerTest {
 
 	@Autowired
-	protected WebApplicationContext wac;
+    private MockMvc mockMvc;
+    @MockBean
+    private NodeService nodeService;
 
-	protected MockMvc mockMvc;
-
-	@Before
-	public void setup() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+    @After
+    public void tearDown() {
+        Mockito.verifyNoMoreInteractions(nodeService);
 	}
 
 	// POST Tests
@@ -45,7 +49,11 @@ public class NodeControllerTest {
 		String name = "Juan";
 		String address = "sacacorcho 123";
 		mockMvc.perform(MockMvcRequestBuilders.post("/node").param("name", name).param("address", address))
-				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        ArgumentCaptor<Node> nodeArgumentCaptor = ArgumentCaptor.forClass(Node.class);
+        Mockito.verify(nodeService).save(nodeArgumentCaptor.capture());
+        Assertions.assertThat(nodeArgumentCaptor.getValue().getName()).isEqualTo(name);
+        Assertions.assertThat(nodeArgumentCaptor.getValue().getAddress()).isEqualTo(address);
 	}
 
 	// GET Tests
@@ -53,14 +61,22 @@ public class NodeControllerTest {
 	@Test
 	public void getAllNodes() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/node"))
-				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        Mockito.verify(nodeService).findAll();
+    }
+
+    @Test
+    public void getNode() throws Exception {
+        Mockito.when(nodeService.findById(Mockito.anyLong())).thenReturn(Optional.of(new Node()));
+        mockMvc.perform(MockMvcRequestBuilders.get("/node/1"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        Mockito.verify(nodeService).findById(Mockito.eq(1L));
 	}
 
+    @Test
 	public void getNotExistingNode() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get("/node/-1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/node/999"))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest());
-	}
-
-
-
+        Mockito.verify(nodeService).findById(Mockito.eq(999L));
+    }
 }

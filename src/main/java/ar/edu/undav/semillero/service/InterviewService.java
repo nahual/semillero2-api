@@ -9,8 +9,9 @@ import ar.edu.undav.semillero.domain.repository.InterviewRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
+import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -30,7 +31,7 @@ public class InterviewService {
     public Interview save(long graduatedId, long companyId) {
         Graduated graduated = graduatedRepository.getOne(graduatedId);
         Company company = companyRepository.getOne(companyId);
-        return interviewRepository.save(new Interview(graduated, company, new Date(), "Sin comentarios"));
+        return interviewRepository.save(new Interview(graduated, company, "Sin comentarios"));
     }
 
     @Transactional(readOnly = true)
@@ -44,17 +45,19 @@ public class InterviewService {
     }
 
     @Transactional(readOnly = true)
-    public Collection<Interview> findByDate(Date date) {
-        return interviewRepository.findByDate(date);
+    public Collection<Interview> findByDate(LocalDate when) {
+        return interviewRepository.findByDate(when);
     }
 
     @Transactional(readOnly = true)
-    public Collection<Interview> findByGraduated(Graduated gId) {
-        return interviewRepository.findByGraduated(gId);
+    public Collection<Interview> findByGraduated(long graduatedId) {
+        return graduatedRepository.findById(graduatedId)
+                .map(interviewRepository::findByGraduated)
+                .orElseGet(Collections::emptyList);
     }
 
     @Transactional(readOnly = true)
-    public Collection<Interview> findAllByOrderByIdDesc() {
+    public Collection<Interview> findAllOrderByIdDesc() {
         return interviewRepository.findAllByOrderByIdDesc();
     }
 }

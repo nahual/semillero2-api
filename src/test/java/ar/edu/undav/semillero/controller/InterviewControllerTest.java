@@ -1,31 +1,32 @@
 package ar.edu.undav.semillero.controller;
 
-import org.junit.Before;
+import ar.edu.undav.semillero.service.InterviewService;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+
+import java.time.LocalDate;
 
 @RunWith(SpringRunner.class)
-@TestPropertySource("classpath:application.test.properties")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WebMvcTest(value = InterviewController.class)
 public class InterviewControllerTest {
 
 	@Autowired
-	protected WebApplicationContext wac;
+    private MockMvc mockMvc;
+    @MockBean
+    private InterviewService interviewService;
 
-	protected MockMvc mockMvc;
-
-	@Before
-	public void setup() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+    @After
+    public void tearDown() {
+        Mockito.verifyNoMoreInteractions(interviewService);
 	}
 
 	// POST Tests
@@ -43,10 +44,13 @@ public class InterviewControllerTest {
 
 	@Test
 	public void saveInterviewPostParams() throws Exception {
-		String graduatedId = "1001";
-		String companyId = "1001";
-		mockMvc.perform(MockMvcRequestBuilders.post("/interview").param("graduatedId", graduatedId).param("companyId",
-				companyId)).andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+        long graduatedId = 1001;
+        long companyId = 1001;
+        mockMvc.perform(MockMvcRequestBuilders.post("/interview")
+                .param("graduatedId", String.valueOf(graduatedId))
+                .param("companyId", String.valueOf(companyId)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        Mockito.verify(interviewService).save(Mockito.eq(graduatedId), Mockito.eq(companyId));
 	}
 
 	// GET Tests
@@ -54,9 +58,28 @@ public class InterviewControllerTest {
 	@Test
 	public void getAllInterviews() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/interview"))
-				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        Mockito.verify(interviewService).findAll();
 	}
 
+    @Test
+    public void getAllInterviewsOrderDesc() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/interview").param("order", "1"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        Mockito.verify(interviewService).findAllOrderByIdDesc();
+    }
 
+    @Test
+    public void getAllInterviewsByGraduated() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/interview").param("gId", "1"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        Mockito.verify(interviewService).findByGraduated(Mockito.eq(1L));
+    }
 
+    @Test
+    public void getAllInterviewsByDate() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/interview").param("when", "2018-04-03"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+        Mockito.verify(interviewService).findByDate(Mockito.eq(LocalDate.of(2018, 4, 3)));
+}
 }

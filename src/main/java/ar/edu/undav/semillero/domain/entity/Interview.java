@@ -1,6 +1,9 @@
 package ar.edu.undav.semillero.domain.entity;
 
-import java.util.Date;
+import ar.edu.undav.semillero.view.View;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,13 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Type;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import ar.edu.undav.semillero.view.View;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "interview")
@@ -35,10 +32,9 @@ public class Interview {
 	@JsonView(View.Summary.class)
 	private Company company;
 
-	@Column(name = "Fecha")
-	@Type(type = "date")
+    @Column(name = "fecha")
 	@JsonView(View.Summary.class)
-	private Date date;
+    private LocalDate date;
 
 	@Column(name = "Comentarios")
 	@JsonView(View.Summary.class)
@@ -47,18 +43,18 @@ public class Interview {
 	public Interview() {
 	}
 
-	public Interview(Graduated graduated, Company company, Date date, String comments) {
+    public Interview(Graduated graduated, Company company, String comments) {
 		this.graduated = graduated;
 		this.company = company;
-		this.date = date;
 		this.comments = comments;
+        date = LocalDate.now();
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public Date getDate() {
+    public LocalDate getDate() {
 		return date;
 	}
 
@@ -73,5 +69,4 @@ public class Interview {
 	public Company getCompany() {
 		return company;
 	}
-
 }

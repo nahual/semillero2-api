@@ -4,7 +4,6 @@ import ar.edu.undav.semillero.domain.entity.Node;
 import ar.edu.undav.semillero.service.NodeService;
 import ar.edu.undav.semillero.view.View;
 import com.fasterxml.jackson.annotation.JsonView;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,14 +47,8 @@ public class NodeController {
     // Obtener todos los nodos
     @JsonView(View.Summary.class)
     @GetMapping("")
-    public ResponseEntity<Collection<Node>> getNode(@RequestParam(value = "date", defaultValue = "null") String date,
-            @RequestParam(value = "node", defaultValue = "null") String node) {
+    public ResponseEntity<Collection<Node>> getNode() {
         Collection<Node> nodes = nodeService.findAll();
-        if (node == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        } else {
             return ResponseEntity.ok(nodes);
         }
     }
-
-}
