@@ -5,26 +5,20 @@ baseUri: /http/localhost:8080/
 
 protocols:
   - HTTP
+
 /graduated:
   displayName: graduated
   description: graduados del Proyecto Nahual
   get:
     description: Devuelve una coleccion de Graduados
     queryParameters:
-      año:
+      when:
+        type: date
+        required: false
+        example: 2018-03-28
+      node:
         type: number
-        default: -1
-      mes:
-        type: number
-        default: -1
-
-      dia:
-        type: number
-        default: -1
-
-      nodeId:
-        type: number
-        default: -1
+        required: false
     responses:
       200:
         description: Obtencion exitosa de todos los graduados(Incluso los que estan marcados con borrado logico)
@@ -51,7 +45,6 @@ protocols:
                   }
                 }
               ]
-
   post:
     description: Creacion de un nuevo graduado del Proyecto Nahual
     responses:
@@ -94,15 +87,16 @@ protocols:
         type: string
         required: true
         example: Daniel
-      nodeId:
+      node:
         description: Id de un nodo
         type: number
         required: true
   /{id}:
-          delete:
-            description: Elimina un graduado por su Id
-          get:
-            description: Detalle de un graduado por su Id
+    delete:
+      description: Elimina un graduado por su Id
+    get:
+      description: Detalle de un graduado por su Id
+
 /company:
   displayName: company
   description: Compañias que tendran contacto con los graduados
@@ -134,9 +128,7 @@ protocols:
     queryParameters:
       name:
         type: string
-        required: true
-        default: null
-
+        required: false
   post:
     description: Creacion de una nueva compañia
     responses:
@@ -178,6 +170,7 @@ protocols:
       description: Detalle de una compañia por su Id
     delete:
       description: Eliminar una compañia por su Id
+
 /node:
   displayName: node
   description: Un nodo es el lugar de graduacion de los graduados
@@ -293,20 +286,15 @@ protocols:
       order:
         description: Parametro que indica si la lista estara ordenada en forma Descendente
         type: number
-        default: -1
-      año:
-        type: number
-        default: -1
-      mes:
-        type: number
-        default: -1
-      dia:
-        default: -1
-        type: number
+        required: false
+      when:
+        type: date
+        required: false
+        example: 2018-03-28
       gId:
         description: Id de un graduado especifico
         type: number
-        default: -1
+        required: false
   post:
     description: Creacion de una entrevista
     responses:
@@ -359,12 +347,12 @@ protocols:
                 "path": "/interview"
               }
     queryParameters:
-      gId:
+      graduatedId:
         description: Id de un graduado
         type: number
         required: true
         example: 2
-      cId:
+      companyId:
         description: Id de una compañia
         type: number
         required: true
