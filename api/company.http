@@ -1,0 +1,10 @@
+### create company
+POST {{host}}/company?name=Pivotal&contact=Josh
+
+### list companies
+GET {{host}}/company
+
+### get company by id
+GET {{host}}/company/1
+
+###
