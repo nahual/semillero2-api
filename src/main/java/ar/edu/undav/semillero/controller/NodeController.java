@@ -38,17 +38,14 @@ public class NodeController {
     // Obtener nodos por ID
     @ResponseBody
     @GetMapping("/{id}")
-    public ResponseEntity<Node> getNode(@PathVariable Long id) {
-        return nodeService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.badRequest().build());
+    public ResponseEntity<Node> getNode(@PathVariable long id) {
+        return WebUtils.emptyToNotFound(nodeService.findById(id));
     }
 
     // Obtener todos los nodos
     @JsonView(View.Summary.class)
     @GetMapping("")
-    public ResponseEntity<Collection<Node>> getNode() {
-        Collection<Node> nodes = nodeService.findAll();
-            return ResponseEntity.ok(nodes);
-        }
+    public Collection<Node> getNode() {
+        return nodeService.findAll();
     }
+}

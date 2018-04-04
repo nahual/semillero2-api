@@ -1,7 +1,7 @@
 #%RAML 0.8
 title: Nahual Project
 version: v1
-baseUri: /http/localhost:8080/
+baseUri: http://localhost:8080/
 
 protocols:
   - HTTP
@@ -161,7 +161,7 @@ protocols:
         type: string
         required: true
         example: TARNET S.A.
-      contactName:
+      contact:
         type: string
         required: true
         example: Juan
@@ -199,13 +199,6 @@ protocols:
                 }
               ]
     description: Se obtienen todos los nodos existentes
-    queryParameters:
-      date:
-        type: string
-        default: null
-      node:
-        type: string
-        default: null
   post:
     responses:
       200:
@@ -283,15 +276,16 @@ protocols:
                 }
               ]
     queryParameters:
-      order:
+      desc:
         description: Parametro que indica si la lista estara ordenada en forma Descendente
-        type: number
-        required: false
+        type: boolean
+        required: true
+        default: false
       when:
         type: date
         required: false
         example: 2018-03-28
-      gId:
+      graduated:
         description: Id de un graduado especifico
         type: number
         required: false
@@ -347,17 +341,16 @@ protocols:
                 "path": "/interview"
               }
     queryParameters:
-      graduatedId:
+      graduated:
         description: Id de un graduado
         type: number
         required: true
         example: 2
-      companyId:
+      company:
         description: Id de una compañia
         type: number
         required: true
         example: 1
-
   /{id}:
     get:
       description: Obtiene una entrevista por Id

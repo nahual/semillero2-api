@@ -22,7 +22,7 @@ import java.util.Optional;
 @WebMvcTest(value = NodeController.class)
 public class NodeControllerTest {
 
-	@Autowired
+    @Autowired
     private MockMvc mockMvc;
     @MockBean
     private NodeService nodeService;
@@ -30,37 +30,37 @@ public class NodeControllerTest {
     @After
     public void tearDown() {
         Mockito.verifyNoMoreInteractions(nodeService);
-	}
+    }
 
-	// POST Tests
-	@Test
-	public void saveNodeNotPost() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.put("/node"))
-				.andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
-	}
+    // POST Tests
+    @Test
+    public void saveNodeNotPost() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/node"))
+                .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
+    }
 
-	@Test
-	public void saveNodePost() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post("/node")).andExpect(MockMvcResultMatchers.status().isBadRequest());
-	}
+    @Test
+    public void saveNodePost() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/node")).andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 
-	@Test
-	public void saveNodePostParams() throws Exception {
-		String name = "Juan";
-		String address = "sacacorcho 123";
-		mockMvc.perform(MockMvcRequestBuilders.post("/node").param("name", name).param("address", address))
+    @Test
+    public void saveNodePostParams() throws Exception {
+        String name = "Juan";
+        String address = "sacacorcho 123";
+        mockMvc.perform(MockMvcRequestBuilders.post("/node").param("name", name).param("address", address))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         ArgumentCaptor<Node> nodeArgumentCaptor = ArgumentCaptor.forClass(Node.class);
         Mockito.verify(nodeService).save(nodeArgumentCaptor.capture());
         Assertions.assertThat(nodeArgumentCaptor.getValue().getName()).isEqualTo(name);
         Assertions.assertThat(nodeArgumentCaptor.getValue().getAddress()).isEqualTo(address);
-	}
+    }
 
-	// GET Tests
+    // GET Tests
 
-	@Test
-	public void getAllNodes() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get("/node"))
+    @Test
+    public void getAllNodes() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/node"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         Mockito.verify(nodeService).findAll();
     }
@@ -71,12 +71,12 @@ public class NodeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/node/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         Mockito.verify(nodeService).findById(Mockito.eq(1L));
-	}
+    }
 
     @Test
-	public void getNotExistingNode() throws Exception {
+    public void getNotExistingNode() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/node/999"))
-				.andExpect(MockMvcResultMatchers.status().isBadRequest());
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
         Mockito.verify(nodeService).findById(Mockito.eq(999L));
     }
 }

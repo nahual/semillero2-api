@@ -18,8 +18,8 @@ public class CompanyService {
     }
 
     @Transactional
-    public Company save(String name, String contactName) {
-        return companyRepository.save(new Company(name, contactName));
+    public Company save(String name, String contact) {
+        return companyRepository.save(new Company(name, contact));
     }
 
     @Transactional(readOnly = true)

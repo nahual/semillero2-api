@@ -31,31 +31,29 @@ public class InterviewController {
 
     // Agregar una entrevista
     @PostMapping("")
-    public Interview addInterview(@RequestParam(value = "graduatedId") long gId, @RequestParam(value = "companyId") long cId) {
-        return interviewService.save(gId, cId);
+    public Interview addInterview(@RequestParam(value = "graduated") long graduatedId, @RequestParam(value = "company") long companyId) {
+        return interviewService.save(graduatedId, companyId);
     }
 
     // Obtener entrevista por id
     @ResponseBody
     @GetMapping("/{id}")
     public ResponseEntity<Interview> getInterview(@PathVariable long id) {
-        return WebUtils.nullToNotFound(interviewService.findById(id));
+        return WebUtils.emptyToNotFound(interviewService.findById(id));
     }
 
     // Obtener todas las entrevistas
     @JsonView(View.Summary.class)
     @GetMapping("")
-    public Collection<Interview> getInterview(@RequestParam(value = "order", required = false) Integer order,
+    public Collection<Interview> getInterview(@RequestParam(value = "desc", defaultValue = "false") boolean desc,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam(value = "when", required = false) LocalDate when,
-            @RequestParam(value = "gId", required = false) Long gId) {
+            @RequestParam(value = "graduated", required = false) Long graduatedId) {
         if (when != null) {
             return interviewService.findByDate(when);
-        } else if (gId != null) {
-            return interviewService.findByGraduated(gId);
-        } else if (order != null) {
-            return interviewService.findAllOrderByIdDesc();
+        } else if (graduatedId != null) {
+            return interviewService.findByGraduated(graduatedId);
         } else {
-            return interviewService.findAll();
-        }
+            return desc ? interviewService.findAllOrderByIdDesc() : interviewService.findAll();
         }
     }
+}

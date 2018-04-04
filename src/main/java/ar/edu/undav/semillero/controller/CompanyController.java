@@ -29,15 +29,15 @@ public class CompanyController {
 
     // Agregar una company
     @PostMapping("")
-    public Company addCompany(@RequestParam(value = "name") String name, @RequestParam(value = "contact") String contactName) {
-        return companyService.save(name, contactName);
+    public Company addCompany(@RequestParam(value = "name") String name, @RequestParam(value = "contact") String contact) {
+        return companyService.save(name, contact);
     }
 
     // Obtener company por ID
     @ResponseBody
     @GetMapping("/{id}")
-    public ResponseEntity<Company> getCompany(@PathVariable Long id) {
-        return WebUtils.nullToNotFound(companyService.findById(id));
+    public ResponseEntity<Company> getCompany(@PathVariable long id) {
+        return WebUtils.emptyToNotFound(companyService.findById(id));
     }
 
     // Obtener todas las companias, si se pasa parametro, se devuelve por nombre
