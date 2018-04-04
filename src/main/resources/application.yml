@@ -15,7 +15,7 @@ logging.file: semillero.log
 
 ---
 spring:
-  profiles: production
+  profiles: docker
   datasource:
     url: jdbc:mariadb://semillero-db/semillero
     username: root
