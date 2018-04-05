@@ -2,6 +2,7 @@ package ar.edu.undav.semillero.service;
 
 import ar.edu.undav.semillero.domain.entity.Node;
 import ar.edu.undav.semillero.domain.repository.NodeRepository;
+import ar.edu.undav.semillero.request.CreateNodeRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +19,8 @@ public class NodeService {
     }
 
     @Transactional
-    public Node save(Node node) {
-        return nodeRepository.save(node);
+    public Node save(CreateNodeRequest request) {
+        return nodeRepository.save(new Node(request.getName(), request.getAddress()));
     }
 
     @Transactional(readOnly = true)

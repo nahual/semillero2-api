@@ -1,5 +1,11 @@
 ### create company
-POST {{host}}/company?name=Pivotal&contact=Josh
+POST {{host}}/company
+Content-Type: application/json
+
+{
+    "name": "Pivotal",
+    "contact": "Josh"
+}
 
 ### list companies
 GET {{host}}/company

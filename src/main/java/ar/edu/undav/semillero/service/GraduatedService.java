@@ -1,9 +1,9 @@
 package ar.edu.undav.semillero.service;
 
 import ar.edu.undav.semillero.domain.entity.Graduated;
-import ar.edu.undav.semillero.domain.entity.Node;
 import ar.edu.undav.semillero.domain.repository.GraduatedRepository;
 import ar.edu.undav.semillero.domain.repository.NodeRepository;
+import ar.edu.undav.semillero.request.CreateGraduatedRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +24,10 @@ public class GraduatedService {
     }
 
     @Transactional
-    public Graduated save(String name, long nodeId) {
-        Node node = nodeRepository.getOne(nodeId);
-        return graduatedRepository.save(new Graduated(name, node));
+    public Graduated save(CreateGraduatedRequest request) {
+        return nodeRepository.findById(request.getNode())
+                .map(node -> graduatedRepository.save(new Graduated(request.getName(), node)))
+                .orElseThrow(RuntimeException::new);
     }
 
     @Transactional

@@ -2,7 +2,9 @@ package ar.edu.undav.semillero.controller;
 
 import ar.edu.undav.semillero.domain.entity.Graduated;
 import ar.edu.undav.semillero.domain.entity.Node;
+import ar.edu.undav.semillero.request.CreateGraduatedRequest;
 import ar.edu.undav.semillero.service.GraduatedService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Test;
@@ -27,6 +29,8 @@ public class GraduatedControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper mapper;
     @MockBean
     private GraduatedService graduatedService;
 
@@ -52,16 +56,24 @@ public class GraduatedControllerTest {
     public void saveGraduatedPostParams() throws Exception {
         String name = "Juan";
         long nodeId = 1001;
+        CreateGraduatedRequest request = new CreateGraduatedRequest(name, nodeId);
         Graduated graduated = new Graduated(name, new Node());
         ReflectionTestUtils.setField(graduated, "id", 1L);
-        Mockito.when(graduatedService.save(Mockito.anyString(), Mockito.anyLong())).thenReturn(graduated);
-        mockMvc.perform(MockMvcRequestBuilders.post("/graduated").param("name", name).param("node", String.valueOf(nodeId)))
+        Mockito.when(graduatedService.save(Mockito.any(CreateGraduatedRequest.class))).thenReturn(graduated);
+        mockMvc.perform(MockMvcRequestBuilders.post("/graduated").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.notNullValue(Number.class)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(name)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.interviews", Matchers.empty()));
-        Mockito.verify(graduatedService).save(Mockito.eq(name), Mockito.eq(nodeId));
+        Mockito.verify(graduatedService).save(Mockito.eq(request));
+    }
+
+    @Test
+    public void saveGraduatedPostParamsInvalid() throws Exception {
+        CreateGraduatedRequest request = new CreateGraduatedRequest("", null);
+        mockMvc.perform(MockMvcRequestBuilders.post("/graduated").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     // GET Tests

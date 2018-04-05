@@ -4,6 +4,7 @@ import ar.edu.undav.semillero.domain.entity.Interview;
 import ar.edu.undav.semillero.domain.repository.CompanyRepository;
 import ar.edu.undav.semillero.domain.repository.GraduatedRepository;
 import ar.edu.undav.semillero.domain.repository.InterviewRepository;
+import ar.edu.undav.semillero.request.CreateInterviewRequest;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,9 +28,9 @@ public class InterviewService {
     }
 
     @Transactional
-    public Interview save(long graduatedId, long companyId) {
-        return companyRepository.findById(companyId)
-                .flatMap(company -> graduatedRepository.findById(graduatedId).map(graduated -> Pair.of(company, graduated)))
+    public Interview save(CreateInterviewRequest request) {
+        return companyRepository.findById(request.getCompany())
+                .flatMap(company -> graduatedRepository.findById(request.getGraduated()).map(graduated -> Pair.of(company, graduated)))
                 .map(pair -> interviewRepository.save(new Interview(pair.getSecond(), pair.getFirst(), "Sin comentarios")))
                 .orElseThrow(RuntimeException::new);
     }
