@@ -12,7 +12,7 @@ public class GraduatedTest {
         Graduated graduated = new Graduated(nombre, node); // Actualizar
 																		// Assert
 		Assert.assertEquals(nombre, graduated.getName());
-		Assert.assertEquals(false, graduated.getDeleted());
+		Assert.assertEquals(false, graduated.isDeleted());
 	}
 
 	@Test

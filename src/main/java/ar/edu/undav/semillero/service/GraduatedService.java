@@ -30,10 +30,8 @@ public class GraduatedService {
     }
 
     @Transactional
-    public Graduated deleteById(long id) {
-        Graduated graduated = graduatedRepository.getOne(id);
-        graduated.setDeleted(true);
-        return graduated;
+    public boolean deleteById(long id) {
+        return graduatedRepository.softDeleteById(id) == 1;
     }
 
     @Transactional(readOnly = true)

@@ -43,8 +43,8 @@ public class GraduatedController {
 
     // Eliminar un graduado
     @DeleteMapping("/{id}")
-    public Graduated deleteGraduated(@PathVariable long id) {
-        return graduatedService.deleteById(id);
+    public ResponseEntity<Void> deleteGraduated(@PathVariable long id) {
+        return graduatedService.deleteById(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
     // Obtener todos los graduados
