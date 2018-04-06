@@ -47,6 +47,21 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>de.androbit</groupId>
+                <artifactId>raml-converter-maven-plugin</artifactId>
+                <version>0.15</version>
+                <configuration>
+                    <raml>api.raml</raml>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>html</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

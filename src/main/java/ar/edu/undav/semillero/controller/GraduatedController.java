@@ -37,13 +37,13 @@ public class GraduatedController {
 
     // Obtener graduados por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Graduated> getGraduated(@PathVariable Long id) {
-        return WebUtils.nullToNotFound(graduatedService.findById(id));
+    public ResponseEntity<Graduated> getGraduated(@PathVariable long id) {
+        return WebUtils.emptyToNotFound(graduatedService.findById(id));
     }
 
     // Eliminar un graduado
     @DeleteMapping("/{id}")
-    public Graduated deleteGraduated(@PathVariable Long id) {
+    public Graduated deleteGraduated(@PathVariable long id) {
         return graduatedService.deleteById(id);
     }
 

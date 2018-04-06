@@ -1,0 +1,4 @@
+### list graduated
+GET {{host}}/graduated
+
+###

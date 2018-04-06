@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -27,7 +26,7 @@ public class GraduatedService {
     @Transactional
     public Graduated save(String name, long nodeId) {
         Node node = nodeRepository.getOne(nodeId);
-        return graduatedRepository.save(new Graduated(name, node, new Date()));
+        return graduatedRepository.save(new Graduated(name, node));
     }
 
     @Transactional

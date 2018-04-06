@@ -19,7 +19,7 @@ public class WebUtilsTest {
         // given
         Optional<Object> body = Optional.empty();
         // when
-        ResponseEntity<Object> entity = WebUtils.nullToNotFound(body);
+        ResponseEntity<Object> entity = WebUtils.emptyToNotFound(body);
         // then
         Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
@@ -29,7 +29,7 @@ public class WebUtilsTest {
         // given
         Optional<Object> body = Optional.of("hello world!");
         // when
-        ResponseEntity<Object> entity = WebUtils.nullToNotFound(body);
+        ResponseEntity<Object> entity = WebUtils.emptyToNotFound(body);
         // then
         Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }

@@ -11,7 +11,7 @@ import java.util.Optional;
  */
 public abstract class WebUtils {
 
-    public static <T> ResponseEntity<T> nullToNotFound(Optional<T> body) {
+    public static <T> ResponseEntity<T> emptyToNotFound(Optional<T> body) {
         return body.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

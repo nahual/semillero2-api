@@ -5,3 +5,5 @@
 .project
 /.settings
 *.log
+semillero.log.*
+/data

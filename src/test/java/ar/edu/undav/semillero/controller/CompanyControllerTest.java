@@ -55,7 +55,7 @@ public class CompanyControllerTest {
         ReflectionTestUtils.setField(company, "id", 1L);
         Mockito.when(companyService.save(Mockito.anyString(), Mockito.anyString())).thenReturn(company);
         mockMvc.perform(MockMvcRequestBuilders.post("/company").param("name", name).param("contact", contact))
-                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.notNullValue(Number.class)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(name)))
@@ -70,7 +70,7 @@ public class CompanyControllerTest {
     public void getAllCompanies() throws Exception {
         Mockito.when(companyService.findAll()).thenReturn(Collections.singletonList(new Company()));
         mockMvc.perform(MockMvcRequestBuilders.get("/company"))
-                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+                .andExpect(MockMvcResultMatchers.status().isOk());
         Mockito.verify(companyService).findAll();
     }
 
@@ -78,7 +78,7 @@ public class CompanyControllerTest {
     public void getCompany() throws Exception {
         Mockito.when(companyService.findByName(Mockito.anyString())).thenReturn(Collections.singletonList(new Company()));
         mockMvc.perform(MockMvcRequestBuilders.get("/company").param("name", "ECORP"))
-                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+                .andExpect(MockMvcResultMatchers.status().isOk());
         Mockito.verify(companyService).findByName(Mockito.eq("ECORP"));
     }
 

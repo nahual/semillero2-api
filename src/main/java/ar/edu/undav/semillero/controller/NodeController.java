@@ -4,7 +4,6 @@ import ar.edu.undav.semillero.domain.entity.Node;
 import ar.edu.undav.semillero.service.NodeService;
 import ar.edu.undav.semillero.view.View;
 import com.fasterxml.jackson.annotation.JsonView;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,23 +38,14 @@ public class NodeController {
     // Obtener nodos por ID
     @ResponseBody
     @GetMapping("/{id}")
-    public ResponseEntity<Node> getNode(@PathVariable Long id) {
-        return nodeService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.badRequest().build());
+    public ResponseEntity<Node> getNode(@PathVariable long id) {
+        return WebUtils.emptyToNotFound(nodeService.findById(id));
     }
 
     // Obtener todos los nodos
     @JsonView(View.Summary.class)
     @GetMapping("")
-    public ResponseEntity<Collection<Node>> getNode(@RequestParam(value = "date", defaultValue = "null") String date,
-            @RequestParam(value = "node", defaultValue = "null") String node) {
-        Collection<Node> nodes = nodeService.findAll();
-        if (node == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        } else {
-            return ResponseEntity.ok(nodes);
-        }
+    public Collection<Node> getNode() {
+        return nodeService.findAll();
     }
-
 }

@@ -1,7 +1,5 @@
 package ar.edu.undav.semillero.domain.entity;
 
-import java.util.Date;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,7 +9,7 @@ public class GraduatedTest {
 	public void testCreation() {
 		String nombre = "nombre";
 		Node node = new Node();
-		Graduated graduated = new Graduated(nombre, node, new Date()); // Actualizar
+        Graduated graduated = new Graduated(nombre, node); // Actualizar
 																		// Assert
 		Assert.assertEquals(nombre, graduated.getName());
 		Assert.assertEquals(false, graduated.getDeleted());
@@ -25,5 +23,4 @@ public class GraduatedTest {
 		graduated.addInterview(new Interview());
 		Assert.assertEquals(1, graduated.getInterviews().size());
 	}
-
 }

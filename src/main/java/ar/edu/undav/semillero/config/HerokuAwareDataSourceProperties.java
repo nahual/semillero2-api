@@ -2,9 +2,6 @@ package ar.edu.undav.semillero.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.net.URI;
@@ -16,9 +13,6 @@ import java.util.function.Supplier;
 /**
  * @author Alejandro Gomez
  */
-@Primary
-@Component
-@ConfigurationProperties(prefix = "spring.datasource")
 public class HerokuAwareDataSourceProperties extends DataSourceProperties {
 
     private final URI herokuDsUri;
