@@ -1,6 +1,7 @@
 package ar.edu.undav.semillero.controller;
 
 import ar.edu.undav.semillero.domain.entity.Interview;
+import ar.edu.undav.semillero.request.CreateInterviewRequest;
 import ar.edu.undav.semillero.service.InterviewService;
 import ar.edu.undav.semillero.view.View;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -10,10 +11,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -30,9 +34,9 @@ public class InterviewController {
     }
 
     // Agregar una entrevista
-    @PostMapping("")
-    public Interview addInterview(@RequestParam(value = "graduated") long graduatedId, @RequestParam(value = "company") long companyId) {
-        return interviewService.save(graduatedId, companyId);
+    @PostMapping
+    public Interview addInterview(@Valid @RequestBody CreateInterviewRequest request) {
+        return interviewService.save(request);
     }
 
     // Obtener entrevista por id
@@ -44,7 +48,7 @@ public class InterviewController {
 
     // Obtener todas las entrevistas
     @JsonView(View.Summary.class)
-    @GetMapping("")
+    @GetMapping
     public Collection<Interview> getInterview(@RequestParam(value = "desc", defaultValue = "false") boolean desc,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam(value = "when", required = false) LocalDate when,
             @RequestParam(value = "graduated", required = false) Long graduatedId) {

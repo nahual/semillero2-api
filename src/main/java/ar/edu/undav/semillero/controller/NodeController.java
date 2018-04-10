@@ -1,6 +1,7 @@
 package ar.edu.undav.semillero.controller;
 
 import ar.edu.undav.semillero.domain.entity.Node;
+import ar.edu.undav.semillero.request.CreateNodeRequest;
 import ar.edu.undav.semillero.service.NodeService;
 import ar.edu.undav.semillero.view.View;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -9,10 +10,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 import java.util.Collection;
 
@@ -29,10 +33,8 @@ public class NodeController {
 
     // Guardar un nodo
     @PostMapping("")
-    public Node saveNode(@RequestParam(value = "name") String name, @RequestParam(value = "address") String address) {
-        Node node = new Node(name, address);
-        nodeService.save(node);
-        return node;
+    public Node saveNode(@Valid @RequestBody CreateNodeRequest request) {
+        return nodeService.save(request);
     }
 
     // Obtener nodos por ID

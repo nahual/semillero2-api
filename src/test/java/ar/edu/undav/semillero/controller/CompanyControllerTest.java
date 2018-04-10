@@ -1,7 +1,9 @@
 package ar.edu.undav.semillero.controller;
 
 import ar.edu.undav.semillero.domain.entity.Company;
+import ar.edu.undav.semillero.request.CreateCompanyRequest;
 import ar.edu.undav.semillero.service.CompanyService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Test;
@@ -26,6 +28,8 @@ public class CompanyControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper mapper;
     @MockBean
     private CompanyService companyService;
 
@@ -51,17 +55,25 @@ public class CompanyControllerTest {
     public void saveCompanyPostParams() throws Exception {
         String name = "ECORP";
         String contact = "Carlos";
+        CreateCompanyRequest request = new CreateCompanyRequest(name, contact);
         Company company = new Company(name, contact);
         ReflectionTestUtils.setField(company, "id", 1L);
-        Mockito.when(companyService.save(Mockito.anyString(), Mockito.anyString())).thenReturn(company);
-        mockMvc.perform(MockMvcRequestBuilders.post("/company").param("name", name).param("contact", contact))
+        Mockito.when(companyService.save(Mockito.any(CreateCompanyRequest.class))).thenReturn(company);
+        mockMvc.perform(MockMvcRequestBuilders.post("/company").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.notNullValue(Number.class)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(name)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.contact", Matchers.is(contact)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.interviews", Matchers.empty()));
-        Mockito.verify(companyService).save(Mockito.eq(name), Mockito.eq(contact));
+        Mockito.verify(companyService).save(Mockito.eq(request));
+    }
+
+    @Test
+    public void saveCompanyPostParamsInvalidRequest() throws Exception {
+        CreateCompanyRequest request = new CreateCompanyRequest("", "");
+        mockMvc.perform(MockMvcRequestBuilders.post("/company").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     // GET Tests

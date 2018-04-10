@@ -1,4 +1,19 @@
 ### list graduated
 GET {{host}}/graduated
 
+### get graduated by id
+GET {{host}}/graduated/3
+
+### get graduated by id
+DELETE {{host}}/graduated/3
+
+###
+POST {{host}}/graduated
+Content-Type: application/json
+
+{
+    "name": "El Graduado",
+    "node": 2
+}
+
 ###

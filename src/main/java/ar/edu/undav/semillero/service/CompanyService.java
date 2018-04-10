@@ -2,6 +2,7 @@ package ar.edu.undav.semillero.service;
 
 import ar.edu.undav.semillero.domain.entity.Company;
 import ar.edu.undav.semillero.domain.repository.CompanyRepository;
+import ar.edu.undav.semillero.request.CreateCompanyRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +19,8 @@ public class CompanyService {
     }
 
     @Transactional
-    public Company save(String name, String contact) {
-        return companyRepository.save(new Company(name, contact));
+    public Company save(CreateCompanyRequest request) {
+        return companyRepository.save(new Company(request.getName(), request.getContact()));
     }
 
     @Transactional(readOnly = true)

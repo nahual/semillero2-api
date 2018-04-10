@@ -1,6 +1,7 @@
 package ar.edu.undav.semillero.controller;
 
 import ar.edu.undav.semillero.domain.entity.Graduated;
+import ar.edu.undav.semillero.request.CreateGraduatedRequest;
 import ar.edu.undav.semillero.service.GraduatedService;
 import ar.edu.undav.semillero.view.View;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -11,9 +12,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -30,9 +34,9 @@ public class GraduatedController {
     }
 
     // Guardar un graduado
-    @PostMapping("")
-    public Graduated saveGraduated(@RequestParam(value = "name") String name, @RequestParam(value = "node") long nodeId) {
-        return graduatedService.save(name, nodeId);
+    @PostMapping
+    public Graduated saveGraduated(@Valid @RequestBody CreateGraduatedRequest request) {
+        return graduatedService.save(request);
     }
 
     // Obtener graduados por ID
@@ -43,13 +47,13 @@ public class GraduatedController {
 
     // Eliminar un graduado
     @DeleteMapping("/{id}")
-    public Graduated deleteGraduated(@PathVariable long id) {
-        return graduatedService.deleteById(id);
+    public ResponseEntity<Void> deleteGraduated(@PathVariable long id) {
+        return graduatedService.deleteById(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
     // Obtener todos los graduados
     @JsonView(View.Summary.class)
-    @GetMapping("")
+    @GetMapping
     public Collection<Graduated> getGraduated(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam(value = "when", required = false) LocalDate when, @RequestParam(value = "node", required = false) Long nodeId) {
         if (nodeId != null) {
             return graduatedService.findByNode(nodeId);

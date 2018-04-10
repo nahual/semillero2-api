@@ -1,6 +1,8 @@
 package ar.edu.undav.semillero.controller;
 
+import ar.edu.undav.semillero.request.CreateInterviewRequest;
 import ar.edu.undav.semillero.service.InterviewService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,6 +10,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -21,6 +24,8 @@ public class InterviewControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper mapper;
     @MockBean
     private InterviewService interviewService;
 
@@ -46,11 +51,17 @@ public class InterviewControllerTest {
     public void saveInterviewPostParams() throws Exception {
         long graduatedId = 1001;
         long companyId = 1001;
-        mockMvc.perform(MockMvcRequestBuilders.post("/interview")
-                .param("graduated", String.valueOf(graduatedId))
-                .param("company", String.valueOf(companyId)))
+        CreateInterviewRequest request = new CreateInterviewRequest(graduatedId, companyId);
+        mockMvc.perform(MockMvcRequestBuilders.post("/interview").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-        Mockito.verify(interviewService).save(Mockito.eq(graduatedId), Mockito.eq(companyId));
+        Mockito.verify(interviewService).save(Mockito.eq(request));
+    }
+
+    @Test
+    public void saveInterviewPostParamsInvalid() throws Exception {
+        CreateInterviewRequest request = new CreateInterviewRequest(null, 1L);
+        mockMvc.perform(MockMvcRequestBuilders.post("/interview").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     // GET Tests

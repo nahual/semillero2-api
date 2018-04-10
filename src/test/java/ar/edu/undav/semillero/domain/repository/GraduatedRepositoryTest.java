@@ -2,6 +2,7 @@ package ar.edu.undav.semillero.domain.repository;
 
 import ar.edu.undav.semillero.domain.entity.Graduated;
 import ar.edu.undav.semillero.domain.entity.Interview;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,21 @@ public class GraduatedRepositoryTest {
                     return graduatedRepository.save(graduated);
                 })
                 .orElseThrow(RuntimeException::new);
+    }
+
+    @Test
+    public void testSoftDeleteById() {
+        Graduated graduatedBefore = graduatedRepository.getOne(1001L);
+        Assertions.assertThat(graduatedBefore.isDeleted()).isFalse();
+        int rowCount = graduatedRepository.softDeleteById(1001L);
+        Assertions.assertThat(rowCount).isEqualTo(1);
+        Graduated graduatedAfter = graduatedRepository.getOne(1001L);
+        Assertions.assertThat(graduatedAfter.isDeleted()).isFalse();
+    }
+
+    @Test
+    public void testSoftDeleteByIdNotFound() {
+        int rowCount = graduatedRepository.softDeleteById(999L);
+        Assertions.assertThat(rowCount).isEqualTo(0);
     }
 }

@@ -1,8 +1,9 @@
 package ar.edu.undav.semillero.controller;
 
 import ar.edu.undav.semillero.domain.entity.Node;
+import ar.edu.undav.semillero.request.CreateNodeRequest;
 import ar.edu.undav.semillero.service.NodeService;
-import org.assertj.core.api.Assertions;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +12,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -24,6 +26,8 @@ public class NodeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper mapper;
     @MockBean
     private NodeService nodeService;
 
@@ -48,12 +52,17 @@ public class NodeControllerTest {
     public void saveNodePostParams() throws Exception {
         String name = "Juan";
         String address = "sacacorcho 123";
-        mockMvc.perform(MockMvcRequestBuilders.post("/node").param("name", name).param("address", address))
+        CreateNodeRequest request = new CreateNodeRequest(name, address);
+        mockMvc.perform(MockMvcRequestBuilders.post("/node").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-        ArgumentCaptor<Node> nodeArgumentCaptor = ArgumentCaptor.forClass(Node.class);
-        Mockito.verify(nodeService).save(nodeArgumentCaptor.capture());
-        Assertions.assertThat(nodeArgumentCaptor.getValue().getName()).isEqualTo(name);
-        Assertions.assertThat(nodeArgumentCaptor.getValue().getAddress()).isEqualTo(address);
+        Mockito.verify(nodeService).save(Mockito.eq(request));
+    }
+
+    @Test
+    public void saveNodePostParamsInvalid() throws Exception {
+        CreateNodeRequest request = new CreateNodeRequest(null, null);
+        mockMvc.perform(MockMvcRequestBuilders.post("/node").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     // GET Tests
