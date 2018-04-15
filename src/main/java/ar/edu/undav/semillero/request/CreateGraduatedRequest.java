@@ -14,10 +14,14 @@ public class CreateGraduatedRequest extends BaseRequest {
     private final String name;
     @NotNull
     private final Long node;
+    private final String contact;
+    private final String resumeUrl;
 
-    public CreateGraduatedRequest(@JsonProperty("name") String name, @JsonProperty("node") Long node) {
+    public CreateGraduatedRequest(@JsonProperty("name") String name, @JsonProperty("node") Long node,@JsonProperty("contact") String contact, @JsonProperty("resumeUrl") String resumeUrl) {
         this.name = name;
         this.node = node;
+        this.contact = contact;
+        this.resumeUrl = resumeUrl;
     }
 
     public String getName() {
@@ -26,5 +30,13 @@ public class CreateGraduatedRequest extends BaseRequest {
 
     public Long getNode() {
         return node;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public String getResumeUrl() {
+        return resumeUrl;
     }
 }

@@ -71,6 +71,12 @@ public class Graduated {
         date = LocalDate.now();
     }
 
+    public Graduated(String name, Node node, String contact, String resumeUrl) {
+        this(name,node);
+        this.contact = contact;
+        this.resumeUrl = resumeUrl;
+    }
+
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }

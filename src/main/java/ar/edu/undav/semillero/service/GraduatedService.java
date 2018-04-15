@@ -26,7 +26,7 @@ public class GraduatedService {
     @Transactional
     public Graduated save(CreateGraduatedRequest request) {
         return nodeRepository.findById(request.getNode())
-                .map(node -> graduatedRepository.save(new Graduated(request.getName(), node)))
+                .map(node -> graduatedRepository.save(new Graduated(request.getName(), node, request.getContact(),request.getResumeUrl())))
                 .orElseThrow(RuntimeException::new);
     }
 
