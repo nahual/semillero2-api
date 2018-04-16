@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Column;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -46,6 +47,21 @@ public class Graduated {
     @JsonView(View.Summary.class)
     private Node node;
 
+    @JsonView(View.Summary.class)
+    private String contact;
+
+    @JsonView(View.Summary.class)
+    @Column(name="resume_url")
+    private String resumeUrl;
+
+    @JsonView(View.Summary.class)
+    @Column(name="looking_for_work")
+    private boolean lookingForWork = true;
+
+    //Feedback provided by professors
+    @JsonView(View.Summary.class)
+    private String feedback;
+
     public Graduated() {
     }
 
@@ -53,6 +69,12 @@ public class Graduated {
         this.name = name;
         this.node = node;
         date = LocalDate.now();
+    }
+
+    public Graduated(String name, Node node, String contact, String resumeUrl) {
+        this(name,node);
+        this.contact = contact;
+        this.resumeUrl = resumeUrl;
     }
 
     public void setDeleted(boolean deleted) {
@@ -85,5 +107,29 @@ public class Graduated {
 
     public Node getNode() {
         return node;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public String getResumeUrl() {
+        return resumeUrl;
+    }
+
+    public void setResumeUrl(String resumeUrl) {
+        this.resumeUrl = resumeUrl;
+    }
+
+    public boolean isLookingForWork() {
+        return lookingForWork;
+    }
+
+    public void setLookingForWork(boolean lookingForWork) {
+        this.lookingForWork = lookingForWork;
     }
 }

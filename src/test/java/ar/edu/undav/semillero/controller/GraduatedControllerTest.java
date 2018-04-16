@@ -56,7 +56,7 @@ public class GraduatedControllerTest {
     public void saveGraduatedPostParams() throws Exception {
         String name = "Juan";
         long nodeId = 1001;
-        CreateGraduatedRequest request = new CreateGraduatedRequest(name, nodeId);
+        CreateGraduatedRequest request = new CreateGraduatedRequest(name, nodeId, null,null);
         Graduated graduated = new Graduated(name, new Node());
         ReflectionTestUtils.setField(graduated, "id", 1L);
         Mockito.when(graduatedService.save(Mockito.any(CreateGraduatedRequest.class))).thenReturn(graduated);
@@ -71,7 +71,7 @@ public class GraduatedControllerTest {
 
     @Test
     public void saveGraduatedPostParamsInvalid() throws Exception {
-        CreateGraduatedRequest request = new CreateGraduatedRequest("", null);
+        CreateGraduatedRequest request = new CreateGraduatedRequest("", null,null,null);
         mockMvc.perform(MockMvcRequestBuilders.post("/graduated").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
