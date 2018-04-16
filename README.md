@@ -24,6 +24,6 @@ Mientras estamos desarrollando podemos usar la base dockerizada pero correr la a
     
 La documentación de la API está escrita en RAML 0.8. 
 
-El HTML generado se puede ver en el siguiente [link](https://rawgit.com/nahual/semillero2-api/development/apiV2.html)
+El HTML generado se puede ver en el siguiente [link](https://rawgit.com/nahual/semillero2-api/development/api.raml.html)
 
 
