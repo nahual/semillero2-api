@@ -17,14 +17,14 @@ public class NodeRepositoryTest {
     @Autowired
     private NodeRepository nodeRepository;
     @Autowired
-    private StudentRepository graduatedRepository;
+    private StudentRepository studentRepository;
 
     @Test
     public void testSave() {
         Node node = new Node("Bariloche", "Calle Verdadera 123");
-        Student graduated = new Student("Daniel", node);
-        node.addGraduated(graduated);
+        Student student = new Student("Daniel", node);
+        node.addStudent(student);
         nodeRepository.save(node);
-        graduatedRepository.save(graduated);
+        studentRepository.save(student);
     }
 }

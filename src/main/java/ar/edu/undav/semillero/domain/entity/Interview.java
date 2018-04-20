@@ -75,7 +75,7 @@ public class Interview {
         return comments;
     }
 
-    public Student getGraduated() {
+    public Student getStudent() {
         return student;
     }
 

@@ -9,18 +9,18 @@ public class StudentTest {
 	public void testCreation() {
 		String nombre = "nombre";
 		Node node = new Node();
-        Student graduated = new Student(nombre, node); // Actualizar
+        Student student = new Student(nombre, node); // Actualizar
 																		// Assert
-		Assert.assertEquals(nombre, graduated.getName());
-		Assert.assertEquals(false, graduated.isDeleted());
+		Assert.assertEquals(nombre, student.getName());
+		Assert.assertEquals(false, student.isDeleted());
 	}
 
 	@Test
 	public void testAddInterview() {
-		Student graduated = new Student();
-		Assert.assertTrue(graduated.getInterviews().isEmpty());
+		Student student = new Student();
+		Assert.assertTrue(student.getInterviews().isEmpty());
 
-		graduated.addInterview(new Interview());
-		Assert.assertEquals(1, graduated.getInterviews().size());
+		student.addInterview(new Interview());
+		Assert.assertEquals(1, student.getInterviews().size());
 	}
 }

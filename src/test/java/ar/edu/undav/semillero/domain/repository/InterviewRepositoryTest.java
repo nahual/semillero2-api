@@ -21,14 +21,14 @@ public class InterviewRepositoryTest {
     @Autowired
     private InterviewRepository interviewRepository;
     @Autowired
-    private StudentRepository graduatedRepository;
+    private StudentRepository studentRepository;
     @Autowired
     private CompanyRepository companyRepository;
 
     @Test
     public void testSave() {
-        graduatedRepository.findById(1001L)
-                .flatMap(graduated -> companyRepository.findById(1001L).map(company -> Pair.of(graduated, company)))
+        studentRepository.findById(1001L)
+                .flatMap(student -> companyRepository.findById(1001L).map(company -> Pair.of(student, company)))
                 .map(pair -> {
                     Interview entrevista = new Interview(pair.getFirst(), pair.getSecond(), "Hay que contratarlo al toque");
                     return interviewRepository.save(entrevista);
