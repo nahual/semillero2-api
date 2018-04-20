@@ -1,6 +1,6 @@
 package ar.edu.undav.semillero.domain.repository;
 
-import ar.edu.undav.semillero.domain.entity.Graduated;
+import ar.edu.undav.semillero.domain.entity.Student;
 import ar.edu.undav.semillero.domain.entity.Interview;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -14,10 +14,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @ActiveProfiles("test")
-public class GraduatedRepositoryTest {
+public class StudentRepositoryTest {
 
     @Autowired
-    private GraduatedRepository graduatedRepository;
+    private StudentRepository graduatedRepository;
     @Autowired
     private CompanyRepository companyRepository;
     @Autowired
@@ -28,7 +28,7 @@ public class GraduatedRepositoryTest {
         nodeRepository.findById(1001L)
                 .flatMap(node -> companyRepository.findById(1001L).map(company -> Pair.of(node, company)))
                 .map(pair -> {
-                    Graduated graduated = new Graduated("Daniel", pair.getFirst());
+                    Student graduated = new Student("Daniel", pair.getFirst());
                     graduated.addInterview(new Interview(graduated, pair.getSecond(), "no comments"));
                     return graduatedRepository.save(graduated);
                 })
@@ -37,11 +37,11 @@ public class GraduatedRepositoryTest {
 
     @Test
     public void testSoftDeleteById() {
-        Graduated graduatedBefore = graduatedRepository.getOne(1001L);
+        Student graduatedBefore = graduatedRepository.getOne(1001L);
         Assertions.assertThat(graduatedBefore.isDeleted()).isFalse();
         int rowCount = graduatedRepository.softDeleteById(1001L);
         Assertions.assertThat(rowCount).isEqualTo(1);
-        Graduated graduatedAfter = graduatedRepository.getOne(1001L);
+        Student graduatedAfter = graduatedRepository.getOne(1001L);
         Assertions.assertThat(graduatedAfter.isDeleted()).isFalse();
     }
 

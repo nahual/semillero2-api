@@ -30,17 +30,17 @@ public class Interview {
 
     @ManyToOne
     @JsonView(View.Summary.class)
-    private Graduated graduated;
+    private Student student;
 
     @ManyToOne
     @JsonView(View.Summary.class)
     private Company company;
 
-    @Column(name = "fecha")
+    @Column(name = "date")
     @JsonView(View.Summary.class)
     private LocalDate date;
 
-    @Column(name = "Comentarios")
+    @Column(name = "comments")
     @JsonView(View.Summary.class)
     private String comments;
 
@@ -56,8 +56,8 @@ public class Interview {
     public Interview() {
     }
 
-    public Interview(Graduated graduated, Company company, String comments) {
-        this.graduated = graduated;
+    public Interview(Student student, Company company, String comments) {
+        this.student = student;
         this.company = company;
         this.comments = comments;
         date = LocalDate.now();
@@ -75,8 +75,8 @@ public class Interview {
         return comments;
     }
 
-    public Graduated getGraduated() {
-        return graduated;
+    public Student getGraduated() {
+        return student;
     }
 
     public Company getCompany() {

@@ -51,11 +51,11 @@ public class InterviewController {
     @GetMapping
     public Collection<Interview> getInterview(@RequestParam(value = "desc", defaultValue = "false") boolean desc,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam(value = "when", required = false) LocalDate when,
-            @RequestParam(value = "graduated", required = false) Long graduatedId) {
+            @RequestParam(value = "student", required = false) Long studentId) {
         if (when != null) {
             return interviewService.findByDate(when);
-        } else if (graduatedId != null) {
-            return interviewService.findByGraduated(graduatedId);
+        } else if (studentId != null) {
+            return interviewService.findByStudent(studentId);
         } else {
             return desc ? interviewService.findAllOrderByIdDesc() : interviewService.findAll();
         }

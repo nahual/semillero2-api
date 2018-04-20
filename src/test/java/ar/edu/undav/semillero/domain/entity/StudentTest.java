@@ -3,13 +3,13 @@ package ar.edu.undav.semillero.domain.entity;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class GraduatedTest {
+public class StudentTest {
 
 	@Test
 	public void testCreation() {
 		String nombre = "nombre";
 		Node node = new Node();
-        Graduated graduated = new Graduated(nombre, node); // Actualizar
+        Student graduated = new Student(nombre, node); // Actualizar
 																		// Assert
 		Assert.assertEquals(nombre, graduated.getName());
 		Assert.assertEquals(false, graduated.isDeleted());
@@ -17,7 +17,7 @@ public class GraduatedTest {
 
 	@Test
 	public void testAddInterview() {
-		Graduated graduated = new Graduated();
+		Student graduated = new Student();
 		Assert.assertTrue(graduated.getInterviews().isEmpty());
 
 		graduated.addInterview(new Interview());

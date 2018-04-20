@@ -9,7 +9,7 @@ public class InterviewTest {
 
 	@Test
 	public void testCreation() {
-		Graduated graduated = new Graduated();
+		Student graduated = new Student();
 		Company company = new Company();
 		String comments = "ok";
         Interview interview = new Interview(graduated, company, comments);

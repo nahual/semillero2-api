@@ -26,6 +26,10 @@ public class Company {
 	private String name;
 	@JsonView(View.Summary.class)
 	private String contact;
+    @JsonView(View.Summary.class)
+    private String email;
+    @JsonView(View.Summary.class)
+    private String comments;
 
 	@OneToMany(mappedBy = "company")
 	private List<Interview> interviews = new ArrayList<>();
@@ -58,7 +62,15 @@ public class Company {
 		return Collections.unmodifiableList(interviews);
 	}
 
-	@Override
+    public String getEmail() {
+        return email;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    @Override
 	public String toString() {
 		return "Company{" + "id=" + id + ", name='" + name + '\'' + ", contact='" + contact + '\'' + '}';
 	}
