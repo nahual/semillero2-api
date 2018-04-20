@@ -4,7 +4,7 @@ GET {{host}}/student
 ### get student by id
 GET {{host}}/student/3
 
-### get student by id
+### delete student by id
 DELETE {{host}}/student/3
 
 ###
