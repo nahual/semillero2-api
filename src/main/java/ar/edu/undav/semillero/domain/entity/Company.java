@@ -59,8 +59,4 @@ public class Company extends AbstractPersistable<Long> {
         return comments;
     }
 
-    @Override
-	public String toString() {
-		return "Company{" + "id=" + id + ", name='" + name + '\'' + ", contact='" + contact + '\'' + '}';
-	}
 }

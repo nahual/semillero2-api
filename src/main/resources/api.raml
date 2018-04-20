@@ -46,10 +46,10 @@ protocols:
                 }
               ]
   post:
-    description: Creacion de un nuevo graduado del Proyecto Nahual
+    description: Creacion de un nuevo estudiante del Proyecto Nahual
     responses:
       200:
-        description: Creacion exitosa de un graduado
+        description: Creacion exitosa de un estudiante
         body:
           application/json:
             example: |
@@ -69,7 +69,7 @@ protocols:
                 }
               }
       400:
-        description: Error en la creacion de un graduado por falta de parametros
+        description: Error en la creacion de un estudiante por falta de parametros
         body:
           application/json:
             example: |
@@ -83,7 +83,7 @@ protocols:
               }
     queryParameters:
       name:
-        description: Nombre del graduado
+        description: Nombre del estudiante
         type: string
         required: true
         example: Daniel
@@ -93,9 +93,9 @@ protocols:
         required: true
   /{id}:
     delete:
-      description: Elimina un graduado por su Id
+      description: Elimina un estudiante por su Id
     get:
-      description: Detalle de un graduado por su Id
+      description: Detalle de un estudiante por su Id
 
 /company:
   displayName: company
