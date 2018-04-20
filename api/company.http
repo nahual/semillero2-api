@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 ### list companies
-GET {{host}}/company
+GET {{host}}/company?name=IVOT&workers=false&interviews=true&page=0&size=10
 
 ### get company by id
 GET {{host}}/company/1

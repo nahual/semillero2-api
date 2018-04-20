@@ -108,27 +108,60 @@ protocols:
         body:
           application/json:
             example: |
-              [
-                {
-                  "id": 1,
-                  "name": "TARNET",
-                  "email": "Nicolas"
-                },
-                {
-                  "id": 2,
-                  "name": "TARNET S.A.",
-                  "email": "Juan"
-                },
-                {
-                  "id": 3,
-                  "name": "PLS CO.",
-                  "email": "Ricardo"
-                }
-              ]
+              {
+                  "content": [
+                      {
+                          "id": 1,
+                          "name": "Pivotal",
+                          "email": "Josh",
+                          "working": 0,
+                          "interviewed": 1
+                      }
+                  ],
+                  "pageable": {
+                      "sort": {
+                          "sorted": false,
+                          "unsorted": true
+                      },
+                      "pageSize": 10,
+                      "pageNumber": 0,
+                      "offset": 0,
+                      "unpaged": false,
+                      "paged": true
+                  },
+                  "last": true,
+                  "totalElements": 1,
+                  "totalPages": 1,
+                  "first": true,
+                  "sort": {
+                      "sorted": false,
+                      "unsorted": true
+                  },
+                  "numberOfElements": 1,
+                  "size": 10,
+                  "number": 0
+              }
     queryParameters:
       name:
         type: string
         required: false
+        description: Nombre para filtrar
+      workers:
+        type: boolean
+        required: false
+        description: True indica solo compañías con nahualerxs trabajando en ella
+      interviews:
+        type: boolean
+        required: false
+        description: True indica solo compañías que hayan entrevistado nahualerxs
+      page:
+        type: number
+        required: true
+        description: Número de página, 0-based
+      size:
+        type: number
+        required: true
+        description: Cantidad de elementos por página
   post:
     description: Creacion de una nueva compañia
     responses:
@@ -140,7 +173,7 @@ protocols:
               {
                 "id": 2,
                 "name": "TARNET S.A.",
-                "email": "Juan",
+                "contact": "Juan",
                 "interviews": []
               }
       400:
@@ -161,7 +194,7 @@ protocols:
         type: string
         required: true
         example: TARNET S.A.
-      email:
+      contact:
         type: string
         required: true
         example: Juan
@@ -319,7 +352,7 @@ protocols:
                 "company": {
                   "id": 1,
                   "name": "TARNET",
-                  "email": "Nicolas",
+                  "contact": "Nicolas",
                   "interviews": [
                     1
                   ]
