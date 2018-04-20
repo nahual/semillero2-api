@@ -303,7 +303,7 @@ font-style: italic;
             <a data-toggle="collapse" href="#a41658ad496f34eb756f197416a0f629_post">
                 <span class="badge badge_post">post</span>
             </a>
-            &nbsp;<p>Creacion de un nuevo graduado del Proyecto Nahual</p>
+            &nbsp;<p>Creacion de un nuevo estudiante del Proyecto Nahual</p>
     </div>
     <div id="a41658ad496f34eb756f197416a0f629_post" class="panel-collapse collapse">
         <div class="panel-body">
@@ -342,7 +342,7 @@ font-style: italic;
       
     </em>
 
-  <p>Nombre del graduado</p>
+  <p>Nombre del estudiante</p>
 
   
   
@@ -383,7 +383,7 @@ font-style: italic;
         <div class="tab-pane" id="a41658ad496f34eb756f197416a0f629_post_response">
             
                 <h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2>
-<p>Creacion exitosa de un graduado</p>
+<p>Creacion exitosa de un estudiante</p>
 
 
     
@@ -424,7 +424,7 @@ font-style: italic;
 
             
                 <h2>HTTP status code <a href="http://httpstatus.es/400" target="_blank">400</a></h2>
-<p>Error en la creacion de un graduado por falta de parametros</p>
+<p>Error en la creacion de un estudiante por falta de parametros</p>
 
 
     
@@ -487,7 +487,7 @@ font-style: italic;
             <a data-toggle="collapse" href="#b34077b5620477110208a656934ff2b0_delete">
                 <span class="badge badge_delete">delete</span>
             </a>
-            &nbsp;<p>Elimina un graduado por su Id</p>
+            &nbsp;<p>Elimina un estudiante por su Id</p>
     </div>
     <div id="b34077b5620477110208a656934ff2b0_delete" class="panel-collapse collapse">
         <div class="panel-body">
@@ -545,7 +545,7 @@ font-style: italic;
             <a data-toggle="collapse" href="#b34077b5620477110208a656934ff2b0_get">
                 <span class="badge badge_get">get</span>
             </a>
-            &nbsp;<p>Detalle de un graduado por su Id</p>
+            &nbsp;<p>Detalle de un estudiante por su Id</p>
     </div>
     <div id="b34077b5620477110208a656934ff2b0_get" class="panel-collapse collapse">
         <div class="panel-body">
@@ -683,7 +683,75 @@ font-style: italic;
       
     </em>
 
+  <p>Nombre para filtrar</p>
+
   
+  
+</li>
+                
+                  <li>
+    <strong>workers</strong>
+    <em>
+      
+      
+         (boolean)
+      
+      
+    </em>
+
+  <p>True indica solo compañías con nahualerxs trabajando en ella</p>
+
+  
+  
+</li>
+                
+                  <li>
+    <strong>interviews</strong>
+    <em>
+      
+      
+         (boolean)
+      
+      
+    </em>
+
+  <p>True indica solo compañías que hayan entrevistado nahualerxs</p>
+
+  
+  
+</li>
+                
+                  <li>
+    <strong>page</strong>
+    <em>
+      
+          required
+      
+      
+         (number)
+      
+      
+    </em>
+
+  <p>Número de página, 0-based</p>
+
+  
+  
+</li>
+                
+                  <li>
+    <strong>size</strong>
+    <em>
+      
+          required
+      
+      
+         (number)
+      
+      
+    </em>
+
+  <p>Cantidad de elementos por página</p>
 
   
   
@@ -716,23 +784,39 @@ font-style: italic;
 
 <div class="body-example">
     <strong class="body-label">Example:</strong>
-    <pre><code class="json">[
-  {
-    &quot;id&quot;: 1,
-    &quot;name&quot;: &quot;TARNET&quot;,
-    &quot;email&quot;: &quot;Nicolas&quot;
-  },
-  {
-    &quot;id&quot;: 2,
-    &quot;name&quot;: &quot;TARNET S.A.&quot;,
-    &quot;email&quot;: &quot;Juan&quot;
-  },
-  {
-    &quot;id&quot;: 3,
-    &quot;name&quot;: &quot;PLS CO.&quot;,
-    &quot;email&quot;: &quot;Ricardo&quot;
-  }
-]
+    <pre><code class="json">{
+    &quot;content&quot;: [
+        {
+            &quot;id&quot;: 1,
+            &quot;name&quot;: &quot;Pivotal&quot;,
+            &quot;email&quot;: &quot;Josh&quot;,
+            &quot;working&quot;: 0,
+            &quot;interviewed&quot;: 1
+        }
+    ],
+    &quot;pageable&quot;: {
+        &quot;sort&quot;: {
+            &quot;sorted&quot;: false,
+            &quot;unsorted&quot;: true
+        },
+        &quot;pageSize&quot;: 10,
+        &quot;pageNumber&quot;: 0,
+        &quot;offset&quot;: 0,
+        &quot;unpaged&quot;: false,
+        &quot;paged&quot;: true
+    },
+    &quot;last&quot;: true,
+    &quot;totalElements&quot;: 1,
+    &quot;totalPages&quot;: 1,
+    &quot;first&quot;: true,
+    &quot;sort&quot;: {
+        &quot;sorted&quot;: false,
+        &quot;unsorted&quot;: true
+    },
+    &quot;numberOfElements&quot;: 1,
+    &quot;size&quot;: 10,
+    &quot;number&quot;: 0
+}
 </code></pre>
 </div>
 
@@ -806,7 +890,7 @@ font-style: italic;
 </li>
                 
                   <li>
-    <strong>email</strong>
+    <strong>contact</strong>
     <em>
       
           required
@@ -860,7 +944,7 @@ font-style: italic;
     <pre><code class="json">{
   &quot;id&quot;: 2,
   &quot;name&quot;: &quot;TARNET S.A.&quot;,
-  &quot;email&quot;: &quot;Juan&quot;,
+  &quot;contact&quot;: &quot;Juan&quot;,
   &quot;interviews&quot;: []
 }
 </code></pre>
@@ -1743,7 +1827,7 @@ font-style: italic;
   &quot;company&quot;: {
     &quot;id&quot;: 1,
     &quot;name&quot;: &quot;TARNET&quot;,
-    &quot;email&quot;: &quot;Nicolas&quot;,
+    &quot;contact&quot;: &quot;Nicolas&quot;,
     &quot;interviews&quot;: [
       1
     ]
