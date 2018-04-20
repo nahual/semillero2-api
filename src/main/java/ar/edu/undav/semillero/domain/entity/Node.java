@@ -29,7 +29,7 @@ public class Node {
 	private String address;
 
 	@OneToMany(mappedBy = "node")
-	private List<Graduated> graduateds = new ArrayList<>();
+	private List<Student> students = new ArrayList<>();
 
 	public Node() {
 	}
@@ -51,12 +51,12 @@ public class Node {
 		return address;
 	}
 
-	public void addGraduated(Graduated graduated) {
-		this.graduateds.add(graduated);
+	public void addGraduated(Student student) {
+		this.students.add(student);
 	}
 
-	public List<Graduated> getGraduateds() {
-		return graduateds;
+	public List<Student> getGraduateds() {
+		return students;
 	}
 
 }

@@ -21,7 +21,7 @@ public class InterviewRepositoryTest {
     @Autowired
     private InterviewRepository interviewRepository;
     @Autowired
-    private GraduatedRepository graduatedRepository;
+    private StudentRepository graduatedRepository;
     @Autowired
     private CompanyRepository companyRepository;
 

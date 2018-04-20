@@ -19,7 +19,7 @@ public class NodeTest {
 		Node node = new Node();
 		Assert.assertTrue(node.getGraduateds().isEmpty());
 
-		node.addGraduated(new Graduated());
+		node.addGraduated(new Student());
 		Assert.assertEquals(1, node.getGraduateds().size());
 	}
 

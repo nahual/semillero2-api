@@ -1,14 +1,14 @@
 ### list graduated
-GET {{host}}/graduated
+GET {{host}}/student
 
 ### get graduated by id
-GET {{host}}/graduated/3
+GET {{host}}/student/3
 
 ### get graduated by id
-DELETE {{host}}/graduated/3
+DELETE {{host}}/student/3
 
 ###
-POST {{host}}/graduated
+POST {{host}}/student
 Content-Type: application/json
 
 {

@@ -21,9 +21,9 @@ import java.util.Collections;
 import java.util.List;
 
 @Entity
-@Table(name = "graduated")
+@Table(name = "student")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Graduated {
+public class Student {
 
     @Id
     @GeneratedValue
@@ -34,12 +34,21 @@ public class Graduated {
     private String name;
 
     @JsonView(View.Summary.class)
+    @Column(name="last_name")
+    private String lastName;
+
+    @JsonView(View.Summary.class)
+    @Column(name="course_date")
     private LocalDate date;
+
+    @JsonView(View.Summary.class)
+    @Column(name="graduation_date")
+    private LocalDate graduationDate;
 
     @JsonView(View.Summary.class)
     private boolean deleted = false;
 
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "graduated")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "student")
     private List<Interview> interviews = new ArrayList<>();
 
     @ManyToOne
@@ -48,7 +57,10 @@ public class Graduated {
     private Node node;
 
     @JsonView(View.Summary.class)
-    private String contact;
+    private String email;
+
+    @JsonView(View.Summary.class)
+    private String phone;
 
     @JsonView(View.Summary.class)
     @Column(name="resume_url")
@@ -62,18 +74,18 @@ public class Graduated {
     @JsonView(View.Summary.class)
     private String feedback;
 
-    public Graduated() {
+    public Student() {
     }
 
-    public Graduated(String name, Node node) {
+    public Student(String name, Node node) {
         this.name = name;
         this.node = node;
         date = LocalDate.now();
     }
 
-    public Graduated(String name, Node node, String contact, String resumeUrl) {
+    public Student(String name, Node node, String email, String resumeUrl) {
         this(name,node);
-        this.contact = contact;
+        this.email = email;
         this.resumeUrl = resumeUrl;
     }
 
@@ -109,12 +121,12 @@ public class Graduated {
         return node;
     }
 
-    public String getContact() {
-        return contact;
+    public String getEmail() {
+        return email;
     }
 
-    public void setContact(String contact) {
-        this.contact = contact;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getResumeUrl() {
@@ -131,5 +143,21 @@ public class Graduated {
 
     public void setLookingForWork(boolean lookingForWork) {
         this.lookingForWork = lookingForWork;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getFeedback() {
+        return feedback;
     }
 }
