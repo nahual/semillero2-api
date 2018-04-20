@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
     "name": "Pivotal",
-    "email": "Josh"
+    "contact": "Josh"
 }
 
 ### list companies
