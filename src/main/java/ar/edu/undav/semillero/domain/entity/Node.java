@@ -51,11 +51,11 @@ public class Node {
 		return address;
 	}
 
-	public void addGraduated(Student student) {
+	public void addStudent(Student student) {
 		this.students.add(student);
 	}
 
-	public List<Student> getGraduateds() {
+	public List<Student> getStudents() {
 		return students;
 	}
 

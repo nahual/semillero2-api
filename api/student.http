@@ -1,10 +1,10 @@
-### list graduated
+### list student
 GET {{host}}/student
 
-### get graduated by id
+### get student by id
 GET {{host}}/student/3
 
-### get graduated by id
+### get student by id
 DELETE {{host}}/student/3
 
 ###
@@ -12,7 +12,7 @@ POST {{host}}/student
 Content-Type: application/json
 
 {
-    "name": "El Graduado",
+    "name": "El Estudiante",
     "node": 2
 }
 
