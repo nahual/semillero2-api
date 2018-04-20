@@ -4,6 +4,8 @@ import ar.edu.undav.semillero.dto.CompanyDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Persistable;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Collections;
 
@@ -29,5 +31,9 @@ public abstract class TestUtils {
 
     public static PageRequest createPageRequest() {
         return PageRequest.of(0, 20);
+    }
+
+    public static void setId(Persistable<Long> persistable, Long id) {
+        ReflectionTestUtils.setField(persistable, "id", id);
     }
 }

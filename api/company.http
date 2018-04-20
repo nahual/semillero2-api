@@ -7,6 +7,15 @@ Content-Type: application/json
     "contact": "Josh"
 }
 
+### create company
+PUT {{host}}/company/1
+Content-Type: application/json
+
+{
+    "name": "new Pivotal",
+    "contact": "new Josh"
+}
+
 ### list companies
 GET {{host}}/company?name=IVOT&workers=false&interviews=true&page=0&size=10
 

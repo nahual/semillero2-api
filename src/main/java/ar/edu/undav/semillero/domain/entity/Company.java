@@ -33,8 +33,16 @@ public class Company extends AbstractPersistable<Long> {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getContact() {
         return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     public void addInterview(Interview interview) {
