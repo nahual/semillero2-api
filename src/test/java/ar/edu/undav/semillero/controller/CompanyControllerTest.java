@@ -61,8 +61,10 @@ public class CompanyControllerTest {
     public void saveCompanyPostParams() throws Exception {
         String name = "ECORP";
         String contact = "Carlos";
-        CreateCompanyRequest request = new CreateCompanyRequest(name, contact);
-        Company company = new Company(name, contact);
+        String email = "carlos@ecorp.com";
+        String comments = "a veces es medio colgado este Carlos";
+        CreateCompanyRequest request = new CreateCompanyRequest(name, contact, email, comments);
+        Company company = new Company(name, contact, email, comments);
         TestUtils.setId(company, 1L);
         Mockito.when(companyService.save(Mockito.any(CreateCompanyRequest.class))).thenReturn(company);
         mockMvc.perform(MockMvcRequestBuilders.post("/company").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
@@ -71,21 +73,23 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.notNullValue(Number.class)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(name)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.contact", Matchers.is(contact)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is(email)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.comments", Matchers.is(comments)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.interviews", Matchers.empty()));
         Mockito.verify(companyService).save(Mockito.eq(request));
     }
 
     @Test
     public void saveCompanyPostParamsInvalidRequest() throws Exception {
-        CreateCompanyRequest request = new CreateCompanyRequest("", "");
+        CreateCompanyRequest request = new CreateCompanyRequest("", "", "", "");
         mockMvc.perform(MockMvcRequestBuilders.post("/company").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
     public void updateCompany() throws Exception {
-        CreateCompanyRequest request = new CreateCompanyRequest("new name", "new contact");
-        Company company = new Company("original name", "original contact");
+        CreateCompanyRequest request = new CreateCompanyRequest("new name", "new contact", "new@mail.com", "new comments");
+        Company company = new Company("original name", "original contact", "old@mail.com", "original comments");
         TestUtils.setId(company, 1L);
         Mockito.when(companyService.update(Mockito.anyLong(), Mockito.any(CreateCompanyRequest.class))).thenReturn(Optional.of(company));
         mockMvc.perform(MockMvcRequestBuilders.put("/company/1").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
@@ -94,13 +98,15 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.notNullValue(Number.class)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.notNullValue(String.class)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.contact", Matchers.notNullValue(String.class)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.notNullValue(String.class)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.comments", Matchers.notNullValue(String.class)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.interviews", Matchers.empty()));
         Mockito.verify(companyService).update(Mockito.eq(1L), Mockito.eq(request));
     }
 
     @Test
     public void updateCompanyNotFound() throws Exception {
-        CreateCompanyRequest request = new CreateCompanyRequest("new name", "new contact");
+        CreateCompanyRequest request = new CreateCompanyRequest("new name", "new contact", "new@mail.com", "new comments");
         Mockito.when(companyService.update(Mockito.anyLong(), Mockito.any(CreateCompanyRequest.class))).thenReturn(Optional.empty());
         mockMvc.perform(MockMvcRequestBuilders.put("/company/1").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())

@@ -1,5 +1,5 @@
 ### create node
-POST {{host}}/node?name=Nodo1&=Calle1
+POST {{host}}/node
 Content-Type: application/json
 
 {
