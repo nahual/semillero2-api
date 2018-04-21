@@ -203,6 +203,42 @@ protocols:
       description: Detalle de una compañia por su Id
     delete:
       description: Eliminar una compañia por su Id
+    put:
+      description: Modificacion de una compañia
+      responses:
+        200:
+          description: Modificacion exitosa de una compañia
+          body:
+            application/json:
+              example: |
+                {
+                  "id": 2,
+                  "name": "TARNET S.A.",
+                  "contact": "Juan",
+                  "interviews": []
+                }
+        400:
+          description: Error por falta de parametro en la modificacion de una compañia
+          body:
+            application/json:
+              example: |
+                {
+                  "timestamp": 1481306391582,
+                  "status": 400,
+                  "error": "Bad Request",
+                  "exception": "org.springframework.web.bind.MissingServletRequestParameterException",
+                  "message": "Required String parameter 'contact' is not present",
+                  "path": "/company"
+                }
+      queryParameters:
+        name:
+          type: string
+          required: true
+          example: TARNET S.A.
+        contact:
+          type: string
+          required: true
+          example: Juan
 
 /node:
   displayName: node

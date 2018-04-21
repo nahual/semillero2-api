@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,6 +42,12 @@ public class CompanyController {
     @GetMapping("/{id}")
     public ResponseEntity<Company> getCompany(@PathVariable long id) {
         return WebUtils.emptyToNotFound(companyService.findById(id));
+    }
+
+    @ResponseBody
+    @PutMapping("/{id}")
+    public ResponseEntity<Company> update(@PathVariable long id, @Valid @RequestBody CreateCompanyRequest request) {
+        return WebUtils.emptyToNotFound(companyService.update(id, request));
     }
 
     @ResponseBody

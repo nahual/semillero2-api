@@ -44,4 +44,14 @@ public class CompanyService {
     public Optional<Company> findById(Long id) {
         return companyRepository.findById(id);
     }
+
+    @Transactional
+    public Optional<Company> update(long id, CreateCompanyRequest request) {
+        Optional<Company> optCompany = companyRepository.findById(id);
+        optCompany.ifPresent(c -> {
+            c.setName(request.getName());
+            c.setContact(request.getContact());
+        });
+        return optCompany;
+    }
 }
