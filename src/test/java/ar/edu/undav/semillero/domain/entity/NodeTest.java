@@ -15,12 +15,12 @@ public class NodeTest {
 	}
 
 	@Test
-	public void testGraduateds() {
+	public void testStudents() {
 		Node node = new Node();
-		Assert.assertTrue(node.getGraduateds().isEmpty());
+		Assert.assertTrue(node.getStudents().isEmpty());
 
-		node.addGraduated(new Graduated());
-		Assert.assertEquals(1, node.getGraduateds().size());
+		node.addStudent(new Student());
+		Assert.assertEquals(1, node.getStudents().size());
 	}
 
 }

@@ -1,0 +1,19 @@
+### list student
+GET {{host}}/student
+
+### get student by id
+GET {{host}}/student/3
+
+### delete student by id
+DELETE {{host}}/student/3
+
+###
+POST {{host}}/student
+Content-Type: application/json
+
+{
+    "name": "El Estudiante",
+    "node": 2
+}
+
+###

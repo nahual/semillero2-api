@@ -11,17 +11,17 @@ import javax.validation.constraints.NotNull;
 public class CreateInterviewRequest extends BaseRequest {
 
     @NotNull
-    private final Long graduated;
+    private final Long student;
     @NotNull
     private final Long company;
 
-    public CreateInterviewRequest(@JsonProperty("graduated") Long graduated, @JsonProperty("company") Long company) {
-        this.graduated = graduated;
+    public CreateInterviewRequest(@JsonProperty("student") Long student, @JsonProperty("company") Long company) {
+        this.student = student;
         this.company = company;
     }
 
-    public Long getGraduated() {
-        return graduated;
+    public Long getStudent() {
+        return student;
     }
 
     public Long getCompany() {

@@ -49,9 +49,9 @@ public class InterviewControllerTest {
 
     @Test
     public void saveInterviewPostParams() throws Exception {
-        long graduatedId = 1001;
+        long studentId = 1001;
         long companyId = 1001;
-        CreateInterviewRequest request = new CreateInterviewRequest(graduatedId, companyId);
+        CreateInterviewRequest request = new CreateInterviewRequest(studentId, companyId);
         mockMvc.perform(MockMvcRequestBuilders.post("/interview").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         Mockito.verify(interviewService).save(Mockito.eq(request));
@@ -81,10 +81,10 @@ public class InterviewControllerTest {
     }
 
     @Test
-    public void getAllInterviewsByGraduated() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/interview").param("graduated", "1"))
+    public void getAllInterviewsByStudent() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/interview").param("student", "1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
-        Mockito.verify(interviewService).findByGraduated(Mockito.eq(1L));
+        Mockito.verify(interviewService).findByStudent(Mockito.eq(1L));
     }
 
     @Test

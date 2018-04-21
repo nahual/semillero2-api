@@ -1,8 +1,8 @@
 package ar.edu.undav.semillero.controller;
 
-import ar.edu.undav.semillero.domain.entity.Graduated;
-import ar.edu.undav.semillero.request.CreateGraduatedRequest;
-import ar.edu.undav.semillero.service.GraduatedService;
+import ar.edu.undav.semillero.domain.entity.Student;
+import ar.edu.undav.semillero.request.CreateStudentRequest;
+import ar.edu.undav.semillero.service.StudentService;
 import ar.edu.undav.semillero.view.View;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,44 +23,44 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/graduated")
+@RequestMapping("/student")
 @CrossOrigin
-public class GraduatedController {
+public class StudentController {
 
-    private final GraduatedService graduatedService;
+    private final StudentService studentService;
 
-    public GraduatedController(GraduatedService graduatedService) {
-        this.graduatedService = graduatedService;
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
     }
 
     // Guardar un graduado
     @PostMapping
-    public Graduated saveGraduated(@Valid @RequestBody CreateGraduatedRequest request) {
-        return graduatedService.save(request);
+    public Student saveStudent(@Valid @RequestBody CreateStudentRequest request) {
+        return studentService.save(request);
     }
 
     // Obtener graduados por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Graduated> getGraduated(@PathVariable long id) {
-        return WebUtils.emptyToNotFound(graduatedService.findById(id));
+    public ResponseEntity<Student> getStudent(@PathVariable long id) {
+        return WebUtils.emptyToNotFound(studentService.findById(id));
     }
 
     // Eliminar un graduado
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteGraduated(@PathVariable long id) {
-        return graduatedService.deleteById(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    public ResponseEntity<Void> deleteStudent(@PathVariable long id) {
+        return studentService.deleteById(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
     // Obtener todos los graduados
     @JsonView(View.Summary.class)
     @GetMapping
-    public Collection<Graduated> getGraduated(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam(value = "when", required = false) LocalDate when, @RequestParam(value = "node", required = false) Long nodeId) {
+    public Collection<Student> getStudent(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam(value = "when", required = false) LocalDate when, @RequestParam(value = "node", required = false) Long nodeId) {
         if (nodeId != null) {
-            return graduatedService.findByNode(nodeId);
+            return studentService.findByNode(nodeId);
         } else if (when != null) {
-            return graduatedService.findByDate(when);
+            return studentService.findByDate(when);
         } else {
-            return graduatedService.findAll();
+            return studentService.findAll();
         }
     }
 }

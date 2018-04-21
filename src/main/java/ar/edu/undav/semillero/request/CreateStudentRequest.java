@@ -8,19 +8,19 @@ import javax.validation.constraints.NotNull;
 /**
  * @author Alejandro Gomez
  */
-public class CreateGraduatedRequest extends BaseRequest {
+public class CreateStudentRequest extends BaseRequest {
 
     @NotEmpty
     private final String name;
     @NotNull
     private final Long node;
-    private final String contact;
+    private final String email;
     private final String resumeUrl;
 
-    public CreateGraduatedRequest(@JsonProperty("name") String name, @JsonProperty("node") Long node,@JsonProperty("contact") String contact, @JsonProperty("resumeUrl") String resumeUrl) {
+    public CreateStudentRequest(@JsonProperty("name") String name, @JsonProperty("node") Long node, @JsonProperty("email") String email, @JsonProperty("resumeUrl") String resumeUrl) {
         this.name = name;
         this.node = node;
-        this.contact = contact;
+        this.email = email;
         this.resumeUrl = resumeUrl;
     }
 
@@ -32,8 +32,8 @@ public class CreateGraduatedRequest extends BaseRequest {
         return node;
     }
 
-    public String getContact() {
-        return contact;
+    public String getEmail() {
+        return email;
     }
 
     public String getResumeUrl() {
