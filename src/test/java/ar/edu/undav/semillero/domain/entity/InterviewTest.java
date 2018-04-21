@@ -9,11 +9,11 @@ public class InterviewTest {
 
 	@Test
 	public void testCreation() {
-		Graduated graduated = new Graduated();
+		Student student = new Student();
 		Company company = new Company();
 		String comments = "ok";
-        Interview interview = new Interview(graduated, company, comments);
-		Assert.assertEquals(graduated, interview.getGraduated());
+        Interview interview = new Interview(student, company, comments);
+		Assert.assertEquals(student, interview.getStudent());
 		Assert.assertEquals(company, interview.getCompany());
         Assert.assertEquals(LocalDate.now(), interview.getDate());
 		Assert.assertEquals(comments, interview.getComments());

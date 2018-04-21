@@ -1,4 +1,4 @@
-### create company
+### create node
 POST {{host}}/node?name=Nodo1&=Calle1
 Content-Type: application/json
 
@@ -7,10 +7,10 @@ Content-Type: application/json
     "address": "domicilio del nodo"
 }
 
-### list companies
+### list nodes
 GET {{host}}/node
 
-### get company by id
+### get node by id
 GET {{host}}/node/1
 
 ###

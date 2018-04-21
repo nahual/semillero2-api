@@ -17,6 +17,8 @@ public class Company extends AbstractPersistable<Long> {
 
     private String name;
     private String contact;
+    private String email;
+    private String comments;
 
     @OneToMany(mappedBy = "company")
     private List<Interview> interviews = new ArrayList<>();
@@ -49,4 +51,12 @@ public class Company extends AbstractPersistable<Long> {
     public String toString() {
         return ReflectionToStringBuilder.toString(this);
     }
+    public String getEmail() {
+        return email;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
 }

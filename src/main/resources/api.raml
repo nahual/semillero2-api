@@ -6,11 +6,11 @@ baseUri: http://localhost:8080/
 protocols:
   - HTTP
 
-/graduated:
-  displayName: graduated
-  description: graduados del Proyecto Nahual
+/student:
+  displayName: student
+  description: Estudiantes del Proyecto Nahual
   get:
-    description: Devuelve una coleccion de Graduados
+    description: Devuelve una coleccion de Estudiantes
     queryParameters:
       when:
         type: date
@@ -21,7 +21,7 @@ protocols:
         required: false
     responses:
       200:
-        description: Obtencion exitosa de todos los graduados(Incluso los que estan marcados con borrado logico)
+        description: Obtencion exitosa de todos los estudiantes(Incluso los que estan marcados con borrado logico)
         body:
           application/json:
             example: |
@@ -46,10 +46,10 @@ protocols:
                 }
               ]
   post:
-    description: Creacion de un nuevo graduado del Proyecto Nahual
+    description: Creacion de un nuevo estudiante del Proyecto Nahual
     responses:
       200:
-        description: Creacion exitosa de un graduado
+        description: Creacion exitosa de un estudiante
         body:
           application/json:
             example: |
@@ -63,13 +63,13 @@ protocols:
                   "id": 1,
                   "name": "Banfield",
                   "address": "CalleFalsa123",
-                  "graduateds": [
+                  "students": [
                     2
                   ]
                 }
               }
       400:
-        description: Error en la creacion de un graduado por falta de parametros
+        description: Error en la creacion de un estudiante por falta de parametros
         body:
           application/json:
             example: |
@@ -79,11 +79,11 @@ protocols:
                 "error": "Bad Request",
                 "exception": "org.springframework.web.bind.MissingServletRequestParameterException",
                 "message": "Required String parameter 'name' is not present",
-                "path": "/graduated"
+                "path": "/student"
               }
     queryParameters:
       name:
-        description: Nombre del graduado
+        description: Nombre del estudiante
         type: string
         required: true
         example: Daniel
@@ -93,13 +93,13 @@ protocols:
         required: true
   /{id}:
     delete:
-      description: Elimina un graduado por su Id
+      description: Elimina un estudiante por su Id
     get:
-      description: Detalle de un graduado por su Id
+      description: Detalle de un estudiante por su Id
 
 /company:
   displayName: company
-  description: Compañias que tendran contacto con los graduados
+  description: Compañias que tendran contacto con los estudiantes
   get:
     description: Devuelve todas las compañias existentes
     responses:
@@ -186,7 +186,7 @@ protocols:
                 "status": 400,
                 "error": "Bad Request",
                 "exception": "org.springframework.web.bind.MissingServletRequestParameterException",
-                "message": "Required String parameter 'contact' is not present",
+                "message": "Required String parameter 'email' is not present",
                 "path": "/company"
               }
     queryParameters:
@@ -206,7 +206,7 @@ protocols:
 
 /node:
   displayName: node
-  description: Un nodo es el lugar de graduacion de los graduados
+  description: Un nodo es el lugar de graduacion de los estudiantes
   get:
     responses:
       200:
@@ -243,7 +243,7 @@ protocols:
                 "id": 2,
                 "name": "Claypole",
                 "address": "Crisantemo6457",
-                "graduateds": []
+                "students": []
               }
       400:
         description: Error en la creacion de un nodo nuevo por falta de parametros
@@ -275,7 +275,7 @@ protocols:
       description: Obtiene los nodos segun el Id
 
 /interview:
-  description: Entrevistas que tienen los graduados con las compañias.
+  description: Entrevistas que tienen los estudiantes con las compañias.
   displayName: interview
   get:
     description: Obtiene todas las entrevistas
@@ -288,7 +288,7 @@ protocols:
               [
                 {
                   "id": 1,
-                  "graduated": {
+                  "student": {
                     "id": 2,
                     "name": "Daniel",
                     "date": 1481305396000,
@@ -302,7 +302,7 @@ protocols:
                   "company": {
                     "id": 1,
                     "name": "TARNET",
-                    "contact": "Nicolas"
+                    "email": "Nicolas"
                   },
                   "date": "2016-12-09",
                   "comments": "Sin comentarios"
@@ -318,8 +318,8 @@ protocols:
         type: date
         required: false
         example: 2018-03-28
-      graduated:
-        description: Id de un graduado especifico
+      student:
+        description: Id de un estudiante especifico
         type: number
         required: false
   post:
@@ -332,7 +332,7 @@ protocols:
             example: |
               {
                 "id": 1,
-                "graduated": {
+                "student": {
                   "id": 2,
                   "name": "Daniel",
                   "date": 1481305396000,
@@ -344,7 +344,7 @@ protocols:
                     "id": 1,
                     "name": "Banfield",
                     "address": "CalleFalsa123",
-                    "graduateds": [
+                    "students": [
                       2
                     ]
                   }
@@ -370,12 +370,12 @@ protocols:
                 "status": 400,
                 "error": "Bad Request",
                 "exception": "org.springframework.web.bind.MissingServletRequestParameterException",
-                "message": "Required long parameter 'graduatedId' is not present",
+                "message": "Required long parameter 'studentId' is not present",
                 "path": "/interview"
               }
     queryParameters:
-      graduated:
-        description: Id de un graduado
+      student:
+        description: Id de un estudiante
         type: number
         required: true
         example: 2
