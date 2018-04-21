@@ -13,5 +13,5 @@ spaces_around_brackets = none
 indent_brace_style = K&R
 continuation_indent_size = 8
 
-[*.{yml,sh}]
+[*.{yml,sh,raml}]
 indent_size = 2

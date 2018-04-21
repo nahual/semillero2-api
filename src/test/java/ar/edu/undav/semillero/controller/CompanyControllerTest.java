@@ -19,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -64,7 +63,7 @@ public class CompanyControllerTest {
         String contact = "Carlos";
         CreateCompanyRequest request = new CreateCompanyRequest(name, contact);
         Company company = new Company(name, contact);
-        ReflectionTestUtils.setField(company, "id", 1L);
+        TestUtils.setId(company, 1L);
         Mockito.when(companyService.save(Mockito.any(CreateCompanyRequest.class))).thenReturn(company);
         mockMvc.perform(MockMvcRequestBuilders.post("/company").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -81,6 +80,32 @@ public class CompanyControllerTest {
         CreateCompanyRequest request = new CreateCompanyRequest("", "");
         mockMvc.perform(MockMvcRequestBuilders.post("/company").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    public void updateCompany() throws Exception {
+        CreateCompanyRequest request = new CreateCompanyRequest("new name", "new contact");
+        Company company = new Company("original name", "original contact");
+        TestUtils.setId(company, 1L);
+        Mockito.when(companyService.update(Mockito.anyLong(), Mockito.any(CreateCompanyRequest.class))).thenReturn(Optional.of(company));
+        mockMvc.perform(MockMvcRequestBuilders.put("/company/1").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.notNullValue(Number.class)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.notNullValue(String.class)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.contact", Matchers.notNullValue(String.class)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.interviews", Matchers.empty()));
+        Mockito.verify(companyService).update(Mockito.eq(1L), Mockito.eq(request));
+    }
+
+    @Test
+    public void updateCompanyNotFound() throws Exception {
+        CreateCompanyRequest request = new CreateCompanyRequest("new name", "new contact");
+        Mockito.when(companyService.update(Mockito.anyLong(), Mockito.any(CreateCompanyRequest.class))).thenReturn(Optional.empty());
+        mockMvc.perform(MockMvcRequestBuilders.put("/company/1").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.content().string(""));
+        Mockito.verify(companyService).update(Mockito.eq(1L), Mockito.eq(request));
     }
 
     // GET Tests
