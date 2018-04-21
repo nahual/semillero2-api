@@ -12,13 +12,37 @@ protocols:
   get:
     description: Devuelve una coleccion de Estudiantes
     queryParameters:
-      when:
+      minGraduationDate:
+        type: date
+        required: false
+        example: 2018-03-28
+      maxGraduationDate:
         type: date
         required: false
         example: 2018-03-28
       node:
         type: number
         required: false
+      graduated:
+        type: boolean
+        required: false
+        description: True indica solo estudiantes graduados
+      working:
+        type: boolean
+        required: false
+        description: True indica solo estudiantes trabajando
+      lookingForWork:
+        type: boolean
+        required: false
+        description: True indica solo estudiantes buscando trabajo
+      page:
+        type: number
+        required: true
+        description: Número de página, 0-based
+      size:
+        type: number
+        required: true
+        description: Cantidad de elementos por página
     responses:
       200:
         description: Obtencion exitosa de todos los estudiantes(Incluso los que estan marcados con borrado logico)
@@ -27,22 +51,27 @@ protocols:
             example: |
               [
                 {
-                  "id": 1,
-                  "name": "santi",
-                  "date": 1481227669000,
-                  "deleted": true,
-                  "node": null
-                },
-                {
-                  "id": 2,
-                  "name": "Daniel",
-                  "date": 1481305396000,
-                  "deleted": false,
-                  "node": {
                     "id": 1,
-                    "name": "Banfield",
-                    "address": "CalleFalsa123"
-                  }
+                    "name": "First",
+                    "lastName": "Last",
+                    "courseDate": "2018-03-01",
+                    "graduationDate": null,
+                    "deleted": false,
+                    "interviews": [],
+                    "node": {
+                        "id": 1,
+                        "name": "Banfield",
+                        "address": "Morazán 669",
+                        "students": [
+                            1
+                        ]
+                    },
+                    "email": "estudiante@gmail.com",
+                    "phone": "1112223333",
+                    "resumeUrl": "linkedin.com/estudiante1",
+                    "lookingForWork": true,
+                    "working": false,
+                    "feedback": null
                 }
               ]
   post:
@@ -54,19 +83,28 @@ protocols:
           application/json:
             example: |
               {
-                "id": 2,
-                "name": "Daniel",
-                "date": 1481305395815,
-                "deleted": false,
-                "interviews": [],
-                "node": {
                   "id": 1,
-                  "name": "Banfield",
-                  "address": "CalleFalsa123",
-                  "students": [
-                    2
-                  ]
-                }
+                  "name": "First",
+                  "lastName": "Last",
+                  "courseDate": "2018-03-01",
+                  "graduationDate": null,
+                  "deleted": false,
+                  "interviews": [],
+                  "node": {
+                      "id": 1,
+                      "name": "Banfield",
+                      "address": "Morazán 669",
+                      "students": [
+                          1
+                      ]
+                  },
+                  "email": "estudiante@gmail.com",
+                  "phone": "1112223333",
+                  "resumeUrl": "linkedin.com/estudiante1",
+                  "lookingForWork": true,
+                  "working": false,
+                  "feedback": null,
+                  "new": false
               }
       400:
         description: Error en la creacion de un estudiante por falta de parametros
@@ -87,10 +125,53 @@ protocols:
         type: string
         required: true
         example: Daniel
+      lastName:
+        description: Apellido del estudiante
+        type: string
+        required: true
+        example: Apellido
       node:
         description: Id de un nodo
         type: number
         required: true
+      graduationDate:
+        type: date
+        required: false
+        example: 2018-03-28
+      courseDate:
+        type: date
+        required: false
+        example: 2018-03-28
+      email:
+        description: Email del estudiante
+        type: string
+        required: false
+        example: estudiante@gmail.com
+      phone:
+        description: Teléfono del estudiante
+        type: string
+        required: false
+        example: 1112223333
+      resumeUrl:
+        description: URL del CV del estudiante
+        type: string
+        required: false
+        example: linkedin.com/estudiante
+      working:
+        description: True si el estudiante está trabajando
+        type: boolean
+        required: true
+        example: True
+      lookingForWork:
+        description: True si el estudiante está buscando trabajando
+        type: boolean
+        required: true
+        example: True
+      feedback:
+        description: Feedback del profesor
+        type: string
+        required: false
+        example: Feedback
   /{id}:
     delete:
       description: Elimina un estudiante por su Id

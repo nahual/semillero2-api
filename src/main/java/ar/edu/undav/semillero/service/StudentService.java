@@ -62,7 +62,7 @@ public class StudentService {
     @Transactional(readOnly = true)
     public Page<Student> list(FilterStudentsRequest filters, Pageable pageable) {
         QueryBuilder<Student> queryBuilder = QueryBuilder.of(Student.class)
-                    .select("select s")
+                    .select("s")
                     .from(Student.class, "s")
                     .gte("graduationDate", filters.getMinGraduationDate())
                     .lte("graduationDate", filters.getMaxGraduationDate())
