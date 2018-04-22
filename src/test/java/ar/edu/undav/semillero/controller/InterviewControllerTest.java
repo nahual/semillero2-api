@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -22,7 +23,7 @@ import java.time.LocalDate;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = InterviewController.class)
-@Import(SpringDataWebAutoConfiguration.class)
+@Import({SpringDataWebAutoConfiguration.class, SecurityConfig.class})
 public class InterviewControllerTest {
 
     @Autowired
@@ -39,18 +40,21 @@ public class InterviewControllerTest {
 
     // POST Tests
     @Test
+    @WithMockUser
     public void saveInterviewNotPost() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/interview"))
                 .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
     }
 
     @Test
+    @WithMockUser
     public void saveInterviewPost() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/interview"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
+    @WithMockUser
     public void saveInterviewPostParams() throws Exception {
         long studentId = 1001;
         long companyId = 1001;
@@ -61,6 +65,7 @@ public class InterviewControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void saveInterviewPostParamsInvalid() throws Exception {
         CreateInterviewRequest request = new CreateInterviewRequest(null, 1L);
         mockMvc.perform(MockMvcRequestBuilders.post("/interview").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
@@ -70,6 +75,7 @@ public class InterviewControllerTest {
     // GET Tests
 
     @Test
+    @WithMockUser
     public void getAllInterviews() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/interview"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -77,6 +83,7 @@ public class InterviewControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getAllInterviewsOrderDesc() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/interview").param("desc", "true"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -84,6 +91,7 @@ public class InterviewControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getAllInterviewsByStudent() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/interview").param("student", "1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -91,6 +99,7 @@ public class InterviewControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getAllInterviewsByDate() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/interview").param("when", "2018-04-03"))
                 .andExpect(MockMvcResultMatchers.status().isOk());

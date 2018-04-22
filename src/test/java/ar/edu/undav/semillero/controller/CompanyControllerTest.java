@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -27,7 +28,7 @@ import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = CompanyController.class)
-@Import(SpringDataWebAutoConfiguration.class)
+@Import({SpringDataWebAutoConfiguration.class, SecurityConfig.class})
 public class CompanyControllerTest {
 
     @Autowired
@@ -44,18 +45,21 @@ public class CompanyControllerTest {
 
     // POST Tests
     @Test
+    @WithMockUser
     public void saveCompanyNotPost() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/company"))
                 .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
     }
 
     @Test
+    @WithMockUser
     public void saveCompanyPost() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/company"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
+    @WithMockUser
     public void saveCompanyPostParams() throws Exception {
         String name = "ECORP";
         String contact = "Carlos";
@@ -78,6 +82,7 @@ public class CompanyControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void saveCompanyPostParamsInvalidRequest() throws Exception {
         CreateCompanyRequest request = new CreateCompanyRequest("", "", "", "");
         mockMvc.perform(MockMvcRequestBuilders.post("/company").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
@@ -85,6 +90,7 @@ public class CompanyControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void updateCompany() throws Exception {
         CreateCompanyRequest request = new CreateCompanyRequest("new name", "new contact", "new@mail.com", "new comments");
         Company company = new Company("original name", "original contact", "old@mail.com", "original comments");
@@ -103,6 +109,7 @@ public class CompanyControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void updateCompanyNotFound() throws Exception {
         CreateCompanyRequest request = new CreateCompanyRequest("new name", "new contact", "new@mail.com", "new comments");
         Mockito.when(companyService.update(Mockito.anyLong(), Mockito.any(CreateCompanyRequest.class))).thenReturn(Optional.empty());
@@ -115,6 +122,7 @@ public class CompanyControllerTest {
     // GET Tests
 
     @Test
+    @WithMockUser
     public void getAllCompanies() throws Exception {
         Mockito.when(companyService.list(Mockito.any(FilterCompaniesRequest.class), Mockito.any(Pageable.class))).thenReturn(TestUtils.createCompanyDTOPage());
         mockMvc.perform(MockMvcRequestBuilders.get("/company"))
@@ -123,6 +131,7 @@ public class CompanyControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getCompany() throws Exception {
         Mockito.when(companyService.list(Mockito.any(FilterCompaniesRequest.class), Mockito.any(Pageable.class))).thenReturn(TestUtils.createCompanyDTOPage());
         mockMvc.perform(MockMvcRequestBuilders.get("/company").param("name", "ECORP"))
@@ -131,6 +140,7 @@ public class CompanyControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getCompanyWrongParam() throws Exception {
         Mockito.when(companyService.list(Mockito.any(FilterCompaniesRequest.class), Mockito.any(Pageable.class))).thenReturn(TestUtils.createCompanyDTOEmptyPage());
         mockMvc.perform(MockMvcRequestBuilders.get("/company").param("name", "dfghertyafdgaert"))
@@ -140,6 +150,7 @@ public class CompanyControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getCompanyById() throws Exception {
         Mockito.when(companyService.findById(Mockito.anyLong())).thenReturn(Optional.of(new Company()));
         mockMvc.perform(MockMvcRequestBuilders.get("/company/1"))
@@ -148,6 +159,7 @@ public class CompanyControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getCompanyByIdNotFound() throws Exception {
         Mockito.when(companyService.findById(Mockito.anyLong())).thenReturn(Optional.empty());
         mockMvc.perform(MockMvcRequestBuilders.get("/company/1"))
