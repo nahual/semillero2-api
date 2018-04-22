@@ -141,6 +141,34 @@ public class Student extends AbstractPersistable<Long> {
         return feedback;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCourseDate(LocalDate courseDate) {
+        this.courseDate = courseDate;
+    }
+
+    public void setGraduationDate(LocalDate graduationDate) {
+        this.graduationDate = graduationDate;
+    }
+
+    public void setInterviews(List<Interview> interviews) {
+        this.interviews = interviews;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setWorking(Boolean working) {
+        this.working = working;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
     public LocalDate getGraduationDate() {
         return graduationDate;
     }
