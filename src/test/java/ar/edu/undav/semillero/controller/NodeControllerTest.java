@@ -1,9 +1,13 @@
 package ar.edu.undav.semillero.controller;
 
+import ar.edu.undav.semillero.TestUtils;
+import ar.edu.undav.semillero.domain.entity.Company;
 import ar.edu.undav.semillero.domain.entity.Node;
+import ar.edu.undav.semillero.request.CreateCompanyRequest;
 import ar.edu.undav.semillero.request.CreateNodeRequest;
 import ar.edu.undav.semillero.service.NodeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +25,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = NodeController.class)
@@ -68,6 +75,21 @@ public class NodeControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
+    @Test
+    public void updateNode() throws Exception {
+        CreateNodeRequest request = new CreateNodeRequest("Banfield", "Morazán 669");
+        Node node = new Node(request.getName(), request.getAddress());
+        TestUtils.setId(node, 1L);
+        Mockito.when(nodeService.update(anyLong(), any(CreateNodeRequest.class))).thenReturn(Optional.of(node));
+        mockMvc.perform(MockMvcRequestBuilders.put("/node/1").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.notNullValue(Number.class)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.notNullValue(String.class)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.address", Matchers.notNullValue(String.class)));
+        Mockito.verify(nodeService).update(Mockito.eq(1L), Mockito.eq(request));
+    }
+
     // GET Tests
 
     @Test
@@ -79,7 +101,7 @@ public class NodeControllerTest {
 
     @Test
     public void getNode() throws Exception {
-        Mockito.when(nodeService.findById(Mockito.anyLong())).thenReturn(Optional.of(new Node()));
+        Mockito.when(nodeService.findById(anyLong())).thenReturn(Optional.of(new Node()));
         mockMvc.perform(MockMvcRequestBuilders.get("/node/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         Mockito.verify(nodeService).findById(Mockito.eq(1L));
