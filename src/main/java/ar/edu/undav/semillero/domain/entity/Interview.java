@@ -7,8 +7,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -21,12 +19,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "interview")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Interview {
-
-    @Id
-    @GeneratedValue
-    @JsonView(View.Summary.class)
-    private Long id;
+public class Interview extends AbstractPersistable<Long> {
 
     @ManyToOne
     @JsonView(View.Summary.class)
@@ -61,10 +54,6 @@ public class Interview {
         this.company = company;
         this.comments = comments;
         date = LocalDate.now();
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public LocalDate getDate() {

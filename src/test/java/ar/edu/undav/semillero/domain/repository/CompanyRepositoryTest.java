@@ -24,7 +24,7 @@ public class CompanyRepositoryTest {
 
     @Test
     public void testSave() {
-        Company company = new Company("compañia", "Pepe");
+        Company company = new Company("compañia", "Pepe", "mail@server.com", "comentarios");
         companyRepository.save(company);
     }
 
