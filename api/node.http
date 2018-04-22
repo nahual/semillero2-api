@@ -3,7 +3,7 @@ POST {{host}}/node
 Content-Type: application/json
 
 {
-    "name": "nombre del nodo",
+    "name": "Capital",
     "address": "domicilio del nodo"
 }
 
