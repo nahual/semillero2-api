@@ -1,8 +1,5 @@
 package ar.edu.undav.semillero.domain.entity;
 
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.springframework.data.jpa.domain.AbstractPersistable;
-
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -26,9 +23,11 @@ public class Company extends AbstractPersistable<Long> {
     public Company() {
     }
 
-    public Company(String name, String contact) {
+    public Company(String name, String contact, String email, String comments) {
         this.name = name;
         this.contact = contact;
+        this.email = email;
+        this.comments = comments;
     }
 
     public String getName() {
@@ -47,6 +46,22 @@ public class Company extends AbstractPersistable<Long> {
         this.contact = contact;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
     public void addInterview(Interview interview) {
         interviews.add(interview);
     }
@@ -54,17 +69,4 @@ public class Company extends AbstractPersistable<Long> {
     public List<Interview> getInterviews() {
         return Collections.unmodifiableList(interviews);
     }
-
-    @Override
-    public String toString() {
-        return ReflectionToStringBuilder.toString(this);
-    }
-    public String getEmail() {
-        return email;
-    }
-
-    public String getComments() {
-        return comments;
-    }
-
 }

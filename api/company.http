@@ -4,7 +4,9 @@ Content-Type: application/json
 
 {
     "name": "Pivotal",
-    "contact": "Josh"
+    "contact": "Josh",
+    "email": "josh@pivotal.com",
+    "comments": "my comments on Josh"
 }
 
 ### create company
@@ -13,7 +15,8 @@ Content-Type: application/json
 
 {
     "name": "new Pivotal",
-    "contact": "new Josh"
+    "contact": "new Josh",
+    "email": "josh@pivotal.com"
 }
 
 ### list companies
