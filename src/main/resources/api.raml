@@ -51,27 +51,71 @@ protocols:
             example: |
               [
                 {
-                    "id": 1,
-                    "name": "First",
-                    "lastName": "Last",
-                    "courseDate": "2018-03-01",
-                    "graduationDate": null,
-                    "deleted": false,
-                    "interviews": [],
-                    "node": {
-                        "id": 1,
-                        "name": "Banfield",
-                        "address": "Morazán 669",
-                        "students": [
-                            1
-                        ]
+                    "content": [
+                        {
+                            "id": 1,
+                            "name": "First",
+                            "lastName": "Last",
+                            "node": {
+                                "id": 1,
+                                "name": "Banfield",
+                                "address": "Morazán 669",
+                                "students": [
+                                    {
+                                        "id": 1,
+                                        "name": "First",
+                                        "lastName": "Last",
+                                        "deleted": false,
+                                        "interviews": [],
+                                        "node": {
+                                            "id": 1,
+                                            "name": "Banfield",
+                                            "address": "Morazán 669",
+                                            "students": [
+                                                1
+                                            ]
+                                        },
+                                        "email": "estudiante@gmail.com",
+                                        "phone": "1112223333",
+                                        "resumeUrl": "linkedin.com/estudiante1",
+                                        "feedback": null
+                                    }
+                                ]
+                            },
+                            "deleted": false,
+                            "courdeDate": "2018-03-01",
+                            "graduationDate": null,
+                            "email": "estudiante@gmail.com",
+                            "phone": "1112223333",
+                            "resumeUrl": "linkedin.com/estudiante1",
+                            "lookingForWork": true,
+                            "working": false,
+                            "feedback": null,
+                            "interviews": 0
+                        }
+                    ],
+                    "pageable": {
+                        "sort": {
+                            "sorted": false,
+                            "unsorted": true
+                        },
+                        "offset": 0,
+                        "pageSize": 20,
+                        "pageNumber": 0,
+                        "paged": true,
+                        "unpaged": false
                     },
-                    "email": "estudiante@gmail.com",
-                    "phone": "1112223333",
-                    "resumeUrl": "linkedin.com/estudiante1",
-                    "lookingForWork": true,
-                    "working": false,
-                    "feedback": null
+                    "last": true,
+                    "totalPages": 1,
+                    "totalElements": 1,
+                    "size": 20,
+                    "number": 0,
+                    "numberOfElements": 1,
+                    "first": true,
+                    "sort": {
+                        "sorted": false,
+                        "unsorted": true
+                    }
                 }
               ]
   post:
@@ -103,8 +147,7 @@ protocols:
                   "resumeUrl": "linkedin.com/estudiante1",
                   "lookingForWork": true,
                   "working": false,
-                  "feedback": null,
-                  "new": false
+                  "feedback": null
               }
       400:
         description: Error en la creacion de un estudiante por falta de parametros
