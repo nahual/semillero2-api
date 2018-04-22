@@ -10,14 +10,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-
 import java.util.Collection;
 
 @RestController
@@ -42,6 +41,12 @@ public class NodeController {
     @GetMapping("/{id}")
     public ResponseEntity<Node> getNode(@PathVariable long id) {
         return WebUtils.emptyToNotFound(nodeService.findById(id));
+    }
+
+    @ResponseBody
+    @PutMapping("/{id}")
+    public ResponseEntity<Node> update(@PathVariable long id, @Valid @RequestBody CreateNodeRequest request) {
+        return WebUtils.emptyToNotFound(nodeService.update(id, request));
     }
 
     // Obtener todos los nodos
