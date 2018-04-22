@@ -7,6 +7,10 @@ spring:
     url: jdbc:mariadb://localhost:3307/semillero
     username: semillero
     password: semillero
+  security:
+    user:
+      name: semillero
+      password: semillero
   jackson.serialization.FAIL_ON_EMPTY_BEANS: false
 
 server.compression:
@@ -14,6 +18,7 @@ server.compression:
   mime-types: application/json
 
 logging.file: semillero.log
+
 
 ---
 spring:
