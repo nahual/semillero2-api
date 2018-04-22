@@ -220,6 +220,94 @@ protocols:
       description: Elimina un estudiante por su Id
     get:
       description: Detalle de un estudiante por su Id
+    put:
+      description: Modificación un estudiante por su Id
+      responses:
+        200:
+          description: Modificación exitosa de una estudiante
+          body:
+            application/json:
+              example: |
+                {
+                    "id": 1,
+                    "name": "First",
+                    "lastName": "Last",
+                    "courseDate": "2018-03-01",
+                    "graduationDate": null,
+                    "deleted": false,
+                    "interviews": [],
+                    "node": {
+                        "id": 1,
+                        "name": "Banfield",
+                        "address": "Morazán 669",
+                        "students": [
+                            1
+                        ]
+                    },
+                    "email": "estudiante@gmail.com",
+                    "phone": "1112223333",
+                    "resumeUrl": "linkedin.com/estudiante1",
+                    "lookingForWork": true,
+                    "working": false,
+                    "feedback": null
+                }
+        400:
+          description: Error por falta de parametro en la modificación de un estudiante
+          body:
+            application/json:
+              example: |
+                {
+                  "timestamp": 1481306391582,
+                  "status": 400,
+                  "error": "Bad Request",
+                  "exception": "org.springframework.web.bind.MissingServletRequestParameterException",
+                  "message": "Required String parameter 'name' is not present",
+                  "path": "/student"
+                }
+      queryParameters:
+        node:
+          description: Id de un nodo
+          type: number
+          required: true
+        graduationDate:
+          type: date
+          required: false
+          example: 2018-03-28
+        courseDate:
+          type: date
+          required: false
+          example: 2018-03-28
+        email:
+          description: Email del estudiante
+          type: string
+          required: false
+          example: estudiante@gmail.com
+        phone:
+          description: Teléfono del estudiante
+          type: string
+          required: false
+          example: 1112223333
+        resumeUrl:
+          description: URL del CV del estudiante
+          type: string
+          required: false
+          example: linkedin.com/estudiante
+        working:
+          description: True si el estudiante está trabajando
+          type: boolean
+          required: true
+          example: True
+        lookingForWork:
+          description: True si el estudiante está buscando trabajando
+          type: boolean
+          required: true
+          example: True
+        feedback:
+          description: Feedback del profesor
+          type: string
+          required: false
+          example: Feedback
+
   /bulk:
     post:
       description: Alta masiva de alumnos a traves de un archivo CSV

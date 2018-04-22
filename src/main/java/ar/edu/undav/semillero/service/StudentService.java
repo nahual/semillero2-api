@@ -15,13 +15,13 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.InputStreamSource;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -132,5 +132,29 @@ public class StudentService {
         } else {
             return LocalDate.of(NumberUtils.toInt(fecha.substring(0, 4)), Month.DECEMBER, 31);
         }
+    }
+
+    @Transactional
+    public Optional<Student> update(long id, @Valid CreateStudentRequest request) {
+        Optional<Student> optStudent = studentRepository.findById(id);
+        optStudent.ifPresent(s -> {
+            s.setEmail(request.getEmail());
+            s.setLastName(request.getLastName());
+            s.setLookingForWork(request.isLookingForWork());
+            s.setResumeUrl(request.getResumeUrl());
+            s.setName(request.getName());
+            s.setCourseDate(request.getCourseDate());
+            s.setGraduationDate(request.getGraduationDate());
+            s.setFeedback(request.getFeedback());
+            if (!s.getNode().getId().equals(request.getNode())){
+                Optional<Node> optNode = nodeRepository.findById(request.getNode());
+                if (optNode.isPresent()){
+                    s.setNode(optNode.get());
+                }else{
+                    throw new RuntimeException();
+                }
+            }
+        });
+        return optStudent;
     }
 }
