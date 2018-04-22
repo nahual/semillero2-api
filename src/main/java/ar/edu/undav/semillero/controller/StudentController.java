@@ -1,6 +1,7 @@
 package ar.edu.undav.semillero.controller;
 
 import ar.edu.undav.semillero.domain.entity.Student;
+import ar.edu.undav.semillero.dto.StudentDTO;
 import ar.edu.undav.semillero.request.CreateStudentRequest;
 import ar.edu.undav.semillero.request.FilterStudentsRequest;
 import ar.edu.undav.semillero.service.StudentService;
@@ -51,9 +52,8 @@ public class StudentController {
     }
 
     // Obtener todos los graduados
-    @JsonView(View.Summary.class)
     @GetMapping
-    public Page<Student> list(@Valid FilterStudentsRequest request, Pageable pageable) {
+    public Page<StudentDTO> list(@Valid FilterStudentsRequest request, Pageable pageable) {
        return studentService.list(request, pageable);
     }
 }
