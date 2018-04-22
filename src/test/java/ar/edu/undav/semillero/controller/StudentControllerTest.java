@@ -1,8 +1,10 @@
 package ar.edu.undav.semillero.controller;
 
+import ar.edu.undav.semillero.TestUtils;
 import ar.edu.undav.semillero.domain.entity.Student;
 import ar.edu.undav.semillero.domain.entity.Node;
 import ar.edu.undav.semillero.request.CreateStudentRequest;
+import ar.edu.undav.semillero.request.FilterStudentsRequest;
 import ar.edu.undav.semillero.service.StudentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
@@ -12,15 +14,20 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RunWith(SpringRunner.class)
@@ -55,9 +62,11 @@ public class StudentControllerTest {
     @Test
     public void saveStudentPostParams() throws Exception {
         String name = "Juan";
+        String lastName = "Last";
         long nodeId = 1001;
-        CreateStudentRequest request = new CreateStudentRequest(name, nodeId, null,null);
-        Student student = new Student(name, new Node());
+        LocalDate courseDate = LocalDate.of(2018, 1, 1);
+        CreateStudentRequest request = new CreateStudentRequest(name, lastName, nodeId, null, courseDate, null, null, null, false, true, null);
+        Student student = new Student(name, lastName, courseDate, null, new Node(), null, null, null, false, true, null);
         ReflectionTestUtils.setField(student, "id", 1L);
         Mockito.when(studentService.save(Mockito.any(CreateStudentRequest.class))).thenReturn(student);
         mockMvc.perform(MockMvcRequestBuilders.post("/student").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
@@ -65,13 +74,14 @@ public class StudentControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.notNullValue(Number.class)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(name)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName", Matchers.is(lastName)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.interviews", Matchers.empty()));
         Mockito.verify(studentService).save(Mockito.eq(request));
     }
 
     @Test
     public void saveStudentPostParamsInvalid() throws Exception {
-        CreateStudentRequest request = new CreateStudentRequest("", null,null,null);
+        CreateStudentRequest request = new CreateStudentRequest("First", "Last", null, null, LocalDate.of(2018, 1, 1), null, null, null, false, true, null);
         mockMvc.perform(MockMvcRequestBuilders.post("/student").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
@@ -79,24 +89,22 @@ public class StudentControllerTest {
     // GET Tests
 
     @Test
-    public void getAllStudent() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/student"))
+    public void listStudents() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/student")
+                    .param("node", "1")
+                    .param("minGraduationDate", "2018-01-01")
+                    .param("maxGraduationDate", "2018-12-31")
+                    .param("page", "0")
+                    .param("size", "20")
+                )
                 .andExpect(MockMvcResultMatchers.status().isOk());
-        Mockito.verify(studentService).findAll();
-    }
-
-    @Test
-    public void getAllStudentByNode() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/student").param("node", "1"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-        Mockito.verify(studentService).findByNode(Mockito.eq(1L));
-    }
-
-    @Test
-    public void getAllStudentByDate() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/student").param("when", "2018-04-02"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-        Mockito.verify(studentService).findByDate(Mockito.eq(LocalDate.of(2018, 4, 2)));
+        Mockito.verify(studentService).list(Mockito.eq(
+                new FilterStudentsRequest(
+                    LocalDate.of(2018, 01, 01),
+                    LocalDate.of(2018, 12, 31),
+                    1L, null, null, null
+                )), Mockito.eq(TestUtils.createPageRequest()));
     }
 
     @Test
@@ -105,5 +113,14 @@ public class StudentControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/student/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         Mockito.verify(studentService).findById(Mockito.eq(1L));
+    }
+
+    @TestConfiguration
+    static class TestConfig implements WebMvcConfigurer {
+
+        @Override
+        public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+            argumentResolvers.add(new PageableHandlerMethodArgumentResolver());
+        }
     }
 }

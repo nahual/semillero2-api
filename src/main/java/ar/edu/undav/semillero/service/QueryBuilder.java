@@ -78,6 +78,14 @@ public class QueryBuilder<T> {
         return this;
     }
 
+    public QueryBuilder<T> notNull(boolean flag, String lhs) {
+        if (flag) {
+            appendConnector();
+            buffer.append(lhs).append(" != null");
+        }
+        return this;
+    }
+
     private void addCondition(String lhs, String operator, Object value) {
         if (value != null) {
             String varName = "var" + (varCounter++);
