@@ -140,4 +140,8 @@ public class Student extends AbstractPersistable<Long> {
     public String getFeedback() {
         return feedback;
     }
+
+    public LocalDate getGraduationDate() {
+        return graduationDate;
+    }
 }

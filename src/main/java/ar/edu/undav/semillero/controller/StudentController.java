@@ -5,8 +5,6 @@ import ar.edu.undav.semillero.dto.StudentDTO;
 import ar.edu.undav.semillero.request.CreateStudentRequest;
 import ar.edu.undav.semillero.request.FilterStudentsRequest;
 import ar.edu.undav.semillero.service.StudentService;
-import ar.edu.undav.semillero.view.View;
-import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.Collection;
 
 @RestController
 @RequestMapping("/student")
@@ -55,5 +54,11 @@ public class StudentController {
     @GetMapping
     public Page<StudentDTO> list(@Valid FilterStudentsRequest request, Pageable pageable) {
        return studentService.list(request, pageable);
+    }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<Void> create(@RequestPart("csv") MultipartFile csvFile) {
+        studentService.importCSV(csvFile);
+        return ResponseEntity.accepted().build();
     }
 }
