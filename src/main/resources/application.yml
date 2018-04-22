@@ -12,6 +12,9 @@ spring:
       name: semillero
       password: semillero
   jackson.serialization.FAIL_ON_EMPTY_BEANS: false
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/00-master.xml
 
 server.compression:
   enabled: true
