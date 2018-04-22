@@ -3,6 +3,7 @@ package ar.edu.undav.semillero.service;
 import ar.edu.undav.semillero.domain.entity.Student;
 import ar.edu.undav.semillero.domain.repository.NodeRepository;
 import ar.edu.undav.semillero.domain.repository.StudentRepository;
+import ar.edu.undav.semillero.dto.StudentDTO;
 import ar.edu.undav.semillero.request.CreateStudentRequest;
 import ar.edu.undav.semillero.request.FilterStudentsRequest;
 import org.springframework.data.domain.Page;
@@ -60,9 +61,11 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Student> list(FilterStudentsRequest filters, Pageable pageable) {
-        QueryBuilder<Student> queryBuilder = QueryBuilder.of(Student.class)
-                    .select("s")
+    public Page<StudentDTO> list(FilterStudentsRequest filters, Pageable pageable) {
+        QueryBuilder<StudentDTO> queryBuilder = QueryBuilder.of(StudentDTO.class)
+                    .select("new ar.edu.undav.semillero.dto.StudentDTO(s.id, s.name, s.lastName, s.node, s.deleted, " +
+                        "s.courseDate, s.graduationDate, s.email, s.phone, s.resumeUrl, s.lookingForWork, s.working, s.feedback, " +
+                         " (select count(i) from ar.edu.undav.semillero.domain.entity.Interview i where i.student = s))")
                     .from(Student.class, "s")
                     .gte("graduationDate", filters.getMinGraduationDate())
                     .lte("graduationDate", filters.getMaxGraduationDate())
@@ -70,6 +73,6 @@ public class StudentService {
                     .notNull(filters.isGraduated(), "graduationDate")
                     .condition(filters.isWorking(), "working = true")
                     .condition(filters.isLookingForWork(), "lookingForWork = true");
-        return queryRunner.run(Student.class, queryBuilder, pageable);
+        return queryRunner.run(StudentDTO.class, queryBuilder, pageable);
     }
 }
