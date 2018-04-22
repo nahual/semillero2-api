@@ -51,7 +51,7 @@ public class NodeController {
 
     // Obtener todos los nodos
     @JsonView(View.Summary.class)
-    @GetMapping("")
+    @GetMapping
     public Collection<Node> getNode() {
         return nodeService.findAll();
     }
