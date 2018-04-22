@@ -86,6 +86,40 @@ public class StudentControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
+    @Test
+    public void updateStudentPostParamsInvalid() throws Exception {
+        CreateStudentRequest request = new CreateStudentRequest("First", "Last", null, null, LocalDate.of(2018, 1, 1), null, null, null, false, true, null);
+        mockMvc.perform(MockMvcRequestBuilders.put("/student/1").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    public void updateStudent() throws Exception {
+        CreateStudentRequest request = new CreateStudentRequest("First", "Last", 1L, null, LocalDate.of(2018, 1, 1), "mail@test.com", null, null, false, true, null);
+        Student student = new Student("First", "Last", LocalDate.of(2018, 1, 1),LocalDate.of(2018, 1, 1), new Node(), "mail@test.com", null, null, true, false, null);
+        TestUtils.setId(student, 1L);
+        Mockito.when(studentService.update(Mockito.anyLong(), Mockito.any(CreateStudentRequest.class))).thenReturn(Optional.of(student));
+        mockMvc.perform(MockMvcRequestBuilders.put("/student/1").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.notNullValue(Number.class)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.notNullValue(String.class)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName", Matchers.notNullValue(String.class)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.notNullValue(String.class)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.interviews", Matchers.empty()));
+        Mockito.verify(studentService).update(Mockito.eq(1L), Mockito.eq(request));
+    }
+
+    @Test
+    public void updateStudentNotFound() throws Exception {
+        CreateStudentRequest request = new CreateStudentRequest("update name", "update last name", 1L, LocalDate.of(2018, 1, 1), LocalDate.of(2018, 1, 1),null, null, null, false, false, "GRan alumne gran");
+        Mockito.when(studentService.update(Mockito.anyLong(), Mockito.any(CreateStudentRequest.class))).thenReturn(Optional.empty());
+        mockMvc.perform(MockMvcRequestBuilders.put("/student/1").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.content().string(""));
+        Mockito.verify(studentService).update(Mockito.eq(1L), Mockito.eq(request));
+    }
+
     // GET Tests
 
     @Test
