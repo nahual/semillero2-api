@@ -198,6 +198,14 @@ protocols:
         type: string
         required: true
         example: Juan
+      email:
+        type: string
+        required: true
+        example: juan@tarnet.com
+      comments:
+        type: string
+        required: false
+        example: comentarios de la compañia
   /{id}:
     get:
       description: Detalle de una compañia por su Id
@@ -239,6 +247,14 @@ protocols:
           type: string
           required: true
           example: Juan
+        email:
+          type: string
+          required: true
+          example: juan@tarnet.com
+        comments:
+          type: string
+          required: false
+          example: comentarios de la compañia
 
 /node:
   displayName: node

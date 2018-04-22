@@ -1,62 +1,49 @@
 package ar.edu.undav.semillero.domain.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import ar.edu.undav.semillero.view.View;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
-import ar.edu.undav.semillero.view.View;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "node")
-public class Node {
+public class Node extends AbstractPersistable<Long> {
 
-	@Id
-	@GeneratedValue
-	@JsonView(View.Summary.class)
-	private Long id;
+    @JsonView(View.Summary.class)
+    private String name;
 
-	@JsonView(View.Summary.class)
-	private String name;
+    @JsonView(View.Summary.class)
+    private String address;
 
-	@JsonView(View.Summary.class)
-	private String address;
+    @OneToMany(mappedBy = "node")
+    private List<Student> students = new ArrayList<>();
 
-	@OneToMany(mappedBy = "node")
-	private List<Student> students = new ArrayList<>();
+    public Node() {
+    }
 
-	public Node() {
-	}
+    public Node(String name, String address) {
+        this.name = name;
+        this.address = address;
+    }
 
-	public Node(String name, String address) {
-		this.name = name;
-		this.address = address;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void addStudent(Student student) {
+        this.students.add(student);
+    }
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void addStudent(Student student) {
-		this.students.add(student);
-	}
-
-	public List<Student> getStudents() {
-		return students;
-	}
-
+    public List<Student> getStudents() {
+        return students;
+    }
 }
