@@ -1,7 +1,5 @@
 package ar.edu.undav.semillero.dto;
 
-import ar.edu.undav.semillero.domain.entity.Node;
-
 import java.time.LocalDate;
 
 public class StudentDTO extends BaseDTO {
@@ -9,9 +7,9 @@ public class StudentDTO extends BaseDTO {
     private final long id;
     private final String name;
     private final String lastName;
-    private final Node node;
+    private final String nodeName;
     private final boolean deleted;
-    private final LocalDate courdeDate;
+    private final LocalDate courseDate;
     private final LocalDate graduationDate;
     private final String email;
     private final String phone;
@@ -21,13 +19,13 @@ public class StudentDTO extends BaseDTO {
     private final String feedback;
     private final long interviews;
 
-    public StudentDTO(long id, String name, String lastName, Node node, boolean deleted, LocalDate courseDate, LocalDate graduationDate, String email, String phone, String resumeUrl, boolean lookingForWork, boolean working, String feedback, long interviews) {
+    public StudentDTO(long id, String name, String lastName, String nodeName, boolean deleted, LocalDate courseDate, LocalDate graduationDate, String email, String phone, String resumeUrl, boolean lookingForWork, boolean working, String feedback, long interviews) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
-        this.node = node;
+        this.nodeName = nodeName;
         this.deleted = deleted;
-        this.courdeDate = courseDate;
+        this.courseDate = courseDate;
         this.graduationDate = graduationDate;
         this.email = email;
         this.phone = phone;
@@ -50,16 +48,16 @@ public class StudentDTO extends BaseDTO {
         return lastName;
     }
 
-    public Node getNode() {
-        return node;
+    public String getNodeName() {
+        return nodeName;
     }
 
     public boolean isDeleted() {
         return deleted;
     }
 
-    public LocalDate getCourdeDate() {
-        return courdeDate;
+    public LocalDate getCourseDate() {
+        return courseDate;
     }
 
     public LocalDate getGraduationDate() {
