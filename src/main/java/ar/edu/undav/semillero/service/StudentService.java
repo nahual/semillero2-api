@@ -63,7 +63,7 @@ public class StudentService {
     @Transactional(readOnly = true)
     public Page<StudentDTO> list(FilterStudentsRequest filters, Pageable pageable) {
         QueryBuilder<StudentDTO> queryBuilder = QueryBuilder.of(StudentDTO.class)
-                    .select("new ar.edu.undav.semillero.dto.StudentDTO(s.id, s.name, s.lastName, s.node, s.deleted, " +
+                    .select("new ar.edu.undav.semillero.dto.StudentDTO(s.id, s.name, s.lastName, s.node.name, s.deleted, " +
                         "s.courseDate, s.graduationDate, s.email, s.phone, s.resumeUrl, s.lookingForWork, s.working, s.feedback, " +
                          " (select count(i) from ar.edu.undav.semillero.domain.entity.Interview i where i.student = s))")
                     .from(Student.class, "s")
