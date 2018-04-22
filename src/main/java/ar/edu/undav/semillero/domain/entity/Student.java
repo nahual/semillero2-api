@@ -1,8 +1,6 @@
 package ar.edu.undav.semillero.domain.entity;
 
-import ar.edu.undav.semillero.view.View;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.CascadeType;
@@ -22,22 +20,17 @@ import java.util.List;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Student extends AbstractPersistable<Long> {
 
-    @JsonView(View.Summary.class)
     private String name;
 
-    @JsonView(View.Summary.class)
     @Column(name="last_name")
     private String lastName;
 
-    @JsonView(View.Summary.class)
     @Column(name="course_date")
     private LocalDate courseDate;
 
-    @JsonView(View.Summary.class)
     @Column(name="graduation_date")
     private LocalDate graduationDate;
 
-    @JsonView(View.Summary.class)
     private boolean deleted = false;
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "student")
@@ -45,29 +38,22 @@ public class Student extends AbstractPersistable<Long> {
 
     @ManyToOne
     @JoinColumn
-    @JsonView(View.Summary.class)
     private Node node;
 
-    @JsonView(View.Summary.class)
     private String email;
 
-    @JsonView(View.Summary.class)
     private String phone;
 
-    @JsonView(View.Summary.class)
     @Column(name="resume_url")
     private String resumeUrl;
 
-    @JsonView(View.Summary.class)
     @Column(name="looking_for_work")
     private Boolean lookingForWork;
 
-    @JsonView(View.Summary.class)
     @Column(name="working")
     private Boolean working;
 
     //Feedback provided by professors
-    @JsonView(View.Summary.class)
     private String feedback;
 
     public Student() {
