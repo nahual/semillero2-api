@@ -12,24 +12,22 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.List;
 import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = CompanyController.class)
+@Import(SpringDataWebAutoConfiguration.class)
 public class CompanyControllerTest {
 
     @Autowired
@@ -155,14 +153,5 @@ public class CompanyControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/company/1"))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
         Mockito.verify(companyService).findById(Mockito.eq(1L));
-    }
-
-    @TestConfiguration
-    static class TestConfig implements WebMvcConfigurer {
-
-        @Override
-        public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-            argumentResolvers.add(new PageableHandlerMethodArgumentResolver());
-        }
     }
 }
