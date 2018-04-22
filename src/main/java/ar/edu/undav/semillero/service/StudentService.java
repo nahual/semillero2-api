@@ -1,21 +1,43 @@
 package ar.edu.undav.semillero.service;
 
+import ar.edu.undav.semillero.domain.entity.Node;
 import ar.edu.undav.semillero.domain.entity.Student;
 import ar.edu.undav.semillero.domain.repository.NodeRepository;
 import ar.edu.undav.semillero.domain.repository.StudentRepository;
 import ar.edu.undav.semillero.dto.StudentDTO;
 import ar.edu.undav.semillero.request.CreateStudentRequest;
 import ar.edu.undav.semillero.request.FilterStudentsRequest;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.InputStreamSource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class StudentService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(StudentService.class);
 
     private final StudentRepository studentRepository;
     private final NodeRepository nodeRepository;
@@ -74,5 +96,41 @@ public class StudentService {
                     .condition(filters.isWorking(), "working = true")
                     .condition(filters.isLookingForWork(), "lookingForWork = true");
         return queryRunner.run(StudentDTO.class, queryBuilder, pageable);
+    }
+
+    @Transactional
+    public void importCSV(InputStreamSource csvResource) {
+        try (Reader reader = new InputStreamReader(csvResource.getInputStream())) {
+            CSVParser records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
+            List<Student> students = StreamSupport.stream(records.spliterator(), true)
+                    .map(record -> Pair.of(record, nodeRepository.findByName(record.get("nodo"))))
+                    .map(this::pairToStudent)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+            studentRepository.saveAll(students);
+        } catch (IOException ex) {
+            LOGGER.error("Error with stream", ex);
+            throw new RuntimeException("Error importing CSV", ex);
+        }
+    }
+
+    private Student pairToStudent(Pair<CSVRecord, Optional<Node>> pair) {
+        return pair.getSecond().map(node -> {
+            CSVRecord record = pair.getFirst();
+            boolean egresado = "Si".equalsIgnoreCase(record.get("egresado"));
+            LocalDate date = extractDate(record);
+            return new Student(record.get("nombre"), record.get("apellido"), date, egresado ? date : null, node, record.get("mail"), record.get("celular"), null, Boolean.FALSE, Boolean.FALSE, null);
+        }).orElse(null);
+    }
+
+    private LocalDate extractDate(CSVRecord record) {
+        String fecha = record.get("fecha");
+        if (StringUtils.isEmpty(fecha)) {
+            return null;
+        } else if (fecha.endsWith("-1")) {
+            return LocalDate.of(NumberUtils.toInt(fecha.substring(0, 4)), Month.JUNE, 30);
+        } else {
+            return LocalDate.of(NumberUtils.toInt(fecha.substring(0, 4)), Month.DECEMBER, 31);
+        }
     }
 }
