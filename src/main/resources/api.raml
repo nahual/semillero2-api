@@ -220,6 +220,18 @@ protocols:
       description: Elimina un estudiante por su Id
     get:
       description: Detalle de un estudiante por su Id
+  /bulk:
+    post:
+      description: Alta masiva de alumnos a traves de un archivo CSV
+      queryParameters:
+        csv:
+          type: file
+          required: true
+      responses:
+        202:
+          description: El archivo se proceso exitosamente
+        500:
+          description: Ocurrio un error en el proceso del archivo
 
 /company:
   displayName: company
