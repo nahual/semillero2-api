@@ -1,8 +1,8 @@
 package ar.edu.undav.semillero.controller;
 
 import ar.edu.undav.semillero.TestUtils;
-import ar.edu.undav.semillero.domain.entity.Student;
 import ar.edu.undav.semillero.domain.entity.Node;
+import ar.edu.undav.semillero.domain.entity.Student;
 import ar.edu.undav.semillero.request.CreateStudentRequest;
 import ar.edu.undav.semillero.request.FilterStudentsRequest;
 import ar.edu.undav.semillero.service.StudentService;
@@ -13,25 +13,23 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = StudentController.class)
+@Import(SpringDataWebAutoConfiguration.class)
 public class StudentControllerTest {
 
     @Autowired
@@ -101,7 +99,7 @@ public class StudentControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
         Mockito.verify(studentService).list(Mockito.eq(
                 new FilterStudentsRequest(
-                    LocalDate.of(2018, 01, 01),
+                    LocalDate.of(2018, 1, 1),
                     LocalDate.of(2018, 12, 31),
                     1L, null, null, null
                 )), Mockito.eq(TestUtils.createPageRequest()));
@@ -113,14 +111,5 @@ public class StudentControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/student/1"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
         Mockito.verify(studentService).findById(Mockito.eq(1L));
-    }
-
-    @TestConfiguration
-    static class TestConfig implements WebMvcConfigurer {
-
-        @Override
-        public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-            argumentResolvers.add(new PageableHandlerMethodArgumentResolver());
-        }
     }
 }
