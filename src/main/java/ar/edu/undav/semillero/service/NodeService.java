@@ -12,24 +12,34 @@ import java.util.Optional;
 @Service
 public class NodeService {
 
-    private final NodeRepository nodeRepository;
+	private final NodeRepository nodeRepository;
 
-    public NodeService(NodeRepository nodeRepository) {
-        this.nodeRepository = nodeRepository;
-    }
+	public NodeService(NodeRepository nodeRepository) {
+		this.nodeRepository = nodeRepository;
+	}
 
-    @Transactional
-    public Node save(CreateNodeRequest request) {
-        return nodeRepository.save(new Node(request.getName(), request.getAddress()));
-    }
+	@Transactional
+	public Node save(CreateNodeRequest request) {
+		return nodeRepository.save(new Node(request.getName(), request.getAddress()));
+	}
 
-    @Transactional(readOnly = true)
-    public Collection<Node> findAll() {
-        return nodeRepository.findAll();
-    }
+	@Transactional
+	public Optional<Node> update(long id, CreateNodeRequest request) {
+		Optional<Node> optNode = nodeRepository.findById(id);
+		optNode.ifPresent(node -> {
+			node.setName(request.getName());
+			node.setAddress(request.getAddress());
+		});
+		return optNode;
+	}
 
-    @Transactional(readOnly = true)
-    public Optional<Node> findById(Long id) {
-        return nodeRepository.findById(id);
-    }
+	@Transactional(readOnly = true)
+	public Collection<Node> findAll() {
+		return nodeRepository.findAll();
+	}
+
+	@Transactional(readOnly = true)
+	public Optional<Node> findById(Long id) {
+		return nodeRepository.findById(id);
+	}
 }
