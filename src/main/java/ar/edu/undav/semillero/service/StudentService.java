@@ -1,15 +1,16 @@
 package ar.edu.undav.semillero.service;
 
 import ar.edu.undav.semillero.domain.entity.Student;
-import ar.edu.undav.semillero.domain.repository.StudentRepository;
 import ar.edu.undav.semillero.domain.repository.NodeRepository;
+import ar.edu.undav.semillero.domain.repository.StudentRepository;
 import ar.edu.undav.semillero.request.CreateStudentRequest;
+import ar.edu.undav.semillero.request.FilterStudentsRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -17,16 +18,29 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final NodeRepository nodeRepository;
+    private final QueryRunner queryRunner;
 
-    public StudentService(StudentRepository studentRepository, NodeRepository nodeRepository) {
+    public StudentService(StudentRepository studentRepository, NodeRepository nodeRepository, QueryRunner queryRunner) {
         this.studentRepository = studentRepository;
         this.nodeRepository = nodeRepository;
+        this.queryRunner = queryRunner;
     }
 
     @Transactional
     public Student save(CreateStudentRequest request) {
         return nodeRepository.findById(request.getNode())
-                .map(node -> studentRepository.save(new Student(request.getName(), node, request.getEmail(),request.getResumeUrl())))
+                .map(node -> studentRepository.save(
+                        new Student(request.getName(),
+                            request.getLastName(),
+                            request.getCourseDate(),
+                            request.getGraduationDate(),
+                            node,
+                            request.getEmail(),
+                            request.getPhone(),
+                            request.getResumeUrl(),
+                            request.isLookingForWork(),
+                            request.isWorking(),
+                            request.getFeedback())))
                 .orElseThrow(RuntimeException::new);
     }
 
@@ -46,14 +60,16 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public Collection<Student> findByNode(long nodeId) {
-        return nodeRepository.findById(nodeId)
-                .map(studentRepository::findByNode)
-                .orElseGet(Collections::emptyList);
-    }
-
-    @Transactional(readOnly = true)
-    public Collection<Student> findByDate(LocalDate when) {
-        return studentRepository.findByDate(when);
+    public Page<Student> list(FilterStudentsRequest filters, Pageable pageable) {
+        QueryBuilder<Student> queryBuilder = QueryBuilder.of(Student.class)
+                    .select("s")
+                    .from(Student.class, "s")
+                    .gte("graduationDate", filters.getMinGraduationDate())
+                    .lte("graduationDate", filters.getMaxGraduationDate())
+                    .eq("node.id", filters.getNode())
+                    .notNull(filters.isGraduated(), "graduationDate")
+                    .condition(filters.isWorking(), "working = true")
+                    .condition(filters.isLookingForWork(), "lookingForWork = true");
+        return queryRunner.run(Student.class, queryBuilder, pageable);
     }
 }

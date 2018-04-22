@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +31,7 @@ public class Student extends AbstractPersistable<Long> {
 
     @JsonView(View.Summary.class)
     @Column(name="course_date")
-    private LocalDate date;
+    private LocalDate courseDate;
 
     @JsonView(View.Summary.class)
     @Column(name="graduation_date")
@@ -61,7 +60,11 @@ public class Student extends AbstractPersistable<Long> {
 
     @JsonView(View.Summary.class)
     @Column(name="looking_for_work")
-    private boolean lookingForWork = true;
+    private Boolean lookingForWork;
+
+    @JsonView(View.Summary.class)
+    @Column(name="working")
+    private Boolean working;
 
     //Feedback provided by professors
     @JsonView(View.Summary.class)
@@ -71,15 +74,21 @@ public class Student extends AbstractPersistable<Long> {
     }
 
     public Student(String name, Node node) {
-        this.name = name;
-        this.node = node;
-        date = LocalDate.now();
+        this(name, null, null, null, node, null, null, null, null, null, null);
     }
 
-    public Student(String name, Node node, String email, String resumeUrl) {
-        this(name,node);
+    public Student(String name, String lastName, LocalDate courseDate, LocalDate graduationDate, Node node, String email, String phone, String resumeUrl, Boolean lookingForWork, Boolean working, String feedback) {
+        this.name = name;
+        this.lastName = lastName;
+        this.courseDate = courseDate;
+        this.graduationDate = graduationDate;
+        this.node = node;
         this.email = email;
+        this.phone = phone;
         this.resumeUrl = resumeUrl;
+        this.lookingForWork = lookingForWork;
+        this.working = working;
+        this.feedback = feedback;
     }
 
     public void setDeleted(boolean deleted) {
@@ -126,11 +135,7 @@ public class Student extends AbstractPersistable<Long> {
         this.resumeUrl = resumeUrl;
     }
 
-    public boolean isLookingForWork() {
-        return lookingForWork;
-    }
-
-    public void setLookingForWork(boolean lookingForWork) {
+    public void setLookingForWork(Boolean lookingForWork) {
         this.lookingForWork = lookingForWork;
     }
 
