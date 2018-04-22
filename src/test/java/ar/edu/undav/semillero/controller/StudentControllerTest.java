@@ -29,7 +29,7 @@ import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = StudentController.class)
-@Import(SpringDataWebAutoConfiguration.class)
+@Import({SpringDataWebAutoConfiguration.class, SecurityConfig.class})
 public class StudentControllerTest {
 
     @Autowired

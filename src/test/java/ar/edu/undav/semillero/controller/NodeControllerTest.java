@@ -19,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -31,7 +32,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = NodeController.class)
-@Import(SpringDataWebAutoConfiguration.class)
+@Import({SpringDataWebAutoConfiguration.class, SecurityConfig.class})
 public class NodeControllerTest {
 
     @Autowired
@@ -48,17 +49,20 @@ public class NodeControllerTest {
 
     // POST Tests
     @Test
+    @WithMockUser
     public void saveNodeNotPost() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/node"))
                 .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
     }
 
     @Test
+    @WithMockUser
     public void saveNodePost() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/node")).andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
+    @WithMockUser
     public void saveNodePostParams() throws Exception {
         String name = "Juan";
         String address = "sacacorcho 123";
@@ -69,6 +73,7 @@ public class NodeControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void saveNodePostParamsInvalid() throws Exception {
         CreateNodeRequest request = new CreateNodeRequest(null, null);
         mockMvc.perform(MockMvcRequestBuilders.post("/node").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
@@ -76,6 +81,7 @@ public class NodeControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void updateNode() throws Exception {
         CreateNodeRequest request = new CreateNodeRequest("Banfield", "Morazán 669");
         Node node = new Node(request.getName(), request.getAddress());
@@ -93,6 +99,7 @@ public class NodeControllerTest {
     // GET Tests
 
     @Test
+    @WithMockUser
     public void getAllNodes() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/node"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -100,6 +107,7 @@ public class NodeControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getNode() throws Exception {
         Mockito.when(nodeService.findById(anyLong())).thenReturn(Optional.of(new Node()));
         mockMvc.perform(MockMvcRequestBuilders.get("/node/1"))
@@ -108,6 +116,7 @@ public class NodeControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getNotExistingNode() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/node/999"))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
