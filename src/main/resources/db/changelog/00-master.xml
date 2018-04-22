@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create_table_company" author="alejandro" dbms="mysql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="company"/>
+            </not>
+        </preConditions>
+        <createTable tableName="company">
+            <column name="id" type="bigint(20)"/>
+            <column name="contact" type="varchar(255)"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="comments" type="longtext"/>
+        </createTable>
+        <addNotNullConstraint tableName="company" columnName="id" columnDataType="bigint(20)"/>
+        <addPrimaryKey columnNames="id" tableName="company"/>
+        <addAutoIncrement tableName="company" columnName="id" columnDataType="bigint(20)"/>
+    </changeSet>
+
+    <changeSet id="create_table_node" author="alejandro" dbms="mysql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="node"/>
+            </not>
+        </preConditions>
+        <createTable tableName="node">
+            <column name="id" type="bigint(20)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="address" type="varchar(255)"/>
+        </createTable>
+        <addNotNullConstraint tableName="node" columnName="id" columnDataType="bigint(20)"/>
+        <addPrimaryKey columnNames="id" tableName="node"/>
+        <addAutoIncrement tableName="node" columnName="id" columnDataType="bigint(20)"/>
+    </changeSet>
+
+    <changeSet id="create_table_student" author="alejandro" dbms="mysql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="student"/>
+            </not>
+        </preConditions>
+        <createTable tableName="student">
+            <column name="id" type="bigint(20)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="last_name" type="varchar(255)"/>
+            <column name="node_id" type="bigint(20)"/>
+            <column name="deleted" type="boolean" defaultValueBoolean="false"/>
+            <column name="graduation_date" type="date"/>
+            <column name="course_date" type="date"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="phone" type="varchar(255)"/>
+            <column name="resume_url" type="varchar(255)"/>
+            <column name="looking_for_work" type="boolean" defaultValueBoolean="false"/>
+            <column name="feedback" type="longtext"/>
+            <column name="working" type="boolean" defaultValueBoolean="false"/>
+        </createTable>
+        <addNotNullConstraint tableName="student" columnName="id" columnDataType="bigint(20)"/>
+        <addPrimaryKey columnNames="id" tableName="student"/>
+        <addAutoIncrement tableName="student" columnName="id" columnDataType="bigint(20)"/>
+    </changeSet>
+
+    <changeSet id="create_table_interview" author="alejandro" dbms="mysql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="interview"/>
+            </not>
+        </preConditions>
+        <createTable tableName="interview">
+            <column name="id" type="bigint(20)"/>
+            <column name="comments" type="longtext"/>
+            <column name="date" type="date"/>
+            <column name="company_id" type="bigint(20)"/>
+            <column name="student_id" type="bigint(20)"/>
+            <column name="work_from_date" type="date"/>
+            <column name="work_to_date" type="date"/>
+        </createTable>
+        <addNotNullConstraint tableName="interview" columnName="id" columnDataType="bigint(20)"/>
+        <addPrimaryKey columnNames="id" tableName="interview"/>
+        <addAutoIncrement tableName="interview" columnName="id" columnDataType="bigint(20)"/>
+        <addForeignKeyConstraint baseColumnNames="company_id"
+                                 baseTableName="interview"
+                                 constraintName="fk_interview_company"
+                                 onDelete="RESTRICT"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="company"/>
+        <addForeignKeyConstraint baseColumnNames="student_id"
+                                 baseTableName="interview"
+                                 constraintName="fk_interview_student"
+                                 onDelete="RESTRICT"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="student"/>
+    </changeSet>
+</databaseChangeLog>
