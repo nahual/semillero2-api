@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -27,7 +28,8 @@ import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = CompanyController.class)
-@Import(SpringDataWebAutoConfiguration.class)
+@Import({SpringDataWebAutoConfiguration.class, SecurityConfig.class})
+@WithMockUser
 public class CompanyControllerTest {
 
     @Autowired
