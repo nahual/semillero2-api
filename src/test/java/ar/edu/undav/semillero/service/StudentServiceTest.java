@@ -7,12 +7,14 @@ import ar.edu.undav.semillero.domain.repository.StudentRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.rule.OutputCapture;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 
@@ -33,6 +35,8 @@ public class StudentServiceTest {
     private NodeRepository nodeRepository;
     @Mock
     private QueryRunner queryRunner;
+    @Rule
+    public OutputCapture capture = new OutputCapture();
 
     @Before
     public void setUp() {
@@ -57,5 +61,6 @@ public class StudentServiceTest {
         Assertions.assertThat(captor.getValue()).hasSize(51);
         long graduatedCount = StreamSupport.stream(captor.getValue().spliterator(), true).filter(s -> Objects.nonNull(s.getGraduationDate())).count();
         Assertions.assertThat(graduatedCount).isEqualTo(18);
+        Assertions.assertThat(capture.toString()).contains("Node not found Paternal");
     }
 }
