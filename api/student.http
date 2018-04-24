@@ -1,14 +1,18 @@
 ### list student
 GET {{host}}/student
+Authorization: Basic c2VtaWxsZXJvOnNlbWlsbGVybw==
 
 ### get student by id
 GET {{host}}/student/3
+Authorization: Basic {{auth}}
 
 ### delete student by id
 DELETE {{host}}/student/3
+Authorization: Basic {{auth}}
 
 ###
 POST {{host}}/student
+Authorization: Basic {{auth}}
 Content-Type: application/json
 
 {
@@ -18,6 +22,7 @@ Content-Type: application/json
 
 ###
 POST {{host}}/student/bulk
+Authorization: Basic {{auth}}
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary

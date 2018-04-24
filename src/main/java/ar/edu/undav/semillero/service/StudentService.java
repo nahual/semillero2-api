@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -29,6 +30,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -102,8 +104,11 @@ public class StudentService {
     public void importCSV(InputStreamSource csvResource) {
         try (Reader reader = new InputStreamReader(csvResource.getInputStream())) {
             CSVParser records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
-            List<Student> students = StreamSupport.stream(records.spliterator(), true)
+            Map<Boolean, List<Pair<CSVRecord, Optional<Node>>>> mapOfPairs = StreamSupport.stream(records.spliterator(), true)
                     .map(record -> Pair.of(record, nodeRepository.findByName(record.get("nodo"))))
+                    .collect(Collectors.partitioningBy(p -> p.getSecond().isPresent()));
+            mapOfPairs.get(Boolean.FALSE).forEach(p -> LOGGER.warn("Node not found {}", p.getFirst().get("nodo")));
+            List<Student> students = mapOfPairs.get(Boolean.TRUE).stream()
                     .map(this::pairToStudent)
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
@@ -119,7 +124,7 @@ public class StudentService {
             CSVRecord record = pair.getFirst();
             boolean egresado = "Si".equalsIgnoreCase(record.get("egresado"));
             LocalDate date = extractDate(record);
-            return new Student(record.get("nombre"), record.get("apellido"), date, egresado ? date : null, node, record.get("mail"), record.get("celular"), null, Boolean.FALSE, Boolean.FALSE, null);
+            return new Student(record.get("nombre"), record.get("apellido"), date, egresado ? date : null, node, record.get("mail"), record.get("celular"), null, false, false, null);
         }).orElse(null);
     }
 
@@ -146,13 +151,9 @@ public class StudentService {
             s.setCourseDate(request.getCourseDate());
             s.setGraduationDate(request.getGraduationDate());
             s.setFeedback(request.getFeedback());
-            if (!s.getNode().getId().equals(request.getNode())){
-                Optional<Node> optNode = nodeRepository.findById(request.getNode());
-                if (optNode.isPresent()){
-                    s.setNode(optNode.get());
-                }else{
-                    throw new RuntimeException();
-                }
+            if (!s.getNode().getId().equals(request.getNode())) {
+                Node node = nodeRepository.findById(request.getNode()).orElseThrow(RuntimeException::new);
+                s.setNode(node);
             }
         });
         return optStudent;

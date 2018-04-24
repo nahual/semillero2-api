@@ -1,5 +1,11 @@
+###
+OPTIONS {{host}}/company
+Access-Control-Request-Method: GET
+Origin: localhost
+
 ### create company
 POST {{host}}/company
+Authorization: Basic {{auth}}
 Content-Type: application/json
 
 {
@@ -11,6 +17,7 @@ Content-Type: application/json
 
 ### create company
 PUT {{host}}/company/1
+Authorization: Basic {{auth}}
 Content-Type: application/json
 
 {
@@ -21,8 +28,10 @@ Content-Type: application/json
 
 ### list companies
 GET {{host}}/company?name=IVOT&workers=false&interviews=true&page=0&size=10
+Authorization: Basic {{auth}}
 
 ### get company by id
 GET {{host}}/company/1
+Authorization: Basic {{auth}}
 
 ###
