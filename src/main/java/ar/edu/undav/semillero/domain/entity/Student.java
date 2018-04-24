@@ -31,7 +31,7 @@ public class Student extends AbstractPersistable<Long> {
     @Column(name="graduation_date")
     private LocalDate graduationDate;
 
-    private boolean deleted = false;
+    private boolean deleted;
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "student")
     private List<Interview> interviews = new ArrayList<>();
@@ -48,10 +48,10 @@ public class Student extends AbstractPersistable<Long> {
     private String resumeUrl;
 
     @Column(name="looking_for_work")
-    private Boolean lookingForWork;
+    private boolean lookingForWork;
 
     @Column(name="working")
-    private Boolean working;
+    private boolean working;
 
     //Feedback provided by professors
     private String feedback;
@@ -60,10 +60,10 @@ public class Student extends AbstractPersistable<Long> {
     }
 
     public Student(String name, Node node) {
-        this(name, null, null, null, node, null, null, null, null, null, null);
+        this(name, null, null, null, node, null, null, null, false, false, null);
     }
 
-    public Student(String name, String lastName, LocalDate courseDate, LocalDate graduationDate, Node node, String email, String phone, String resumeUrl, Boolean lookingForWork, Boolean working, String feedback) {
+    public Student(String name, String lastName, LocalDate courseDate, LocalDate graduationDate, Node node, String email, String phone, String resumeUrl, boolean lookingForWork, boolean working, String feedback) {
         this.name = name;
         this.lastName = lastName;
         this.courseDate = courseDate;
@@ -121,7 +121,7 @@ public class Student extends AbstractPersistable<Long> {
         this.resumeUrl = resumeUrl;
     }
 
-    public void setLookingForWork(Boolean lookingForWork) {
+    public void setLookingForWork(boolean lookingForWork) {
         this.lookingForWork = lookingForWork;
     }
 
@@ -161,7 +161,7 @@ public class Student extends AbstractPersistable<Long> {
         this.phone = phone;
     }
 
-    public void setWorking(Boolean working) {
+    public void setWorking(boolean working) {
         this.working = working;
     }
 

@@ -1,5 +1,6 @@
 ### create node
 POST {{host}}/node
+Authorization: Basic {{auth}}
 Content-Type: application/json
 
 {
@@ -9,8 +10,10 @@ Content-Type: application/json
 
 ### list nodes
 GET {{host}}/node
+Authorization: Basic {{auth}}
 
 ### get node by id
 GET {{host}}/node/1
+Authorization: Basic {{auth}}
 
 ###
