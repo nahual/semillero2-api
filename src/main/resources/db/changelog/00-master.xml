@@ -98,4 +98,28 @@
                                  referencedColumnNames="id"
                                  referencedTableName="student"/>
     </changeSet>
+
+    <changeSet id="fix_student" author="alejandro" dbms="mysql">
+        <modifyDataType tableName="student" columnName="deleted" newDataType="boolean"/>
+        <modifyDataType tableName="student" columnName="looking_for_work" newDataType="boolean"/>
+        <modifyDataType tableName="student" columnName="working" newDataType="boolean"/>
+        <addDefaultValue tableName="student" columnName="deleted" defaultValueBoolean="false"/>
+        <addDefaultValue tableName="student" columnName="looking_for_work" defaultValueBoolean="false"/>
+        <addDefaultValue tableName="student" columnName="working" defaultValueBoolean="false"/>
+        <update tableName="student">
+            <column name="deleted" valueBoolean="false"/>
+            <where>deleted is null</where>
+        </update>
+        <update tableName="student">
+            <column name="looking_for_work" valueBoolean="false"/>
+            <where>looking_for_work is null</where>
+        </update>
+        <update tableName="student">
+            <column name="working" valueBoolean="false"/>
+            <where>working is null</where>
+        </update>
+        <addNotNullConstraint tableName="student" columnName="deleted" columnDataType="boolean"/>
+        <addNotNullConstraint tableName="student" columnName="looking_for_work" columnDataType="boolean"/>
+        <addNotNullConstraint tableName="student" columnName="working" columnDataType="boolean"/>
+    </changeSet>
 </databaseChangeLog>
