@@ -1,5 +1,6 @@
 ### create interview
 POST {{host}}/interview
+Authorization: Basic {{auth}}
 Content-Type: application/json
 
 {
@@ -9,8 +10,10 @@ Content-Type: application/json
 
 ### list interviews
 GET {{host}}/interview
+Authorization: Basic {{auth}}
 
 ### get interview by id
 GET {{host}}/interview/1
+Authorization: Basic {{auth}}
 
 ###
