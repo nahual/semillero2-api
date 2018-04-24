@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.util.Pair;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -28,11 +27,8 @@ public class InterviewRepositoryTest {
     @Test
     public void testSave() {
         studentRepository.findById(1001L)
-                .flatMap(student -> companyRepository.findById(1001L).map(company -> Pair.of(student, company)))
-                .map(pair -> {
-                    Interview entrevista = new Interview(pair.getFirst(), pair.getSecond(), "Hay que contratarlo al toque");
-                    return interviewRepository.save(entrevista);
-                })
+                .flatMap(student -> companyRepository.findById(1001L).map(company -> new Interview(student, company, "Hay que contratarlo al toque")))
+                .map(interviewRepository::save)
                 .orElseThrow(RuntimeException::new);
     }
 
