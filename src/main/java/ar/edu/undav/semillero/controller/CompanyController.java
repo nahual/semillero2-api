@@ -5,6 +5,8 @@ import ar.edu.undav.semillero.dto.CompanyDTO;
 import ar.edu.undav.semillero.request.CreateCompanyRequest;
 import ar.edu.undav.semillero.request.FilterCompaniesRequest;
 import ar.edu.undav.semillero.service.CompanyService;
+import ar.edu.undav.semillero.view.View;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/company")
@@ -33,13 +38,19 @@ public class CompanyController {
 
     // Agregar una company
     @PostMapping
-    public Company addCompany(@Valid @RequestBody CreateCompanyRequest request) {
-        return companyService.save(request);
+    public ResponseEntity<Void> addCompany(@Valid @RequestBody CreateCompanyRequest request) {
+        Company company = companyService.save(request);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(company.getId())
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
     // Obtener company por ID
     @ResponseBody
     @GetMapping("/{id}")
+    @JsonView(View.Summary.class)
     public ResponseEntity<Company> getCompany(@PathVariable long id) {
         return WebUtils.emptyToNotFound(companyService.findById(id));
     }

@@ -1,5 +1,6 @@
 package ar.edu.undav.semillero.controller;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -7,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 /**
  * @author Alejandro Gomez
  */
+@Order(200)
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
