@@ -68,14 +68,9 @@ public class CompanyControllerTest {
         TestUtils.setId(company, 1L);
         Mockito.when(companyService.save(Mockito.any(CreateCompanyRequest.class))).thenReturn(company);
         mockMvc.perform(MockMvcRequestBuilders.post("/company").contentType(MediaType.APPLICATION_JSON_UTF8).content(mapper.writeValueAsString(request)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.notNullValue(Number.class)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is(name)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.contact", Matchers.is(contact)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email", Matchers.is(email)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.comments", Matchers.is(comments)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.interviews", Matchers.empty()));
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.content().string(""))
+                .andExpect(MockMvcResultMatchers.header().string("Location", Matchers.startsWith("http://localhost/company/")));
         Mockito.verify(companyService).save(Mockito.eq(request));
     }
 

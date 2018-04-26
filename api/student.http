@@ -29,9 +29,9 @@ Content-Type: multipart/form-data; boundary=boundary
 Content-Disposition: form-data; name="csv"; filename="egresados.csv"
 
 nombre,apellido,mail,celular,egresado,nodo,fecha
-Silvia,Merlano,Silvia.merlano@gmail.com,,,Capital,2017-2
-Jose,Morales,Joseamorales2@gmail.com,,Si,Capital,2017-2
-fernando,schmer,fers@sion.com,59443911,,Capital,2017-2
+Sheri,Moody,sheri.moody@mail.com,11223344,Si,Capital,2017-1
+Harry,Figueroa,harry.figueroa@mail.com,11223344,SI,Paternal,2017-1
+Sadie,Caldwell,sadie.caldwell@mail.com,11223344,,Capital,2017-2
 --boundary
 
 ###

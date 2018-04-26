@@ -1,5 +1,8 @@
 package ar.edu.undav.semillero.domain.entity;
 
+import ar.edu.undav.semillero.view.View;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -12,9 +15,13 @@ import java.util.List;
 @Table(name = "company")
 public class Company extends AbstractPersistable<Long> {
 
+    @JsonView(View.Summary.class)
     private String name;
+    @JsonView(View.Summary.class)
     private String contact;
+    @JsonView(View.Summary.class)
     private String email;
+    @JsonView(View.Summary.class)
     private String comments;
 
     @OneToMany(mappedBy = "company")
