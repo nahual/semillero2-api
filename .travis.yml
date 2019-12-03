@@ -2,7 +2,7 @@ language: java
 
 env:
   global:
-    - CC_TEST_REPORTER_ID=ac8d62ca68293f4f48785a06e5f6ff4fb73aa9e04a9c3cee0595f0a7af011e57
+    - CC_TEST_REPORTER_ID=6019dde656e878891bed3381837006ff17755b1300fd148b1d0c433a568e9ba3
 
 jdk:
   - openjdk8
