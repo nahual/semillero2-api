@@ -1,1 +1,0 @@
-ALTER TABLE student ADD deleted BOOLEAN DEFAULT FALSE;

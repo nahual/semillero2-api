@@ -1,4 +1,4 @@
-# Semillero API [![Build Status](https://travis-ci.org/DanielJulian/NahualSpringBoot.svg?branch=master)](https://travis-ci.org/DanielJulian/NahualSpringBoot.svg?branch=master)
+# Semillero API [![Build Status](https://travis-ci.org/nahual/semillero2-api.svg?branch=development)](https://travis-ci.org/nahual/semillero2-api)
 
 ## Introducción
 
@@ -10,11 +10,25 @@ Está desarrollada en Java, más específicamente con Spring Boot.
 
 ### Base de datos
 
+#### Creación del esquema + creación de tablas
+
 La instalación de los containers nos instala una base MariaDB. 
 De hecho, hay un docker-compose.yml solo para este proyecto, por si no querés levantar los otros containers y solo te levante la base de datos.
 
-Dentro de la carpeta __sql-migrations__ se encuentran todos los archivos que debemos ejecutar para la creación del esquema.
-(Recordatorio: el puerto no es el default, es el __3307__)
+El esquema lo tenés que crear a mano, corriendo el archivo `000000000000_empty_schema.sql`.
+
+Luego, ya se puede levantar la aplicación con el comando `./mvnw spring-boot:run`, de esa manera se va a correr el changelog de Liquibase.
+
+Eso nos va a crear todas las tablas necesarias
+
+#### Creación de algunos datos de prueba
+
+Ya con la aplicación arriba, usamos la API para crear 2 nodos de prueba y un CSV que se usa en los tests.
+
+    curl --user semillero:semillero -X POST -H "Content-Type: application/json" --data '{"name":"Capital","address":"capi1"}' http://localhost:8080/node
+    curl --user semillero:semillero -X POST -H "Content-Type: application/json" --data '{"name":"Paternal","address":"paternal1"}' http://localhost:8080/node
+    curl --user semillero:semillero -i -X POST -H "Content-Type: multipart/form-data" -F "csv=@src/test/resources/data.csv" http://localhost:8080/student/bulk
+
 
 ### Cómo desarrollamos? 
 
@@ -24,6 +38,10 @@ Mientras estamos desarrollando podemos usar la base dockerizada pero correr la a
     
 La documentación de la API está escrita en RAML 0.8. 
 
-El HTML generado se puede ver en el siguiente [link](https://rawgit.com/nahual/semillero2-api/development/apiV2.html)
+El HTML generado se **podía** ver en el siguiente [link](https://rawgit.com/nahual/semillero2-api/development/apiV2.html).
+
+**Update**
+
+Rawgit fue dado de baja y hay que migrar esto a otro sistema (github pages, por ejemplo)
 
 
