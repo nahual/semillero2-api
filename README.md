@@ -12,6 +12,12 @@ Está desarrollada en Java, más específicamente con Spring Boot.
 
 ### Base de datos
 
+#### Antes que nada: docker volume para la base
+
+Estamos compartiendo el volumen donde se guardan los datos entre el docker-compose de semillero en general y el de la api en particular.
+
+En el caso de la API, va a pedir el volumen creado por el otro docker-compose general `semillero_semillero-mariadb`
+
 #### Creación del esquema + creación de tablas
 
 La instalación de los containers nos instala una base MariaDB. 
