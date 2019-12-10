@@ -10,6 +10,10 @@ Está desarrollada en Java, más específicamente con Spring Boot.
 
 ## Instalación DEV
 
+### Dockerfile
+`$ docker image build -t semillero2-api:1.0 .` para crear la [imagen](https://docs.docker.com/glossary/#image).
+`$ docker container run --publish 4200:4200 -v $PWD:/semillero2-web semillero2-web:1.0`
+
 ### Base de datos
 
 #### Antes que nada: docker volume para la base

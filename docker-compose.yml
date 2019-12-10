@@ -1,14 +1,25 @@
 version: "3"
 services:
-  semillero-db:
+  semillero-mariadb:
     image: mariadb:10.3
+    container_name: semillero-mariadb
     volumes:
-      - semillero-mariadb:/var/lib/mysql
+      - semillero-data:/var/lib/mysql
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
       - TERM=xterm
     ports:
       - "3307:3306"
+ 
+  semillero-api:
+    build: .
+    container_name: semillero-api
+    environment:
+      - DB_SERVER=semillero-mariadb
+    ports:
+      - 8080:8080
+    links:
+      - semillero-mariadb
+
 volumes:
-  - semillero_semillero-mariadb:
-      external: true  
+  semillero-data:
