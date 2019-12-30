@@ -10,3 +10,14 @@ services:
       - TERM=xterm
     ports:
       - "3307:3306"
+
+  semillero-api:
+    image: maven:3.5.2
+    working_dir: /semillero2-api
+    volumes:
+      - $PWD:/semillero2-api
+    ports:
+      - "8080:8080"
+    command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker
+    depends_on:
+      - semillero-db

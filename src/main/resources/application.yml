@@ -31,5 +31,5 @@ spring:
     show-sql: false
   datasource:
     url: jdbc:mariadb://semillero-db/semillero
-    username: root
-    password:
+    username: semillero
+    password: semillero
