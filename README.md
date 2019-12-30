@@ -6,30 +6,32 @@
 
 API que usamos en Nahual para hacer un seguimiento de los estudiantes que pasan por el taller y el estado en qué se encuentra su búsqueda laboral.
 
-Está desarrollada en Java, más específicamente con Spring Boot.
+Está desarrollada en Java, más específicamente con [Spring Boot](https://hub.docker.com/_/mariadb/). Usa la base de datos [MariaDB](https://hub.docker.com/_/mariadb/).
 
 ## Instalación DEV
 
-### Base de datos
+La instalación de los containers nos instala una base MariaDB.
+De hecho, hay un `docker-compose.yml` para tener solo la base dockerizada y o
 
-#### Antes que nada: docker volume para la base
+El esquema se crea automaticamente (ver los archivos de compose) en base a `src/main/resources/sql-migrations/000000000000_empty_schema.sql`. El archivo es copiado a un directorio que el proceso (en el container) de la DB va a revisar y ejecutar.
 
-Estamos compartiendo el volumen donde se guardan los datos entre el docker-compose de semillero en general y el de la api en particular.
+Para borrar imagenes, containers, volumenes y networks del docker-compose, usar `docker-compose down -v --remove-orphans`.
+Es util para todo lo relacionado con alguna prueba, y arrancar "de cero".
 
-En el caso de la API, va a pedir el volumen creado por el otro docker-compose general `semillero_semillero-mariadb`
+### Solo base de datos dockerizada (y API local)
 
-#### Creación del esquema + creación de tablas
+Ejecutando `docker-compose up` (que por default usa el archivo `docker-compose.yml`) levanta un MariaDB en un container.
+Se puede entrar con `docker exec -it semillero2-api_semillero-db_1 bash`. Luego, con `mysql` te conectas a la DB.
 
-La instalación de los containers nos instala una base MariaDB. 
-De hecho, hay un docker-compose.yml solo para este proyecto, por si no querés levantar los otros containers y solo te levante la base de datos.
+La API se puede correr local (por consola o con tu IDE preferido) con el comando `./mvnw spring-boot:run`. De esa manera se va a correr el changelog de Liquibase (donde se crean las tablas si no existen).
 
-El esquema lo tenés que crear a mano, corriendo el archivo `000000000000_empty_schema.sql`.
+TODO: revisar que levanta bien!
 
-Luego, ya se puede levantar la aplicación con el comando `./mvnw spring-boot:run`, de esa manera se va a correr el changelog de Liquibase.
+### Base de datos y API dockerizadas
 
-Eso nos va a crear todas las tablas necesarias
+Ejecutando `docker-compose -f docker-compose-ambas.yml up` se ejecutan las dos partes en sus respectivos containers.
 
-#### Creación de algunos datos de prueba
+### Creación de algunos datos de prueba
 
 Ya con la aplicación arriba, usamos la API para crear 2 nodos de prueba y un CSV que se usa en los tests.
 
